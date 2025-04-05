@@ -3,16 +3,18 @@ import { CircleUser, Heart, MapPinned, Search, ShoppingCart, Store, Video } from
 import { Link } from "react-router-dom";
 import { Button } from "../../ui/button";
 import { Badge } from "@/components/ui/badge";
-import { IUser } from "@/utils/interfaces";
+import { IProduct, IUser } from "@/utils/interfaces";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Squash as Hamburger } from 'hamburger-react';
+// import { Squash as Hamburger } from 'hamburger-react';
 // import { slide as Menu } from 'react-burger-menu';
 import { Input } from "@/components/ui/input";
+import { MobileNav } from "./MobileNav";
 
 export const HomePageNavBar = () => {
 
     const customerData: IUser = useSelector((state: any) => state.website.customerData);
+    const products: IProduct[] = useSelector((state: any) => state.website.productData);
     
     const [ wishListLength, setWishListLength ] = useState(0);
     const [ cartLength, setCartLength ] = useState(0);
@@ -24,7 +26,15 @@ export const HomePageNavBar = () => {
         setCartLength(customerData?.cart?.length);
     }, [ customerData ]);
 
-    const [ isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+    const [query, setQuery] = useState("");
+
+    const filteredProducts = products.filter((product) =>
+      product.name.toLowerCase().trim().includes(query.toLowerCase())
+    );
+
+    const [ isSearchBarOpen, setIsSearchBarOpen ] = useState(false);
+
+    // const [ isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
     return (
         <>
@@ -37,8 +47,23 @@ export const HomePageNavBar = () => {
                     <div className="flex-[0.4] gap-[3%] !stroke-white!text-white flex justify-center items-center">
                         <Link to={"/store-locator"}><MapPinned className="stroke-[1.5] stroke-[#A68A7E]" /></Link>
                         <div className="relative w-full">
-                            <Input type="text" placeholder="Search" className="pl-6 h-8 border-[#A68A7E] border-2 bg-transparent text-[#A68A7E] placeholder:text-[#A68A7E]" />
+                            <Input type="text" onClick={(e) => {
+                                e.preventDefault();
+                                setIsSearchBarOpen(!isSearchBarOpen);
+                            }} placeholder="Search" value={query}
+                            onChange={(e) => setQuery(e.target.value)} className="pl-6 h-8 border-[#A68A7E] border-2 bg-transparent text-[#A68A7E] placeholder:text-[#A68A7E]" />
                             <Search className="absolute top-1/2 left-2 -translate-y-1/2 w-3 h-3 stroke-[#A68A7E] stroke-2"/>
+                            {isSearchBarOpen && <div className="absolute h-56 w-full top-[150%] rounded-lg flex flex-col gap-4 bg-white overflow-y-scroll text-[#A68A7E]">
+                                {filteredProducts?.map(product => {
+                                    return (
+                                        <a onClick={() => {
+                                            setIsSearchBarOpen(false)
+                                        }} href={`/product/${product?._id}`} className="px-4">
+                                            {product?.name}
+                                        </a>
+                                    )
+                                })}
+                            </div>}
                         </div>
                         <Link to={"/video-cart"}>
                             <Button className="rounded-full m-0 px-3 py-4 relative" variant={"ghost"}>
@@ -66,7 +91,7 @@ export const HomePageNavBar = () => {
                     </div>
                 </div>
                 {/* <div className="flex !text-white self-center items-center justify-evenly text-[#A68A7E] w-[80%]"> */}
-                <div className="flex !text-white self-center items-center justify-evenly w-[80%]">
+                <div className="flex text-gray-600 self-center items-center justify-evenly w-[80%]">
                     {/* <Link className="" to={"/"}>Home</Link> */}
                     <Link to={"/about"}>About</Link>
                     <Link to={"/collections"}>Collections</Link>
@@ -81,7 +106,7 @@ export const HomePageNavBar = () => {
             </div>
             <div id="phone-navbar" className="sm:hidden justify-between items-center flex w-full h-14">
                 <Link to={"/"}>
-                    <img src="./logo.svg" alt="" className="" />
+                    <img src="/logo.svg" alt="" className="" />
                 </Link>
                 <Link to={"/store-locator"}>
                     <Store className="fill-[#E1C6B3] w-4 h-4 stroke-[#E1C6B3]"/>
@@ -92,9 +117,10 @@ export const HomePageNavBar = () => {
                 <Link to={"/cart"}>
                     <ShoppingCart className="fill-[#E1C6B3] w-4 h-4 stroke-[#E1C6B3]" />
                 </Link>
-                <Hamburger color="#E1C6B3" toggled={isHamburgerMenuOpen} onToggle={() => {
+                {/* <Hamburger color="#E1C6B3" toggled={isHamburgerMenuOpen} onToggle={() => {
                     setIsHamburgerMenuOpen(!isHamburgerMenuOpen);
-                }} size={14} />
+                }} size={14} /> */}
+                <MobileNav />
             </div>
         </>
     );

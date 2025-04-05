@@ -120,7 +120,6 @@ export const Auth = () => {
             
             dispatch(setUser(data.data.user));
             navigate("/");
-            
             console.log(data);
         } catch (error) {
             console.error("Error: ", error);

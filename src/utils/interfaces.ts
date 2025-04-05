@@ -51,6 +51,14 @@ export interface IProduct {
     price: number,
     quantitySold: number,
     imageUrl: { url: string, publicId: string }[],
+    isPendantFixed: boolean,
+    containsGemstone: boolean,
+    gemStoneWeight: boolean,
+    isMrpProduct: boolean,
+    addChain: boolean,
+    pointerWeight: boolean,
+    colouredStone: string [],
+    gemStoneWeightPointer: number
 };
 
 export interface ICartItem {

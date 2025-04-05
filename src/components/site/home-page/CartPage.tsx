@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { setCustomerData } from "@/redux/slices/websiteSlice";
 
-
 export const CartPage = () => {
 
     const navigate = useNavigate();
@@ -36,9 +35,6 @@ export const CartPage = () => {
             return total + (cartItem?.totalPrice * cartItem?.quantity)
         }, 0));
     }, [ cartItems ]);
-
-
-
 
     // const [ isOrderPlacing, setIsOrderPlacing ] = useState(false);
 
@@ -127,10 +123,11 @@ export const CartPage = () => {
                                         
                                     }} variant={"ghost"}>Apply</Button>
                                 </div>
-                                <Button disabled={cartItems?.length! <= 0 || isPlaceOrderButtonLoading} className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
+                                <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading || customerData._id == null } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
                                     e.preventDefault();
-                                    // console.log(totalPrice);
                                     setIsPlaceOrderButtonLoading(true);
+                                    if ( customerData?.address?.city == null )
+                                        return navigate("/set-shipping");
                                     try {
                                         // @ts-ignore
                                         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}payment/create-an-order/`, {

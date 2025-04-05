@@ -24,6 +24,7 @@ import { AccountSettings } from './components/site/home-page/AccountSettings.tsx
 import { PaymentSuccess } from './components/site/home-page/PaymentSuccess.tsx';
 import { BlogPage } from './components/site/home-page/BlogPage.tsx';
 import { BlogsPage } from './components/site/home-page/BlogsPage.tsx';
+import { SetShipping } from './components/site/home-page/SetShipping.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -52,6 +53,8 @@ const router = createBrowserRouter(
               <Route path="/payment-success/" element={<PaymentSuccess />} />
               <Route path="/blogs/" element={<BlogsPage />} />
               <Route path="/blogs/:id" element={<BlogPage />} />
+              <Route path="/set-shipping" element={<SetShipping />} />
+
           </Route>
       </Route>
   )

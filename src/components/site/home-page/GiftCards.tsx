@@ -10,6 +10,14 @@ import { Textarea } from '../../ui/textarea';
 import { Button } from '../../ui/button';
 // import { Checkbox } from '../../ui/checkbox';
 import { cn } from '../../../lib/utils';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { useSelector } from 'react-redux';
+import { IUser } from '@/utils/interfaces';
+import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Loader, Loader2 } from 'lucide-react';
 
 const GIFTCARDS = [
     {
@@ -38,39 +46,42 @@ const GIFTCARDS = [
     },
 ];
   
-enum Shapes {
-    Round = 'Round',
-    Pear = 'Pear',
-    Heart = 'Heart',
-    Princess = 'Princess',
-    Marquise = 'Marquise',
-    Oval = 'Oval',
-    Emerald = 'Emerald',
-    Radiant = 'Radiant',
-    Cushion = 'Cushion',
+enum GiftCardNames {
+    CONGRATULATIONS = "Congratulations",
+    THANK_YOU = "Thank you",
+    HAPPY_ANNIVERSARY = "Happy Anniversary",
+    HAPPY_BIRTHDAY = "Happy Birthday",
+    CUSTOM = "Custom",
+    BEST_WISHES = "Best Wishes",
 };
+
+// enum Shapes {
+//     Round = 'Round',
+//     Pear = 'Pear',
+//     Heart = 'Heart',
+//     Princess = 'Princess',
+//     Marquise = 'Marquise',
+//     Oval = 'Oval',
+//     Emerald = 'Emerald',
+//     Radiant = 'Radiant',
+//     Cushion = 'Cushion',
+// };
   
-enum Colour {
-    D = 'D',
-    E = 'E',
-    F = 'F',
-};
+// enum Colour {
+//     D = 'D',
+//     E = 'E',
+//     F = 'F',
+// };
   
 
 const formSchema = z.object({
     email: z.string().email('Enter a valid email address!').min(0), // Add email validation
-    shape: z.nativeEnum(Shapes, {
-      required_error: 'Shape is required!',
+    giftCardDesign: z.nativeEnum(GiftCardNames, {
+      required_error: 'Select a giftcard!!',
     }),
-    carat: z.coerce.number({
+    name: z.string(),
+    amount: z.coerce.number({
       required_error: 'Carat is required!',
-      invalid_type_error: 'Enter a valid number!',
-    }),
-    colour: z.nativeEnum(Colour, {
-      required_error: 'Colour is required!',
-    }),
-    goldWeight: z.coerce.number({
-      required_error: 'Gold weight is required!',
       invalid_type_error: 'Enter a valid number!',
     }),
     phoneNo: z.coerce
@@ -88,12 +99,7 @@ const formSchema = z.object({
           message: 'Invalid phone number. It must only contain 10 digits!.',
         }
       ),
-    multiDiamonds: z.boolean().default(false),
-    noOfDiamonds: z.coerce
-      .number()
-      .min(2, { message: 'No of stones cannot be less than 2!' })
-      .optional(),
-    additionalRequirements: z.string().optional(),
+    message: z.string().optional(),
 });
   
 export const UIsideBar = ({ side } : { side : "left" | "right" }) => {
@@ -108,15 +114,137 @@ export const UIsideBar = ({ side } : { side : "left" | "right" }) => {
 
 export const GiftCards = () => {
 
+    const navigate = useNavigate();
+
+    const customerData: IUser = useSelector((state: any) => state.website.customerData);
+
+    const [ isSubmitButtonLoading, setIsSubmitButtonLoading ] = useState(false);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-          shape: Shapes.Round, // Default value
-        },
+        // defaultValues: {
+        //   shape: Shapes.Round, // Default value
+        // },
     });
     
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values);
+        setIsSubmitButtonLoading(true);
+
+        if ( customerData?._id == null ) return navigate("/auth");
+
+        try {
+
+            const paymentResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}payment/create-an-order/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ options: {
+                    amount: (values?.amount * 100),
+                    currency: "INR",
+                }}),
+                credentials: "include"
+            });
+
+            if (!paymentResponse.ok) throw new Error("HTTP error! status: "+paymentResponse.status+", "+paymentResponse.statusText);
+
+            const paymentData = await paymentResponse.json();
+
+            var options = {
+                "key_id": import.meta.env.VITE_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+                // "key_id": "rzp_test_2KRjU8skvbLEYt", // Enter the Key ID generated from the Dashboard
+                "amount": (values?.amount * 100), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Kultivated karats", //your business name
+                "description": "Test Transaction",
+                "image": `/logo.png`,
+                "order_id": paymentData?.data?.id,
+                "handler": async function (res : any){
+                    try {
+                        console.log(res);
+                        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}payment/order/validate`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ 
+                                razorpay_order_id: res.razorpay_order_id,
+                                razorpay_payment_id: res.razorpay_payment_id, 
+                                razorpay_signature: res.razorpay_signature,
+                            }),
+                            credentials: "include"
+                        });
+                        // console.log(response);
+                        
+                        if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+                        
+                        console.log(res);
+
+                        const data = await response.json();
+                        console.log(data, response);
+
+                        console.log(response);
+
+                        const giftCardCreationResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}giftcards/create-a-gift-card`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            credentials: 'include',
+                            body: JSON.stringify({ giftCardData : {
+                                code: `${uuidv4().split("-")[0]}-${Date.now().toString(36)}`.toUpperCase(),
+                                amount: values?.amount,
+                                occasion: values?.giftCardDesign,
+                                recipientName: values?.name,
+                                recipientEmail: values?.email,
+                                recipientPhone: values?.phoneNo,
+                                sender: customerData,
+                                message: values?.message ? values?.message : "",
+                                validUpto: new Date().setFullYear(new Date().getFullYear() + 1),
+                                used: false,
+                                imageUrl: [ {
+                                    url: GIFTCARDS?.filter(giftCard => {
+                                        giftCard?.name == values?.giftCardDesign
+                                    })[0],
+                                    publicId: ""
+                                } ]
+                            }}),
+                        });
+
+                        if (!giftCardCreationResponse.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+                        
+                        console.log(giftCardCreationResponse);
+                        
+                        const giftCardResponse = await giftCardCreationResponse.json();
+                        console.log( giftCardResponse , giftCardCreationResponse );
+                        // dispatch(setCustomerData(orderData?.data));
+                        // await clearCart(dispatch, customerData?._id ? true : false);
+                        navigate("/payment-success");
+                    } catch (error) {
+                        console.log(error);
+                    }
+                },
+                "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+                    "name": `${customerData?.firstName} ${customerData?.lastName}`, //your customer's name
+                    "email": `${customerData?.email}`, 
+                    "contact": `${customerData?.phoneNumber || "0000000000"}`  //Provide the customer's phone number for better conversion rates 
+                },
+                // "notes": {
+                //     "address": "Razorpay Corporate Office"
+                // },
+                "theme": {
+                    "color": "#BFA6A1"
+                }
+            };
+
+            const rzp = new (window as any).Razorpay(options);
+            rzp.open();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsSubmitButtonLoading(false);
+        }
     };
 
     return (
@@ -134,23 +262,39 @@ export const GiftCards = () => {
                         <div className="flex-[0.75]">
                             <FormField
                                 control={form.control}
-                                name="shape"
+                                name="giftCardDesign"
                                 render={({ field }) => (
                                 <FormItem className='h-full'>
                                     <FormControl>
                                     <div id="card" className="flex h-full gap-5 flex-col">
                                         <p className='text-center'>Select a gift card</p>
-                                        <div className='grid grid-cols-2 max-h-full h-full gap-4'>
-                                            {GIFTCARDS.map(card => {
-                                                console.log(field);
-                                                return (
-                                                    <div className='bg-white text-[#E1C6B3] flex flex-col pt-2 gap-2 justify-between items-center sm:border-white border border-[#E1C6B3] rounded-lg aspect-video col-span-1'>
-                                                        {card.name}
-                                                        <img src={card?.image} alt="" className='w-full h-full rounded-[inherit] self-end bg-red-600'/>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
+                                        <RadioGroup
+  {...field}
+  value={field.value} // Bind to form state
+  onValueChange={field.onChange} // Update form on change
+  className="grid grid-cols-2 max-h-full h-full gap-4"
+>
+  {GIFTCARDS.map((card) => (
+    <Label
+      key={card.name}
+      htmlFor={card.name} // Connect label to radio input
+      className="bg-white peer-checked:bg-blue-500 peer-checked:text-white text-[#E1C6B3] flex flex-col pt-2 gap-2 justify-between items-center sm:border-white border border-[#E1C6B3] rounded-lg aspect-video col-span-1 cursor-pointer peer-checked:border-[#D4A373] peer-checked:bg-[#E1C6B3]"
+    >
+      <RadioGroupItem
+        id={card.name} // Ensure unique ID
+        value={card.name} // Ensure correct value
+        className="peer" // Keep it functional but visually hidden
+      />
+      {card.name}
+      <img
+        src={card.image}
+        alt={card.name}
+        className="w-full h-full rounded-[inherit] self-end bg-white"
+      />
+    </Label>
+  ))}
+</RadioGroup>
+
                                     </div>
                                     </FormControl>
                                     <FormMessage className="" />
@@ -161,26 +305,7 @@ export const GiftCards = () => {
                         <div className="flex-1 col-start-3 grid grid-rows-5 row-start-1 col-span-1 row-span-2">
                             <FormField
                                 control={form.control}
-                                name="colour"
-                                render={({ field }) => (
-                                <FormItem className="flex flex-col justify-center relative items-center">
-                                    <FormControl>
-                                    <div
-                                        id="colour"
-                                        className="grid grid-cols-4 w-full  gap-4"
-                                    >
-                                        <p className='col-span-1 flex items-center'>Amount :</p>
-                                        <Input {...field} placeholder="" className='col-span-3 sm:border-white border-[#E1C6B3]' type="number" />
-                                    </div>
-                                    </FormControl>
-                                    <FormDescription />
-                                    <FormMessage className="" />
-                                </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="colour"
+                                name="name"
                                 render={({ field }) => (
                                 <FormItem className="flex flex-col justify-center relative items-center">
                                     <FormControl>
@@ -199,7 +324,26 @@ export const GiftCards = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name="colour"
+                                name="amount"
+                                render={({ field }) => (
+                                <FormItem className="flex flex-col justify-center relative items-center">
+                                    <FormControl>
+                                    <div
+                                        id="amount"
+                                        className="grid grid-cols-4 w-full  gap-4"
+                                    >
+                                        <p className='col-span-1 flex items-center'>Amount :</p>
+                                        <Input {...field} placeholder="" className='col-span-3' type="number" />
+                                    </div>
+                                    </FormControl>
+                                    <FormDescription />
+                                    <FormMessage className="" />
+                                </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phoneNo"
                                 render={({ field }) => (
                                 <FormItem className="flex flex-col justify-center relative items-center">
                                     <FormControl>
@@ -212,13 +356,13 @@ export const GiftCards = () => {
                                     </div>
                                     </FormControl>
                                     <FormDescription />
-                                    <FormMessage className="hidden" />
+                                    <FormMessage className="" />
                                 </FormItem>
                                 )}
                             />
                             <FormField
                                 control={form.control}
-                                name="carat"
+                                name="email"
                                 render={({ field }) => (
                                 <FormItem className="flex justify-center items-center w-full flex-col">
                                     <FormControl>
@@ -230,13 +374,13 @@ export const GiftCards = () => {
                                         <Input {...field} placeholder="" className='col-span-3' type="email" />
                                     </div>
                                     </FormControl>
-                                    <FormMessage className="hidden" />
+                                    <FormMessage className="" />
                                 </FormItem>
                                 )}
                             />
                             <FormField
                                 control={form.control}
-                                name="goldWeight"
+                                name="message"
                                 render={({ field }) => (
                                     <FormItem className="flex justify-center items-center flex-col w-full">
                                         <FormControl>
@@ -248,13 +392,13 @@ export const GiftCards = () => {
                                             <Textarea {...field} placeholder="" className='col-span-3 resize-none' />
                                         </div>
                                         </FormControl>
-                                        <FormMessage className="hidden" />
+                                        <FormMessage className="" />
                                     </FormItem>
                                 )}
                             />
                             <div className='mt-14 flex justify-end items-center'>
                                 <Button type='submit' className='bg-transparent border sm:border-white border-[#E1C6B3] text-[#E1C6B3] sm:text-white rounded-md'>
-                                    Proceed to pay
+                                    {isSubmitButtonLoading ? <Loader2 className='animate-spin' /> : `Proceed to pay`}
                                 </Button>
                             </div>
                         </div>

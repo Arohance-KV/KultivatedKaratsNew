@@ -2,15 +2,28 @@ import { ArrowRight, Facebook, Gem, Instagram, Mouse, Stamp, Truck } from "lucid
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../ui/button";
 import { gsap } from "gsap";
-import { useEffect, useRef, useState } from "react";
+import { useEffect
+    // , useRef
+    , useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { BLOGDATA } from "@/utils/constants";
-import { TestimonialCard } from "./Text";
+// import { TestimonialCard } from "./Text";
 
-const Reel = ({ reel } : { reel: {title: string, url: string, product: string }}) => {
+const Reel = ({ reel, navigate } : { navigate: any, reel: {title: string, url: string, product: {
+    imageUrl: {
+        url: string,
+        // publicId: string,
+    },
+    name: string,
+    _id: string
+} }}) => {
+
     return (
-        <div className="flex flex-col w-auto sm:width-[calc(300*0.85)] sm:h-[450px] playfair-display rounded-xl">
+        <div onClick={(e) => {
+            e.preventDefault();
+            navigate(`/product/${reel?.product?._id}`)
+        }} className="flex flex-col w-auto hover:cursor-pointer sm:width-[calc(300*0.85)] sm:h-[450px] playfair-display rounded-xl">
             <div className="bg-[#E1C6B3] rounded-t-[inherit] flex-[0.85]">
                     {/* <video src={reel.url}></video> */}
                 <video src={reel.url} className="rounded-[inherit] sm:h-[calc(0.85*450px)] w-[inherit] sm:min-w-full" muted={true} controls={false} autoPlay={true}></video>
@@ -18,7 +31,7 @@ const Reel = ({ reel } : { reel: {title: string, url: string, product: string }}
             {/* ToDo: change when mapped to product <div className="flex-[0.15] py-2 flex items-center gap-4 px-4 bg-gradient-to-b from-white to-[#E1C6B3] rounded-b-[inherit]"> */}
             <div className="flex-[0.15] py-2 flex justify-center items-center gap-4 px-4 bg-gradient-to-b from-white to-[#E1C6B3] rounded-b-[inherit]">
                 <div id="reels-image" className="rounded-full bg-[#E1C6B3] sm:h-14 h-8 aspect-square">
-                    {/* <video src={reel.url}></video> */}
+                    <img src={reel.product?.imageUrl?.url} className="w-full h-full rounded-[inherit]"></img>
                 </div>
                 {/* <div className="text-[#A68A7E]">
                     {reel?.title}
@@ -37,18 +50,39 @@ const REELS_DATA = [
     {
         title: 'reel 1',
         url: '/KultivatedKaratsAssets/reel-1.mp4',
-        product: 'Engagement Ring'      
+        product: {
+            _id: "67de6a20eab64aa971fae0c8",
+            imageUrl: {
+                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1742293610/daadis.in/ldjehkhrq8itxckesytw.jpg",
+                publicId: "",
+            },
+            name: "The Adhira Ring",
+        }
     },
     {
         title: 'reel 1',
         // url: 'https:',
         url: '/KultivatedKaratsAssets/reel-2.mp4',
-        product: 'Engagement Ring'      
+        product: { 
+            _id: "67de6a20eab64aa971fae0c9", 
+            imageUrl: {
+                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1742293615/daadis.in/qtxsyfnvnyobfp6c0nmk.webp",
+                publicId: "",
+            },
+            name: "The Charvi Ring"
+        }
     },
     {
         title: 'reel 1',
         url: '/KultivatedKaratsAssets/reel-3.mp4',
-        product: 'Engagement Ring'      
+        product: {
+            _id: "67de6a20eab64aa971fae0ca",
+            name: "The Ishani Ring",
+            imageUrl: {
+                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1742293618/daadis.in/eqjdi9qnooesvlkqn99c.jpg",
+                publidId: ""
+            }
+        }
     },
 ];
 
@@ -64,8 +98,47 @@ const TESTIMONIALS = [
             publicId: ""
         }
     }
-]
+];
 
+const ReviewCard = ({ name, rating, review, imageUrl } : { name: string, rating: number, review: string, imageUrl: string }) => {
+
+    const renderStars = () => {
+      const filledStars = Math.floor(rating);
+      const hasHalfStar = rating % 1 !== 0;
+  
+      let stars = [];
+      for (let i = 0; i < 5; i++) {
+        if (i < filledStars) {
+          stars.push(<span key={i} className="text-white text-xl">★</span>);
+        } else if (i === filledStars && hasHalfStar) {
+          stars.push(<span key={i} className="text-white text-xl">★</span>); // You'd need a half-star icon for this
+        } else {
+          stars.push(<span key={i} className="text-white text-xl">☆</span>);
+        }
+      }
+      return stars;
+    };
+  
+    return (
+      <div className="bg-[#E1C6B3] rounded-[15px] p-6 flex items-center w-[656px] h-[222px]">
+        <div className="bg-white rounded-full w-[110px] h-[110px] mr-6 flex-shrink-0">
+          <img src={imageUrl} className="w-full h-full rounded-[inherit]" alt="" />
+        </div>
+        <div>
+          <h3 className="text-white text-3xl font-normal mb-2 tracking-wider">
+            {name}
+          </h3>
+          <div className="flex items-center mb-2">
+            {renderStars()}
+          </div>
+          <p className="text-white text-base font-normal tracking-wide leading-6">
+            {review}
+          </p>
+        </div>
+      </div>
+    );
+};
+  
 export const HomePage = () => {
 
     useEffect(() => {
@@ -301,7 +374,7 @@ export const HomePage = () => {
 
     const navigate = useNavigate();
 
-    const categoriesImageRef = useRef(null);
+    // const categoriesImageRef = useRef(null);
 
     return (
         <>
@@ -381,7 +454,7 @@ export const HomePage = () => {
                         {REELS_DATA.map(reel => {
                             return (
                                 <>
-                                    <Reel reel={reel} />
+                                    <Reel navigate={navigate} reel={reel} />
                                 </>
                             )
                         })}
@@ -544,20 +617,20 @@ export const HomePage = () => {
                     <div className="gap-4 py-[5%] flex text-[#BFA6A1] text-[75px] h-[100%] justify-center w-[80%] relative ">
                         <div className="flex-1 h-full cursor-pointer flex justify-center items-center z-10" onClick={(e) => {
                             e.preventDefault();
-                        }} onMouseOver={() => {
+                        // }} onMouseOver={() => {
                             // @ts-ignore
-                            categoriesImageRef.current.src = "/ring.png";
+                            // categoriesImageRef.current.src = "/ring.png";
                         }}>Rings</div>
                         <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onMouseOver={() => {
                             // @ts-ignore
-                            categoriesImageRef.current.src = "/earring.png";
+                            // categoriesImageRef.current.src = "/earring.png";
                         }}>Earings</div>
                         <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onMouseOver={() => {
                             // @ts-ignore
-                            categoriesImageRef.current.src = "/pendent.png";
+                            // categoriesImageRef.current.src = "/pendent.png";
                         }}>Pendants</div>
                         <div id="categories-hover-element" className="absolute bg-[#E9D6C8] z-[0] w-[350px] top-1/2 flex justify-end items-end -translate-y-1/2 overflow-hidden left-[10%] aspect-video rotate-[75deg]">
-                            <img ref={categoriesImageRef} src="/ring.png" className="-rotate-[120deg] h-auto -translate-y-[10%] w-[70%]" alt="" />
+                            {/* <img ref={categoriesImageRef} src="/ring.png" className="-rotate-[120deg] h-auto -translate-y-[10%] w-[70%]" alt="" /> */}
                         </div>
                     </div>
                         <Button className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all">See more <ArrowRight /></Button>
@@ -786,7 +859,7 @@ export const HomePage = () => {
                         {REELS_DATA.map(reel => {
                             return (
                                 <>
-                                    <Reel reel={reel} />
+                                    <Reel reel={reel} navigate={navigate} />
                                 </>
                             )
                         })}
@@ -817,8 +890,11 @@ export const HomePage = () => {
                 <section id="testimonials" className="w-[80%] opacity-0 snap-start playfair-display! justify-self-center sm:h-screen flex flex-col">
                     <div className="flex-1 flex-col flex w-full relative">
                         <div className="flex-1 ">
-                            <div className="text-[#BFA6A1] w-1/2 text-[200%] mb-14 sm:mb-0 sm:text-[500%]">
+                            <div className="text-[#BFA6A1] justify-evenly flex flex-col items-center w-full h-full text-[200%] mb-14 sm:mb-0 sm:text-[500%]">
                                 What people say
+                                <div>
+                                    {TESTIMONIALS.map(testimonial => <ReviewCard name={testimonial?.customerName} rating={testimonial?.rating} imageUrl={testimonial?.sourceLogo?.url} review={testimonial?.descripttion} />)}
+                                </div>
                             </div>
                         </div>
                         {/* <div className="sm:flex-1 flex-[0.25] relative">
@@ -826,9 +902,6 @@ export const HomePage = () => {
                                 <img src="https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1" className="w-full h-full object-cover rounded-full" alt="" />
                             </div>
                         </div> */}
-                        <div>
-                            {TESTIMONIALS.map(testimonial => <TestimonialCard name={testimonial?.customerName} rating={testimonial?.rating} imageUrl={testimonial?.sourceLogo?.url} text={testimonial?.descripttion} />)}
-                        </div>
                         {/* <img src="/double-quotes.svg" className="z-0 sm:-bottom-[22%] -bottom-[70%] scale-50 sm:scale-100 absolute sm:left-[50%] left-0 sm:-translate-x-1/2" alt="" /> */}
                     </div>
                     {/* <div className="flex-1 w-full sm:rounded-ee-[200px] rounded-ee-[100px] flex items-center pt-[5%] pl-[5%] bg-[#BFA6A1] z-10">

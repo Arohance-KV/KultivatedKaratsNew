@@ -1,0 +1,74 @@
+import { MenuIcon, XIcon } from 'lucide-react';
+import { useState } from 'react';
+// import { MenuIcon, XIcon } from '@heroicons/react/solid'; // Or any other icon library
+
+export const MobileNav = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const menuItems = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Services', href: '/services' },
+    { name: 'Contact', href: '/contact' },
+  ];
+
+  return (
+    <div className="relative h-full w-14">
+      {/* Hamburger Button */}
+      
+      <button
+        onClick={toggleMenu}
+        className="bg-white rounded-md p-2"
+      >
+        {isOpen ? (
+          <XIcon className="h-6 w-6 text-gray-700" aria-hidden="true" />
+        ) : (
+          <MenuIcon className="h-6 w-6 text-gray-700" aria-hidden="true" />
+        )}
+      </button>
+
+      {/* Menu Overlay */}
+      <div
+        className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-40 transition-opacity duration-300 ease-in-out ${
+          isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+        onClick={toggleMenu} // Close menu when clicking outside
+      ></div>
+
+      {/* Menu Panel (Top to Bottom) */}
+      <div
+        className={`fixed top-0 left-0 w-full bg-white z-50 shadow-lg transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-y-0' : '-translate-y-full'
+        }`}
+      >
+        {/* Close Button inside the menu */}
+        <div className="p-4 flex justify-end">
+          <button onClick={toggleMenu} className="focus:outline-none">
+            <XIcon className="h-6 w-6 text-gray-700" aria-hidden="true" />
+          </button>
+        </div>
+
+        {/* Menu Items */}
+        <nav className="p-4">
+          <ul className="space-y-2">
+            {menuItems.map((item) => (
+              <li key={item.name}>
+                <a
+                  href={item.href}
+                  className="block py-2 px-4 text-gray-800 hover:bg-gray-100 rounded-md"
+                  onClick={toggleMenu} // Close menu on item click (optional)
+                >
+                  {item.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  );
+};

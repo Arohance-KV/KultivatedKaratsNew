@@ -9,7 +9,7 @@ export const BlogPage = () => {
     const blog = BLOGDATA.filter(blog => blog?._id == id)[0];
 
     return (
-        <section className="flex p-10 inria-serif-regular justify-center items-center w-full h-screen mt-56">
+        <section className="p-10 !inria-serif-regular text-[#A68A7E]  w-full min-h-screen sm:mt-36 mt-14">
             {parse(blog?.blogContent?.markup)};
         </section>
     );
