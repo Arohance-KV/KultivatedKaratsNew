@@ -17,7 +17,7 @@ import { IUser } from '@/utils/interfaces';
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Loader, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 const GIFTCARDS = [
     {
@@ -278,7 +278,7 @@ export const GiftCards = () => {
     <Label
       key={card.name}
       htmlFor={card.name} // Connect label to radio input
-      className="bg-white peer-checked:bg-blue-500 peer-checked:text-white text-[#E1C6B3] flex flex-col pt-2 gap-2 justify-between items-center sm:border-white border border-[#E1C6B3] rounded-lg aspect-video col-span-1 cursor-pointer peer-checked:border-[#D4A373] peer-checked:bg-[#E1C6B3]"
+      className="bg-white peer-checked:text-white text-[#E1C6B3] flex flex-col pt-2 gap-2 justify-between items-center sm:border-white border border-[#E1C6B3] rounded-lg aspect-video col-span-1 cursor-pointer peer-checked:border-[#D4A373] peer-checked:bg-[#E1C6B3]"
     >
       <RadioGroupItem
         id={card.name} // Ensure unique ID

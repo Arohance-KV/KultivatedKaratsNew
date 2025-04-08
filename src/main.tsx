@@ -25,6 +25,7 @@ import { PaymentSuccess } from './components/site/home-page/PaymentSuccess.tsx';
 import { BlogPage } from './components/site/home-page/BlogPage.tsx';
 import { BlogsPage } from './components/site/home-page/BlogsPage.tsx';
 import { SetShipping } from './components/site/home-page/SetShipping.tsx';
+import { Products } from './components/site/home-page/Products.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
               <Route path="/store-locator" element={<StoreLocator />} />
               <Route path="/giftcards" element={<GiftCards />} />
               <Route path="/collections" element={<Collections />} />
+              <Route path="/products" element={<Products />} />
               <Route path="/test" element={<Test />} />
               <Route path="/video-cart" element={<VideoCartPage />} />
               <Route path="/store-locator" element={<StoreLocator />} />
@@ -54,7 +56,6 @@ const router = createBrowserRouter(
               <Route path="/blogs/" element={<BlogsPage />} />
               <Route path="/blogs/:id" element={<BlogPage />} />
               <Route path="/set-shipping" element={<SetShipping />} />
-
           </Route>
       </Route>
   )
