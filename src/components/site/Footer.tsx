@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
     return (
-        <div className="sm:block hidden bg-[#E1C6B3]">
-            <div className="text-white p-10 inria-serif-regular gap-4 bg-[#E1C6B3] flex flex-col w-full h-96">
+        <div className="bg-[#E1C6B3]">
+            <div className="sm:flex hidden text-white p-10 inria-serif-regular gap-4 bg-[#E1C6B3] flex-col w-full h-96">
                 <div className="flex gap-4 flex-1">
                     <div className="flex-1 flex flex-col gap-4 justify-between">
                         <img src="/logo.svg" className="w-[60%]" />
@@ -46,7 +46,7 @@ export const Footer = () => {
                 <p className="flex justify-center items-center gap-2"><Copyright /> 2025 Kultivated Karats</p>
             </div>
             <footer className="bg-[#E1C6B3] sm:hidden block inria-serif-regular mt-56 py-8 text-white text-center">
-                <div className="container mx-auto px-4">
+                <div className="container mx-auto px-4 flex flex-col justify-center items-center">
                     {/* Copyright */}
                     <div className="mb-6">
                     <p className="text-lg">&copy; 2025 Kultivated Karats</p>
@@ -60,17 +60,17 @@ export const Footer = () => {
 
                     {/* Description */}
                     <div className="mb-6 px-6 md:px-24">
-                    <p className="w-[80%] leading-relaxed">
+                    <p className="w-[80%] leading-relaxed text-center">
                         Kultivated Karats is a pioneer in the lab-grown diamond industry, revolutionizing the world of fine jewelry with a profound commitment to innovation, sustainability, and exceptional customer experiences.
                     </p>
                     </div>
 
                     {/* Social Icons */}
                     <div className="flex justify-center space-x-6 mb-8">
-                    <a href="#" className="hover:opacity-75">
+                    <a href="https://www.instagram.com/kultivatedkarats/" className="hover:opacity-75">
                         <Instagram size={24} />
                     </a>
-                    <a href="#" className="hover:opacity-75">
+                    <a href="https://www.facebook.com/people/Kultivated-Karats-Lab-Grown-Diamonds/61568391746014/" className="hover:opacity-75">
                         <Facebook size={24} />
                     </a>
                     </div>

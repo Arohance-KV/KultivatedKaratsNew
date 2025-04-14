@@ -26,6 +26,10 @@ import { BlogPage } from './components/site/home-page/BlogPage.tsx';
 import { BlogsPage } from './components/site/home-page/BlogsPage.tsx';
 import { SetShipping } from './components/site/home-page/SetShipping.tsx';
 import { Products } from './components/site/home-page/Products.tsx';
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoldCoins } from './components/site/home-page/GoldCoins.tsx';
+import { GoldCoinPage } from './components/site/home-page/GoldCoinPage.tsx';
+import { Categories } from './components/site/home-page/Categories.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,24 +51,31 @@ const router = createBrowserRouter(
               <Route path="/test" element={<Test />} />
               <Route path="/video-cart" element={<VideoCartPage />} />
               <Route path="/store-locator" element={<StoreLocator />} />
+              <Route path="/gold-coins" element={<GoldCoins />} />
               <Route path="/wishlist" element={<WishListPage />} />
               <Route path="/video-cart/book" element={<VideoCallBookingPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/product/:productId" element={<ProductPage />} />
+              <Route path="/gold-coin/:goldCoinWeight" element={<GoldCoinPage />} />
               <Route path="/account-details/" element={<AccountSettings />} />
               <Route path="/payment-success/" element={<PaymentSuccess />} />
               <Route path="/blogs/" element={<BlogsPage />} />
               <Route path="/blogs/:id" element={<BlogPage />} />
               <Route path="/set-shipping" element={<SetShipping />} />
+              <Route path="/categories" element={<Categories />} />
           </Route>
       </Route>
   )
 );
 
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
       <Provider store={store}>
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
           <RouterProvider router={router} />
+        </GoogleOAuthProvider>
           {/* <AnimatedCursor /> */}
       </Provider>
   </StrictMode>

@@ -4,7 +4,7 @@ import { Button } from "../../ui/button";
 import { gsap } from "gsap";
 import { useEffect
     // , useRef
-    , useState } from "react";
+    , useRef, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { BLOGDATA } from "@/utils/constants";
@@ -92,7 +92,7 @@ const TESTIMONIALS = [
     {
         customerName: "Karandeep",
         rating: 5,
-        descripttion: `I couldn’t be happier with my decision to purchase a lab-grown diamond from Kultivated Carats! From start to finish, the experience was exceptional. The website was easy to navigate, and I really appreciated the transparency about the diamond’s origin and the sustainable practices behind its creation.`,
+        descripttion: `I couldn’t be happier with my decision to purchase a lab-grown diamond from Kultivated Carats! From start to finish, the experience was exceptional.`,
         sourceLogo: {
             url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
             publicId: ""
@@ -120,18 +120,18 @@ const ReviewCard = ({ name, rating, review, imageUrl } : { name: string, rating:
     };
   
     return (
-      <div className="bg-[#E1C6B3] rounded-[15px] p-6 flex items-center w-[656px] h-[222px]">
-        <div className="bg-white rounded-full w-[110px] h-[110px] mr-6 flex-shrink-0">
+      <div className="bg-[#E1C6B3] rounded-[15px] p-6 flex items-center sm:w-[656px] sm:h-[222px] w-[350px] ">
+        <div className="bg-white rounded-full w-[20%] h-[full] mr-6 flex-shrink-0">
           <img src={imageUrl} className="w-full h-full rounded-[inherit]" alt="" />
         </div>
         <div>
-          <h3 className="text-white text-3xl font-normal mb-2 tracking-wider">
+          <h3 className="text-white text-xl font-normal mb-2 tracking-wider">
             {name}
           </h3>
           <div className="flex items-center mb-2">
             {renderStars()}
           </div>
-          <p className="text-white text-base font-normal tracking-wide leading-6">
+          <p className="text-white text-xs sm:text-base font-normal tracking-wide leading-6">
             {review}
           </p>
         </div>
@@ -359,22 +359,36 @@ export const HomePage = () => {
                 translateX: "300px",
                 duration: 2,
                 rotateZ: 80,
+                onStart: () => {
+                        // @ts-ignore
+                        categoriesImageRef.current.src = "/earring.png";
+                }
             })
             .to("#categories-hover-element", {
                 translateX: "560px",
                 duration: 2,
                 rotateZ: 100,
+                onStart: () => {
+                    // @ts-ignore
+                    categoriesImageRef.current.src = "/pendent.png";
+                }
             })
             .to("#categories-hover-element", {
                 translateX: "0",
                 duration: 2,
                 rotateZ: 75,
+                onStart: () => {
+                    // @ts-ignore
+                    categoriesImageRef.current.src = "/ring.png";
+                }
             });
     }, []);
 
     const navigate = useNavigate();
 
-    // const categoriesImageRef = useRef(null);
+    const categoriesImageRef = useRef(null);
+
+    // const [ aboutUsEmblem, setAboutUsEmblem ] = useState();
 
     return (
         <>
@@ -485,7 +499,7 @@ export const HomePage = () => {
                     </p>
                 </section>
                 <section className="w-[90%] justify-self-center flex flex-col my-14 justify-center items-center self-center">
-                    <div className="flex-1 flex w-full relative">
+                    {/* <div className="flex-1 flex w-full relative">
                         <div className="flex-1 ">
                             <div className="text-[#BFA6A1] w-full text-nowrap text-[200%] mb-14">
                                 What people say
@@ -497,18 +511,15 @@ export const HomePage = () => {
                             </div>
                         </div>
                         <img src="/double-quotes.svg" className="z-0 sm:-bottom-[22%] -bottom-[70%] scale-50 sm:scale-100 absolute sm:left-[50%] left-0 sm:-translate-x-1/2" alt="" />
-                    </div>
-                    <div className="flex-1 w-full sm:rounded-ee-[200px] rounded-ee-[100px] flex items-center pt-[5%] pl-[5%] bg-[#BFA6A1] z-10">
-                        <div className="inria-serif-regular w-[70%] h-[100%] relative rounded-[inherit] text-sm py-5 text-white">
-                            I couldn’t be happier with my decision to purchase a lab-grown diamond from Kultivated Carats!
-                             {/* From start to finish, the experience was exceptional. The website was easy to navigate, and I really appreciated the transparency about the diamond’s origin and the sustainable practices behind its creation. */}
-                            <div className="absolute font-[montserrat] bottom-[10%] italic right-0 text-sm">
-                                Karandeep
-                            </div>
+                    </div> */}
+                    <div className="text-[#BFA6A1] justify-evenly gap-4 flex flex-col items-center w-full h-full text-[200%] sm:mb-0 sm:text-[500%]">
+                        What people say
+                        <div>
+                            {TESTIMONIALS.map(testimonial => <ReviewCard name={testimonial?.customerName} rating={testimonial?.rating} imageUrl={testimonial?.sourceLogo?.url} review={testimonial?.descripttion} />)}
                         </div>
                     </div>
                 </section>
-                <section className="my-8 w-full flex gap-4 justify-evenly flex-col items-center">
+                <section className="w-full flex gap-4 justify-evenly flex-col items-center">
                     <p className="blog-section-fade text-3xl text-[#BFA6A1]">Read the blog</p>    
                     <div className="flex justify-evenly w-full items-center">
                         {BLOGDATA?.map((blog) => (
@@ -630,16 +641,19 @@ export const HomePage = () => {
                             // categoriesImageRef.current.src = "/pendent.png";
                         }}>Pendants</div>
                         <div id="categories-hover-element" className="absolute bg-[#E9D6C8] z-[0] w-[350px] top-1/2 flex justify-end items-end -translate-y-1/2 overflow-hidden left-[10%] aspect-video rotate-[75deg]">
-                            {/* <img ref={categoriesImageRef} src="/ring.png" className="-rotate-[120deg] h-auto -translate-y-[10%] w-[70%]" alt="" /> */}
+                            <img ref={categoriesImageRef} src="/ring.png" className="-rotate-[120deg] h-auto -translate-y-[10%] w-[70%]" alt="" />
                         </div>
                     </div>
-                        <Button className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all">See more <ArrowRight /></Button>
+                        <Button onClick={(e) => {
+                            e.preventDefault();
+                            navigate("/categories");
+                        }} className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all">See more <ArrowRight /></Button>
                 </section>
                 <section id="shop-by-budget" className="w-full snap-start opacity-0 min-h-screen playfair-display relative mb-14 justify-center items-center">
                     {/* <div className="flex bg-yellow-900/50 rotate-z-[-30deg] w-[80%] justify-between overflow-x-hidden overflow-y-hidden py-10"> */}
                         <div onClick={(e) => {
                             e.preventDefault();
-                            navigate("/collections?filter=60k");
+                            navigate("/collections?filter=100k");
                         }} id="shop-by-budget-hexagon-1" className="w-[500px] shop-by-budget-hexagon hover:cursor-pointer absolute overflow-hidden flex justify-center items-center top-[20%] left-[10%]" style={{
                         // <div id="shop-by-budget-hexagon-1" className="hover:cursor-pointer absolute overflow-hidden flex justify-center items-center top-[20%] left-[10%]" style={{
                             aspectRatio: "1/cos(30deg)",
@@ -649,13 +663,13 @@ export const HomePage = () => {
                             // rotate: "-45deg"
                         }}>
                             <p className="z-10 rotate-z-[30deg] text-white text-9xl">
-                                60k
+                                100k
                             </p>
                             <img src="/KultivatedKaratsAssets/shop-by-budget-1.png" className="top-0 bottom-0 hover:cursor-pointer rotate-z-[30deg] left-0 right-0 object-cover absolute" alt="" />
                         </div>
                         <div onClick={(e) => {
                             e.preventDefault();
-                            navigate("/collections?filter=30k");
+                            navigate("/collections?filter=75k");
                         }} id="shop-by-budget-hexagon-2" className="w-[300px] shop-by-budget-hexagon absolute hover:cursor-pointer overflow-hidden flex justify-center items-center top-[15%] left-[45%]" style={{
                         // <div id="shop-by-budget-hexagon-2" className="absolute hover:cursor-pointer overflow-hidden flex justify-center items-center top-[15%] left-[45%]" style={{
                             aspectRatio: "1/cos(30deg)",
@@ -664,7 +678,7 @@ export const HomePage = () => {
                             // rotate: "-45deg"
                         }}>
                             <p className="z-10 rotate-z-[30deg] text-white text-6xl">
-                                30k
+                                75k
                             </p>
                             <img src="/KultivatedKaratsAssets/shop-by-budget-2.png" className="top-0 bottom-0 rotate-z-[30deg] left-0 right-0 object-cover absolute" alt="" />
                         </div>
@@ -681,7 +695,7 @@ export const HomePage = () => {
                         </div> */}
                         <div onClick={(e) => {
                             e.preventDefault();
-                            navigate("/collections?filter=15k");
+                            navigate("/collections?filter=50k");
                         }} id="shop-by-budget-hexagon-3" className="w-[150px] shop-by-budget-hexagon shop-by-budget-hexagon z-10 absolute hover:cursor-pointer overflow-hidden flex justify-center items-center top-[15%] right-[22%]" style={{
                         // <div id="shop-by-budget-hexagon-3" className="z-10 absolute hover:cursor-pointer overflow-hidden flex justify-center items-center top-[15%] right-[22%]" style={{
                             aspectRatio: "1/cos(30deg)",
@@ -690,7 +704,7 @@ export const HomePage = () => {
                             // rotate: "-45deg"
                         }}>
                             <p className="z-[50] rotate-z-[30deg] text-white text-3xl">
-                                15k
+                                50k
                             </p>
                             <img src="/KultivatedKaratsAssets/shop-by-budget-3.png" className="top-0 bottom-0 rotate-z-[30deg] left-0 right-0 object-cover absolute" alt="" />
                         </div>
@@ -750,7 +764,10 @@ export const HomePage = () => {
                                     Discover timeless jewelry crafted with brilliance, elegance, and sustainable luxury at Kultivated Karats.
                                 </p>
                                 <div className="flex-1">
-                                    <Button className="bg-[#E9D6C8] px-10 text-white rounded-none transition-all border-2 hover:text-[#BFA6A1] hover:bg-white border-[#BFA6A1]">See more</Button>
+                                    <Button onClick={(e) => {
+                                        e.preventDefault();
+                                        navigate("/collections");
+                                    }} className="bg-[#E9D6C8] px-10 text-white rounded-none transition-all border-2 hover:text-[#BFA6A1] hover:bg-white border-[#BFA6A1]">See more</Button>
                                 </div>
                             </div>
                             {/* <div className="flex-[0.33] bg-red-600/30 w-full">

@@ -6,10 +6,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IUser } from "@/utils/interfaces";
-import { Check, X } from "lucide-react";
+import { Check, LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { resetCustomerData } from "@/redux/slices/websiteSlice";
+import { googleLogout } from "@react-oauth/google";
 
 const OPTIONS = [ "Shipping Details", "Orders", "Video Calls", "Giftcards/vouchers", "Personal details" ];
 
@@ -117,6 +119,35 @@ export const AccountSettings = () => {
 
     const [ currentOption, setCurrentOption ] = useState(4);
 
+    const dispatch = useDispatch();
+
+    const logout = async () => {
+        try {
+            googleLogout();
+            // @ts-ignore
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}users/logout`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) throw new Error("HTTP error! status: "+response.status);
+
+            const data = await response.json();
+            
+            // navigate("/admin/auth");
+            dispatch(resetCustomerData());
+            localStorage.setItem("cart", JSON.stringify([]));
+            localStorage.setItem("wishList", JSON.stringify([]));
+            localStorage.setItem("videoCallCart", JSON.stringify([]));
+            console.log(data);
+        } catch (error) {
+            console.error("Error: ", error);
+        }
+    }
+
     return (
         <div className='w-full relative pb-14 inria-serif-regular'>
             <UIsideBar side="left"/>
@@ -131,7 +162,7 @@ export const AccountSettings = () => {
                 <div className="flex-[0.4] flex flex-col gap-8 justify-center items-center h-full w-full">
                     <div id='solitare-main' className="flex-[0.5] rounded-tr-[50px] h-[45%] bg-transparent border-2 border-[#BFA6A1] w-[90%]">
                     </div>
-                    <div id='solitare-main' className="flex-[0.5] rounded-tr-[50px] h-[45%] text-white flex flex-col justify-evenly pl-8 bg-[#E1C6B3] w-[90%]">
+                    <div id='solitare-main' className="flex-[0.5] rounded-tr-[50px] h-[45%] text-white flex flex-col relative justify-evenly pl-8 bg-[#E1C6B3] w-[90%]">
 
                             <p onClick={(e) => {
                                 e.preventDefault();
@@ -157,6 +188,12 @@ export const AccountSettings = () => {
                             }}>
                                 Giftcards/vouchers
                             </p>
+                        <Button onClick={ async (e) => {
+                            e.preventDefault();
+                            await logout();
+                        }} className="absolute right-5 bottom-5" variant={"ghost"}>
+                            <LogOut />
+                        </Button>
                     </div>
                 </div>
                 <div className="flex-[0.6] h-full w-full inria-serif-regular relative flex justify-end flex-col">

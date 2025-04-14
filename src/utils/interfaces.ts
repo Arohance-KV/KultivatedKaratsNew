@@ -26,6 +26,7 @@ export interface IBanner {
 };
 
 export interface IProduct {
+    gemStoneColour: string
     _id?: string,
     productId: string,
     code: string,
@@ -53,13 +54,25 @@ export interface IProduct {
     imageUrl: { url: string, publicId: string }[],
     isPendantFixed: boolean,
     containsGemstone: boolean,
-    gemStoneWeight: boolean,
+    gemStoneWeightSol: number,
     isMrpProduct: boolean,
     addChain: boolean,
     pointerWeight: boolean,
     colouredStone: string [],
     gemStoneWeightPointer: number
 };
+
+export interface IGoldCoin {
+    _id: string,
+    name: string, 
+    weight: number,
+    karats: number,
+    imageUrl: [{
+        url: string,
+        publicId: string,
+    }],
+    price: number
+}
 
 export interface ICartItem {
     product: IProduct,
@@ -70,7 +83,7 @@ export interface ICartItem {
 };
 
 export interface IWishListItem {
-    product: IProduct,
+    product: IProduct | IGoldCoin,
     color: string,
     karat: number,
 };
@@ -101,7 +114,13 @@ export interface ICollection {
 
 export interface IUser {
     _id?: string,
-    firstName: string
+    googleId?: string,
+    img?: {
+        link: string,
+        source: string
+    },
+    verified?: boolean,
+    firstName: string,
     lastName: string,
     phoneNumber: number,
     phoneNumberVerified: boolean,

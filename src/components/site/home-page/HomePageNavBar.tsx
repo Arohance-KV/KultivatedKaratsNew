@@ -1,15 +1,13 @@
-import { CircleUser, Heart, MapPinned, Search, ShoppingCart, Store, Video } from "lucide-react";
-// import { Input } from "../../ui/input";
+import { CircleUser, CoinsIcon, Heart, MapPinned, Search, ShoppingCart, Store, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../../ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IProduct, IUser } from "@/utils/interfaces";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-// import { Squash as Hamburger } from 'hamburger-react';
-// import { slide as Menu } from 'react-burger-menu';
 import { Input } from "@/components/ui/input";
 import { MobileNav } from "./MobileNav";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const HomePageNavBar = () => {
 
@@ -19,11 +17,13 @@ export const HomePageNavBar = () => {
     const [ wishListLength, setWishListLength ] = useState(0);
     const [ cartLength, setCartLength ] = useState(0);
     const [ videoCartLength, setVideoCartLength ] = useState(0);
-
+    const [ avatarUrl, setAvatarUrl ] = useState("");
     useEffect(() => {
         setWishListLength(customerData?.wishList?.length);
         setVideoCartLength(customerData?.videoCallCart?.length);
         setCartLength(customerData?.cart?.length);
+        setAvatarUrl(customerData?.img?.link!);
+        console.log(avatarUrl);
     }, [ customerData ]);
 
     const [query, setQuery] = useState("");
@@ -46,6 +46,7 @@ export const HomePageNavBar = () => {
                     <div className="flex-1"></div>
                     <div className="flex-[0.4] gap-[3%] !stroke-white!text-white flex justify-center items-center">
                         <Link to={"/store-locator"}><MapPinned className="stroke-[1.5] stroke-[#A68A7E]" /></Link>
+                        <Link to={"/gold-coins"}><CoinsIcon className="stroke-[1.5] stroke-[#FFD700]" /></Link>
                         <div className="relative w-full">
                             <Input type="text" onClick={(e) => {
                                 e.preventDefault();
@@ -53,16 +54,18 @@ export const HomePageNavBar = () => {
                             }} placeholder="Search" value={query}
                             onChange={(e) => setQuery(e.target.value)} className="pl-6 h-8 border-[#A68A7E] border-2 bg-transparent text-[#A68A7E] placeholder:text-[#A68A7E]" />
                             <Search className="absolute top-1/2 left-2 -translate-y-1/2 w-3 h-3 stroke-[#A68A7E] stroke-2"/>
-                            {isSearchBarOpen && <div className="absolute h-56 w-full top-[150%] rounded-lg flex flex-col gap-4 bg-white overflow-y-scroll text-[#A68A7E]">
-                                {filteredProducts?.map(product => {
-                                    return (
-                                        <a onClick={() => {
-                                            setIsSearchBarOpen(false)
-                                        }} href={`/product/${product?._id}`} className="px-4">
-                                            {product?.name}
-                                        </a>
-                                    )
-                                })}
+                            {isSearchBarOpen && <div className="absolute h-56 w-full top-[150%] rounded-lg py-4 rounded-br-lg flex flex-col gap-4 bg-white  text-[#A68A7E]">
+                                <div className="flex flex-col gap-4 overflow-y-scroll">
+                                    {filteredProducts?.map(product => {
+                                        return (
+                                            <a onClick={() => {
+                                                setIsSearchBarOpen(false)
+                                            }} href={`/product/${product?._id}`} className="px-4">
+                                                {product?.name}
+                                            </a>
+                                        )
+                                    })}
+                                </div>
                             </div>}
                         </div>
                         <Link to={"/video-cart"}>
@@ -84,8 +87,11 @@ export const HomePageNavBar = () => {
                             </Button>
                         </Link>
                         <Link to={"/account-details"}>
-                            <Button className="rounded-full m-0 px-3 py-4" variant={"ghost"}>
-                                <CircleUser className="stroke-[#A68A7E] w-10 h-10"/>
+                            <Button className="rounded-full h-auto hover:scale-110 transition-all m-0 px-0 py-0" variant={"ghost"}>
+                                {<Avatar>
+                                    <AvatarImage src={avatarUrl}></AvatarImage>
+                                    <AvatarFallback><CircleUser className="stroke-[#A68A7E] w-10 h-10"/></AvatarFallback>
+                                </Avatar>}
                             </Button>
                         </Link>
                     </div>

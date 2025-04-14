@@ -264,13 +264,15 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
 
     const [ isRemoveItemLoadingButton, setIsRemoveItemLoadingButton ] = useState(false);
 
+    if (typeof cartItem == "object")
+
     return (    
         <div className="w-full relative flex gap-4">
             <img src={cartItem?.product?.imageUrl[0]?.url} className="sm:h-32 h-20 border-2 border-[#BFA6A1] aspect-square sm:aspect-video object-cover rounded-md" alt="" />
             <div className=" flex-1 bg-white border-2 border-[#BFA6A1] px-8 flex rounded-md text-[#A68A7E] inria-serif-regular">
                 <div className="flex-1 flex flex-col justify-around items-start">
                     <p>Name: {cartItem?.product?.name}</p>
-                    <p>code: {cartItem?.product?.code}</p>
+                    {cartItem?.product?.productId! && <p>code: {cartItem?.product?.productId}</p>}
                 </div>
                 <div className="flex-1 flex flex-col justify-around items-end">
                     <p>Price for 1: {Math.round(cartItem?.totalPrice)}</p>
@@ -279,13 +281,13 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
                 <Button disabled={isRemoveItemLoadingButton} variant={"ghost"} className="rounded-full py-3 px-1 w-0 h-0 ml-4 mt-4 bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={async (e) => {
                     e.preventDefault();
                     setIsRemoveItemLoadingButton(true);
-                    await updateCart({ product: cartItem.product!, quantity: 1, color: "white", karat: 14, totalPrice: 0 }, false, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
+                    const response = await updateCart({ product: cartItem.product!, quantity: 1, color: "white", karat: 14, totalPrice: 0 }, false, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
                     setIsRemoveItemLoadingButton(false);
-                    console.log(customerData?.cart)
-                    setCartItems(customerData?.cart)
+                    console.log(customerData?.cart, response)
+                    setCartItems(customerData?.cart);
                     // setIsInVideoCallCart(false);
                     return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });            
-                }}><Minus className="w-2 h-2" /></Button>
+                }}>{isRemoveItemLoadingButton ? <Loader2 className="w-2 h-2 animate-spin" /> : <Minus className="w-2 h-2" />}</Button>
             </div>
         </div>
     );

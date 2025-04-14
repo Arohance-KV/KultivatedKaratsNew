@@ -19,6 +19,7 @@ const shippingFormSchema = z.object({
     company: z.string().optional(),
     line1: z.string(),
     line2: z.string().optional(),
+    phoneNumber: z.coerce.number(({ invalid_type_error: "Please enter a valid number." })).min( 10, { message: "Phone no should be 10 digits!"}),
 }); 
 
 export const SetShipping = () => {
@@ -63,7 +64,7 @@ const onShippingFormSubmit = async (values: z.infer<typeof shippingFormSchema>) 
             //     throw new Error("Unauthorized user");
             // }
             
-            dispatch(setUser(data.data.user));
+            dispatch(setUser(data.data));
             navigate("/cart");
             console.log(data);
         } catch (error) {
@@ -177,6 +178,29 @@ const onShippingFormSubmit = async (values: z.infer<typeof shippingFormSchema>) 
                                             <FormControl>
                                                 <Input {...field} placeholder="Company name" />
                                             </FormControl>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )
+                            }}
+                        />
+                        <FormField 
+                            control={shippingForm.control}
+                            name="phoneNumber"
+                            render={( {field} ) => {
+                                return (
+                                    <FormItem>
+                                        <div className="grid w-full max-w-sm items-center gap-1.5">
+                                            {/* <Label htmlFor="phone">Phone Number</Label> */}
+                                            <Input
+                                                {...field}
+                                                type="tel"
+                                                id="phone"
+                                                placeholder="Phone number"
+                                                pattern="^\+?[1-9]\d{1,14}$"
+                                                inputMode="tel"
+                                                className="font-mono"
+                                            />
                                         </div>
                                         <FormMessage />
                                     </FormItem>
