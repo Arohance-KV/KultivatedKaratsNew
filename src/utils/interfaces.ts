@@ -83,7 +83,8 @@ export interface ICartItem {
 };
 
 export interface IWishListItem {
-    product: IProduct | IGoldCoin,
+    // product: IProduct | IGoldCoin,
+    product: IProduct,
     color: string,
     karat: number,
 };
