@@ -148,11 +148,13 @@ export const GoldCoinPage = () => {
                             e.preventDefault();
                             if( isInWishList )
                             {
+                                // @ts-ignore
                                 await updateWishList({ product: goldCoinData!, color: colourRef.current, karat: karatRef.current }, false, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                 setIsWishListAddedButtonLoading(false);
                                 setIsInWishList(false);
                                 return toast.success("Product deleted from wishlist successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                             }
+                            // @ts-ignore
                             await updateWishList({ product: goldCoinData!, color: colourRef.current, karat: karatRef.current}, true, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                             setIsWishListAddedButtonLoading(false);
                             setIsInWishList(true);
@@ -335,11 +337,13 @@ export const GoldCoinPage = () => {
                                     e.preventDefault();
                                     if( isInWishList )
                                     {
+                                        // @ts-ignore
                                         await updateWishList({ product: goldCoinData!, color: colourRef.current, karat: karatRef.current }, false, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                         setIsWishListAddedButtonLoading(false);
                                         setIsInWishList(false);
                                         return toast.success("Product deleted from wishlist successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                     }
+                                    // @ts-ignore
                                     await updateWishList({ product: goldCoinData!, color: colourRef.current, karat: karatRef.current}, true, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                     setIsWishListAddedButtonLoading(false);
                                     setIsInWishList(true);
