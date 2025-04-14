@@ -388,7 +388,15 @@ export const HomePage = () => {
 
     const categoriesImageRef = useRef(null);
 
-    // const [ aboutUsEmblem, setAboutUsEmblem ] = useState();
+    const [ aboutUsEmblem, setAboutUsEmblem ] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setAboutUsEmblem(prev => (prev >= 3 ? 0 : prev + 1));
+        }, 3000);
+      
+        return () => clearInterval(interval); // good cleanup
+    }, []);
 
     return (
         <>
@@ -555,16 +563,16 @@ export const HomePage = () => {
                     <Button onClick={() => navigate("/about")} className="bg-[#BFA6A1] mb-8 text-white px-4 rounded-none sm:hidden block">About us</Button>
                     <div className="flex gap-4 scale-50 sm:scale-100">
                         <div id="card" className="rounded-[25%] shadow-[0px_0px_20px_0px_rgba(119,96,23,0.25)] flex p-4 items-center justify-center border-[#C5B2A1] border-2 text-[#C5B2A1] flex-col max-w-[150px] aspect-square">
-                            <Truck className="w-[50%] h-[50%] stroke-2"/>
-                            <span className="text-nowrap font-bold">Free shipping</span>
-                        </div>
-                        <div id="card" className="rounded-[25%] sm:hidden flex shadow-[0px_0px_20px_0px_rgba(119,96,23,0.25)] p-4 items-center justify-center border-[#C5B2A1] border-2 text-[#C5B2A1] flex-col max-w-[150px] aspect-square">
-                            <Truck className="w-[50%] h-[50%] stroke-2"/>
-                            <span className="text-nowrap font-bold">Free shipping</span>
-                        </div>
-                        <div id="card" className="rounded-[25%] sm:hidden flex shadow-[0px_0px_20px_0px_rgba(119,96,23,0.25)] p-4 items-center justify-center border-[#C5B2A1] border-2 text-[#C5B2A1] flex-col max-w-[150px] aspect-square">
-                            <Truck className="w-[50%] h-[50%] stroke-2"/>
-                            <span className="text-nowrap font-bold">Free shipping</span>
+                            {aboutUsEmblem == 0 ? <>
+                                <Truck className="w-[50%] h-[50%] stroke-2"/>
+                                <span className="text-nowrap font-bold">Free shipping</span>
+                            </> : aboutUsEmblem == 1 ? <>
+                                <Gem className="w-[50%] h-[50%] stroke-2"/>
+                                <span className="font-bold text-center text-sm">Tested and certified diamonds</span>
+                            </> : <>
+                                <Stamp className="w-[50%] h-[50%] stroke-2"/>
+                                <span className="font-bold text-sm text-center">Hallmark pure gold</span>
+                            </>}
                         </div>
                     </div>
                     <div className="sm:flex hidden items-center h-full flex-1 w-[400px] sm:visible">
