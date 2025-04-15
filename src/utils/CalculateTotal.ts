@@ -47,6 +47,8 @@ export const getProductPriceDetails = ({ isGemStoneProduct, isChainAdded, chainK
     const newMultiDaiWeight = safeNumber(multiDiaWeight);
     const newSolitareWeight = safeNumber(solitareWeight);
     const newPointerWeight = safeNumber(pointersWeight);
+    // const newGemStoneSolWeight = safeNumber(gemStoneSolWeight);
+    // const newGemStonePointerWeight = safeNumber(gemStonePointerWeight);
     const grossWeight = (netWeight + ((newPointerWeight == undefined ? (newSolitareWeight + newMultiDaiWeight + newPointerWeight) : (newSolitareWeight + newMultiDaiWeight)) * 0.2));
     const goldRate = (netWeight * (karat == 14 ? goldRate14K : goldRate18K)); // Todo: Confirm
     const makingCharges = grossWeight * 1200;

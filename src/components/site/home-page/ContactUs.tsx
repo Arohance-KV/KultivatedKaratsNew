@@ -141,7 +141,7 @@ export const ContactUs = () => {
         </div>
       </div>
       <div className='flex-1'>
-        <img src="" alt="Contact-us-banner" className='bg-white' />
+        <img src={'/contact-us-banner.png'} alt="Contact-us-banner" className='bg-white' />
       </div>
     </section>
   );
