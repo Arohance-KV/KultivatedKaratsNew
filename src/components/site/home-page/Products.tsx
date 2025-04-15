@@ -4,7 +4,7 @@ import { UIsideBar } from "./Solitare"
 import { Button } from "../../ui/button";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { IProduct } from "../../../utils/interfaces";
+import { ICategory, IProduct } from "../../../utils/interfaces";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -33,6 +33,8 @@ export const Products = () => {
 
     const productDataFromStore: IProduct[] = useSelector((state: any) => state.website.productData);
 
+    const categoryDataFromStore: ICategory[] = useSelector((state: any) => state.website.categories);
+
     const [ products, setProducts ] = useState<IProduct[]>([]);
 
     const navigate = useNavigate();
@@ -42,13 +44,14 @@ export const Products = () => {
     useEffect(() => {
         if ( categoryFilter ) {
             console.log(categoryFilter, productDataFromStore[0]?.category)
-            setProducts(productDataFromStore.filter(p => p.category?.name?.toLowerCase() == categoryFilter?.toLowerCase()))
+            const category = categoryDataFromStore?.filter(category => category?.name?.trim()?.toLowerCase() == categoryFilter.trim()?.toLowerCase())[0];
+            setProducts(category?.products!);
             setIsLoading(false);
-            return console.log(products);
+            return console.log(categoryDataFromStore, categoryFilter, category, products);
         };
         setProducts(productDataFromStore);
         setIsLoading(false);
-    }, [ productDataFromStore ]);
+    }, [ productDataFromStore, categoryDataFromStore ]);
 
     const [ showFilter, setShowFilter ] = useState<Boolean>(false);
     const [ showSortOptions, setShowSortOptions ] = useState<Boolean>(false);
@@ -190,7 +193,7 @@ export const Products = () => {
                 {<div id="sub-collection-section" className="gap-8 w-full">
                     <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
                         {isLoading ? <Loader2 className="sm:stroke-white stroke-[#E1C6B3] self-center justify-self-center" /> : products
-                        .filter((item: IProduct) => {
+                        ?.filter((item: IProduct) => {
                         const withinPriceRange =
                             item.price >= filters.price.min && item.price <= filters.price.max;
 

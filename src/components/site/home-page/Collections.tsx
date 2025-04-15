@@ -9,66 +9,67 @@ import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 
 const Collection = ({ data, navigate } : { data : ICollection, navigate: NavigateFunction}) => {
     
-    if ( data?.products?.length == 0 ) return;
-    
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const filter = queryParams.get("filter");
-
-    // console.log(filter);
-     
-    let collectionData = data;
-
-    if ( filter == "60k" )
-        collectionData = { ...data, products: data?.products?.filter((product) => product.price < 60000 )! || []}
-    if ( filter == "30k" )
-        collectionData = { ...data, products: data?.products?.filter((product) => product.price < 30000 )! || []}
-    if ( filter == "15k" )
-        collectionData = { ...data, products: data?.products?.filter((product) => product.price < 15000 )! || []}
-    
-    console.log(collectionData);
+    if (!data?.products?.length) return null;
 
     return (
-        <>
-            {collectionData?.products?.length! > 0 ? <div>
-                <div id={`${collectionData?.name?.trim()?.toLowerCase()}`} className="w-full my-8 h-auto text-white">
-                    <p className="capitalize font-bold textxl sm:text-white text-[#E1C6B3]">{data.name}</p>
+        <div>
+            <div id={`${data?.name?.trim()?.toLowerCase()}`} className="w-full my-8 h-auto text-white">
+                <p className="capitalize font-bold textxl sm:text-white text-[#E1C6B3]">{data.name}</p>
+            </div>
+            <div id="sub-collection-section" className="gap-8 w-full">
+                <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
+                    {data?.products?.map((item: IProduct) => (
+                        <button
+                            key={item._id}
+                            className="flex flex-col col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigate(`/product/${item?._id}`);
+                            }}
+                        >
+                            <img
+                                src={item?.imageUrl[0]?.url}
+                                alt={item?.name}
+                                className="bg-white sm:min-w-56 object-cover aspect-square"
+                            />
+                        </button>
+                    ))}
                 </div>
-                {<div id="sub-collection-section" className="gap-8 w-full">
-                    <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
-                        {collectionData?.products?.map((item : IProduct) => {
-                            return (
-                                <button className="flex flex-col col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4" onClick={(e) => {
-                                    e.preventDefault();
-                                    navigate(`/product/${item?._id}`);
-                                }}>
-                                    <img src={item?.imageUrl[0]?.url} alt="" className="bg-white sm:min-w-56 object-cover aspect-square"/>
-                                    <div className="sm:text-white text-[#E1C6B3] text-[4px] flex justify-between">
-                                        {/* <p className="capitalize w-1/2 text-[8px] sm:text-sm">Name: {item.name}</p> */}
-                                        {/* <p className="w-1/2 text-[8px] sm:text-sm">Base price: {item.price}</p> */}
-                                    </div>
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>}
-            </div> : <div>No {data?.name} under {filter}!</div>}
-        </>
-    )
+            </div>
+        </div>
+    );
 }
 
 export const Collections = () => {
 
     const collectionsFromStore = useSelector((state: any) => state.website.collections);
 
-    const [ collections, setCollections ] = useState<ICollection[]>([]);
-
     const navigate = useNavigate();
+    const [ collections, setCollections ] = useState<ICollection[]>([]);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const filter = queryParams.get("filter");
 
     useEffect(() => {
-        setCollections(collectionsFromStore);
-    }, [ collectionsFromStore ]);
+        let filteredCollections = collectionsFromStore.map((collection: ICollection) => {
+            let products = collection.products || [];
 
+            if (filter === "60k") {
+                products = products.filter(product => product.price < 60000);
+            } else if (filter === "30k") {
+                products = products.filter(product => product.price < 30000);
+            } else if (filter === "15k") {
+                products = products.filter(product => product.price < 15000);
+            }
+
+            return {
+                ...collection,
+                products
+            };
+        });
+
+        setCollections(filteredCollections);
+    }, [collectionsFromStore, filter]);
     // const [ showFilter, setShowFilter ] = useState<Boolean>(true);
     const [ showSortOptions, setShowSortOptions ] = useState<Boolean>(false); 
 

@@ -52,7 +52,7 @@ export const Categories = () => {
                             <div className="h-[200px] aspect-square">
                                 <Link to={`/products?category-filter=${category?.name?.toLocaleLowerCase().trim()}`} className="flex h-full gap-2 flex-col">
                                     <img src="" className="bg-white w-full flex-1" />
-                                    <p>
+                                    <p className="capitalize">
                                         {category?.name}
                                     </p>
                                 </Link>
