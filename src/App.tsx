@@ -1,6 +1,6 @@
 import './index.css';
 import { HomePageNavBar } from './components/site/home-page/HomePageNavBar';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Footer } from './components/site/Footer';
 // import { ReactLenis, useLenis } from 'lenis/react'
 import { useEffect } from 'react';
@@ -8,6 +8,16 @@ import { setCategories, setCollections, setCustomerData, setProductData } from '
 import { useDispatch } from 'react-redux';
 // import { useDispatch } from "react-redux";
 import AnimatedCursor from "react-animated-cursor";
+
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]); // Scroll to top on pathname change
+
+  return null; // This component doesn't render anything visually
+}
 
 function App() {
 
@@ -18,6 +28,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // console.log(recentlyViewed);
     (async function verify() {
       try {
         console.log(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}`);
@@ -156,11 +167,14 @@ function App() {
             // toast.error("Failed to fetch categories!", { className: "font-[quicksand]", icon: <ToastWarning /> });
           }
     })();
+    if(localStorage.getItem("recentlyViewedCart")) return;
+    localStorage.setItem("recentlyViewedCart", JSON.stringify([]));
   }, []);
 
   return (
     <div className=''>
       {/* <ReactLenis root> */}
+      <ScrollToTop />
         <HomePageNavBar />
           <Outlet />
           <AnimatedCursor

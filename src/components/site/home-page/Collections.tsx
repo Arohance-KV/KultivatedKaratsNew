@@ -31,7 +31,7 @@ const Collection = ({ data, navigate } : { data : ICollection, navigate: Navigat
     return (
         <>
             {collectionData?.products?.length! > 0 ? <div>
-                <div id="tabs" className="w-full my-8 h-auto text-white">
+                <div id={`${collectionData?.name?.trim()?.toLowerCase()}`} className="w-full my-8 h-auto text-white">
                     <p className="capitalize font-bold textxl sm:text-white text-[#E1C6B3]">{data.name}</p>
                 </div>
                 {<div id="sub-collection-section" className="gap-8 w-full">
@@ -130,6 +130,13 @@ export const Collections = () => {
                             )} */}
                         </div>
                     </div>
+                </div>
+                <div className="w-full flex-wrap flex gap-2">
+                    {collections?.map((collection: ICollection) => {
+                        return (
+                            <a className="border border-white text-white px-4 py-2 rounded-md" href={`#${collection?.name?.trim()?.toLowerCase()}`}>{collection?.name}</a>
+                        );
+                    })}
                 </div>
                 {collections?.map((collection : ICollection) => {
                     return <Collection data={collection} navigate={navigate} />

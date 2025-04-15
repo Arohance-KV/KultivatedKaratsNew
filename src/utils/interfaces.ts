@@ -57,7 +57,7 @@ export interface IProduct {
     gemStoneWeightSol: number,
     isMrpProduct: boolean,
     addChain: boolean,
-    pointerWeight: boolean,
+    pointersWeight: number,
     colouredStone: string [],
     gemStoneWeightPointer: number
 };
@@ -146,7 +146,7 @@ export interface IUser {
             phoneNo: Number,
             status: "Pending" | "Concluded",
             email: String,
-            createdAt: String,
+            createdAt?: String,
         }
     ]
     totalOrderAmount: number,

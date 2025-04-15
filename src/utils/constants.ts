@@ -4,6 +4,9 @@ export enum DashboardOptions {
     Customers = "Customers",    
 };
 
+export const INSTAGRAM = `https://www.instagram.com/kultivatedkarats/`;
+export const FACEBOOK = `https://www.facebook.com/61555613443273`;
+
 export const BLOGDATA = [
     {
         _id: "01",

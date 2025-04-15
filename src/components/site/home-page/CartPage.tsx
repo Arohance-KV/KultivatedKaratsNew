@@ -48,7 +48,7 @@ export const CartPage = () => {
         document.body.appendChild(script);
     }, []);
 
-    const copuonRef = useRef(null);
+    const couponRef = useRef<HTMLInputElement>(null);
     const voucherOrGiftCardRef = useRef(null);
 
     return (
@@ -82,14 +82,14 @@ export const CartPage = () => {
                             </div>
                             <div className="flex flex-col gap-4 justify-center items-center">
                                 <div className="relative w-[80%]">
-                                    <Input ref={copuonRef} className="justify-self-center w-full border border-dashed" placeholder="Enter coupon code" />
+                                    <Input ref={couponRef} className="justify-self-center w-full border border-dashed" placeholder="Enter coupon code" />
                                     <Button onClick={ async (e) => {
                                         e.preventDefault();
-                                        // @ts-ignore
-                                        const code = copuonRef?.current?.value!;
+                                        
+                                        const code = couponRef?.current?.value!;
                                         if ( code ) {
                                             try {
-                                                // @ts-ignore
+                                                
                                                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}coupons/verify-coupon`, {
                                                     method: "POST",
                                                     headers: {
@@ -129,7 +129,7 @@ export const CartPage = () => {
                                     if ( customerData?.address?.city == null )
                                         return navigate("/set-shipping");
                                     try {
-                                        // @ts-ignore
+                                        
                                         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}payment/create-an-order/`, {
                                             method: "POST",
                                             headers: {
@@ -150,16 +150,16 @@ export const CartPage = () => {
                                         // console.log(data, window.Razorpay);
 
                                         var options = {
-                                            "key_id": import.meta.env.VITE_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
-                                            // "key_id": "rzp_test_2KRjU8skvbLEYt", // Enter the Key ID generated from the Dashboard
+                                            "key_id": import.meta.env.VITE_RAZORPAY_KEY_ID,
+                                            "key": import.meta.env.VITE_RAZORPAY_KEY_ID,
                                             "amount": (Math.round(cartItems?.reduce((total, item) => {
                                                 return total + item?.totalPrice * item?.quantity;
-                                            }, 0)!) * 100), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                            }, 0)!) * 100),
                                             "currency": "INR",
-                                            "name": "Kultivated karats", //your business name
+                                            "name": "Kultivated karats",
                                             "description": "Test Transaction",
                                             "image": "https://example.com/your_logo",
-                                            "order_id": data?.data?.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                                            "order_id": data?.data?.id, 
                                             "handler": async function (res : any){
                                                 try {
                                                     console.log(res);

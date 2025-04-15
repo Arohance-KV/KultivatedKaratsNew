@@ -1,3 +1,4 @@
+import { FACEBOOK, INSTAGRAM } from "@/utils/constants";
 import { Copyright, Facebook, Instagram, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -12,8 +13,12 @@ export const Footer = () => {
                             Kultivated Karats is a pioneer in the lab-grown diamond industry, revolutionizing the world of fine jewelry with a profound commitment to innovation, sustainability, and exceptional customer experiences.
                         </p>
                         <div className="flex gap-4 items-center">
-                            <Instagram />
-                            <Facebook />
+                            <a href={INSTAGRAM} className="hover:opacity-75">
+                                <Instagram size={24} />
+                            </a>
+                            <a href={FACEBOOK} className="hover:opacity-75">
+                                <Facebook size={24} />
+                            </a>
                         </div>
                     </div>
                     <div className="flex-1 flex">
@@ -28,7 +33,7 @@ export const Footer = () => {
                         <div className="flex-1 flex flex-col gap-8">
                             <p className="text-3xl">Our Policies</p>
                             <div className="flex h-full gap-4 flex-col text-xl">
-                                <Link to={"/about"}>Privacy policy</Link>
+                                <Link to={"/privacy-policy"}>Privacy policy</Link>
                                 <Link to={"/terms-and-conditions"}>Terms and conditions</Link>
                                 <Link to={"/shipping-policy"}>Shipping policy</Link>
                             
@@ -37,8 +42,8 @@ export const Footer = () => {
                         <div className="flex-1 flex flex-col gap-8">
                             <p className="text-3xl">Customer Care</p>
                             <div className="flex text-xl flex-col gap-4 h-full">
-                                <Link to={"/"}>Contact us</Link>
-                                <Link to={"/"}>product care & repair</Link>
+                                <Link to={"/contact-us"}>Contact us</Link>
+                                <Link to={"/product-care"}>product care & repair</Link>
                             </div>
                         </div>
                     </div>
@@ -67,10 +72,10 @@ export const Footer = () => {
 
                     {/* Social Icons */}
                     <div className="flex justify-center space-x-6 mb-8">
-                    <a href="https://www.instagram.com/kultivatedkarats/" className="hover:opacity-75">
+                    <a href={INSTAGRAM} className="hover:opacity-75">
                         <Instagram size={24} />
                     </a>
-                    <a href="https://www.facebook.com/people/Kultivated-Karats-Lab-Grown-Diamonds/61568391746014/" className="hover:opacity-75">
+                    <a href={FACEBOOK} className="hover:opacity-75">
                         <Facebook size={24} />
                     </a>
                     </div>

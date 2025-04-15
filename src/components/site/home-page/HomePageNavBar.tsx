@@ -1,4 +1,4 @@
-import { CircleUser, CoinsIcon, Heart, MapPinned, Search, ShoppingCart, Store, Video } from "lucide-react";
+import { CircleUser, Heart, MapPinned, Search, ShoppingCart, Store, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../../ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,7 +46,7 @@ export const HomePageNavBar = () => {
                     <div className="flex-1"></div>
                     <div className="flex-[0.4] gap-[3%] !stroke-white!text-white flex justify-center items-center">
                         <Link to={"/store-locator"}><MapPinned className="stroke-[1.5] stroke-[#A68A7E]" /></Link>
-                        <Link to={"/gold-coins"}><CoinsIcon className="stroke-[1.5] stroke-[#FFD700]" /></Link>
+                        {/* <Link to={"/gold-coins"}><CoinsIcon className="stroke-[1.5] stroke-[#FFD700]" /></Link> */}
                         <div className="relative w-full">
                             <Input type="text" onClick={(e) => {
                                 e.preventDefault();
@@ -103,6 +103,7 @@ export const HomePageNavBar = () => {
                     <Link to={"/collections"}>Collections</Link>
                     <Link to={"/products"}>Products</Link>
                     <Link to={"/solitare"}>Solitare</Link>
+                    <Link to={"/gold-coins"}>Gold coins</Link>
                     {/* <Link to={"/store-locator"}>
                         Store Locator
                     </Link> */}

@@ -9,7 +9,9 @@ const getSolRate = (value : number) => {
     // if ( value > 0.10 && value <= 0.49 )    
     //     return 48000;    
 
-    // if ( value >= 0.50 && value <= 2.99 )    
+    // if ( value >= 0.50 && value <= 2.99 ) 
+    if ( value == 0) 
+        return 0;   
     if ( value <= 2.99 )    
         return 60000;    
     if ( value >= 3.00 )    
@@ -17,33 +19,50 @@ const getSolRate = (value : number) => {
     return 0;
 };
 
-export const getDiamondPrice = ({ karat, netWeight, solitareWeight, multiDiaWeight, pointersWeight } : { karat: number, netWeight : number, solitareWeight: number, multiDiaWeight: number, pointersWeight?: number }) => {
-    // const grossWeight = ((solitareWeight + multiDiaWeight) / 5) + netWeight;
-    const grossWeight = Math.round(netWeight + ((pointersWeight ? (solitareWeight + multiDiaWeight + pointersWeight) : (solitareWeight + multiDiaWeight)) * 0.2));
-    const GoldRate = Math.round(netWeight * (karat == 14 ? goldRate14K : goldRate18K));
-    const solitareRate = getSolRate(solitareWeight);
-    const multiDiaRate = multiDiaWeight * 30000;
-    const pointersRate = pointersWeight ? pointersWeight * 48000 : 0;
-    const diamondRate = solitareRate + multiDiaRate + pointersRate;
-    const makingCharges = grossWeight * 1200;
-    const subTotal = Math.round(GoldRate + diamondRate + makingCharges);
-    const total = Math.round(subTotal + (subTotal * (GST / 100)));
-    console.log(grossWeight, GoldRate, solitareRate, multiDiaRate, diamondRate, makingCharges, subTotal, total);
-    return { subTotal, total, grossWeight, GoldRate, solitareRate, multiDiaRate, pointersRate, diamondRate, makingCharges };
-};
+// export const getDiamondPrice = ({ karat, netWeight, solitareWeight, multiDiaWeight, pointersWeight } : { karat: number, netWeight : number, solitareWeight: number, multiDiaWeight: number, pointersWeight?: number }) => {
+//     // const grossWeight = ((solitareWeight + multiDiaWeight) / 5) + netWeight;
+//     const grossWeight = Math.round(netWeight + ((pointersWeight ? (solitareWeight + multiDiaWeight + pointersWeight) : (solitareWeight + multiDiaWeight)) * 0.2));
+//     const GoldRate = Math.round(netWeight * (karat == 14 ? goldRate14K : goldRate18K));
+//     const solitareRate = getSolRate(solitareWeight);
+//     const multiDiaRate = multiDiaWeight * 30000;
+//     const pointersRate = pointersWeight ? pointersWeight * 48000 : 0;
+//     const diamondRate = solitareRate + multiDiaRate + pointersRate;
+//     const makingCharges = grossWeight * 1200;
+//     const subTotal = Math.round(GoldRate + diamondRate + makingCharges);
+//     const total = Math.round(subTotal + (subTotal * (GST / 100)));
+//     console.log(grossWeight, GoldRate, solitareRate, multiDiaRate, diamondRate, makingCharges, subTotal, total);
+//     return { subTotal, total, grossWeight, GoldRate, solitareRate, multiDiaRate, pointersRate, diamondRate, makingCharges };
+// };
 
 const COLOUREDDAIMONDRATEPERCARAT = 95000;
 const GEMSTONEPERKARAT = 500;
 
-export const getGemstonePrice= ({ isGemstone, isColouredDaimond, netWeight, karat, multiDiaWeight, pointersWeight, solitareWeight } : { isGemstone: boolean, isColouredDaimond: boolean, netWeight: number, karat: number, multiDiaWeight: number, pointersWeight: number, solitareWeight: number }) => {
-    const grossWeight = (netWeight + ((solitareWeight + multiDiaWeight + pointersWeight) * 0.2));
-    const GoldRate = netWeight * (karat == 14 ? goldRate14K : goldRate18K);
-    const solitareRate = isGemstone ? solitareWeight * GEMSTONEPERKARAT : isColouredDaimond ? solitareWeight * COLOUREDDAIMONDRATEPERCARAT : 0;
-    const pointersRate = isGemstone ? pointersWeight * GEMSTONEPERKARAT : isColouredDaimond ? pointersWeight * COLOUREDDAIMONDRATEPERCARAT : 0;
+export const getProductPriceDetails = ({ isGemStoneProduct, isChainAdded, chainKarat, isColouredDiamond, karat, pointersWeight, solitareWeight, gemStonePointerWeight, gemStoneSolWeight, multiDiaWeight, netWeight } : { chainKarat: number, isChainAdded: boolean, gemStonePointerWeight: number, gemStoneSolWeight : number, isGemStoneProduct: boolean, netWeight: number, karat: number, isColouredDiamond: boolean, pointersWeight: number, solitareWeight: number, multiDiaWeight: number }) => {
+    const grossWeight = (netWeight + ((pointersWeight == undefined ? (solitareWeight + multiDiaWeight + pointersWeight) : (solitareWeight + multiDiaWeight)) * 0.2));
+    const goldRate = (netWeight * (karat == 14 ? goldRate14K : goldRate18K)); // Todo: Confirm
+    const makingCharges = grossWeight * 1200;
+    const solitareRate = getSolRate(solitareWeight);
+    const gemstoneSolRate = isGemStoneProduct ? isColouredDiamond ? solitareWeight * COLOUREDDAIMONDRATEPERCARAT : gemStoneSolWeight * GEMSTONEPERKARAT : 0;
+    const gemstonePointerRate = isGemStoneProduct ? isColouredDiamond ? pointersWeight * COLOUREDDAIMONDRATEPERCARAT : gemStonePointerWeight * GEMSTONEPERKARAT : 0;
     const multiDiaRate = multiDiaWeight * 30000;
-    const diamondRate = solitareRate + multiDiaRate + pointersRate;
-    const makingCharges = (grossWeight * 1200);
-    const subTotal = GoldRate + diamondRate + makingCharges;
-    const total = Math.round(subTotal + (subTotal * (GST / 100)));
-    return { grossWeight, GoldRate, solitareRate, multiDiaRate, diamondRate, pointersRate, makingCharges, subTotal, total };
-}
+    const pointersRate = pointersWeight ? pointersWeight * 48000 : 0;   
+    const diamondRate = solitareRate + multiDiaRate + pointersRate + gemstonePointerRate + gemstoneSolRate;
+    const pendantChainPrice = isChainAdded ? 2.5 * (chainKarat == 14 ? goldRate14K : goldRate18K) : 0;
+    const subTotal = (goldRate + diamondRate + makingCharges + pendantChainPrice);
+    const total = (subTotal + (subTotal * (GST / 100)));
+    console.log(`subTotal: ${subTotal}, total: ${total}, grossWeight: ${grossWeight}, netWeight: ${netWeight}, multiDiaWeight: ${multiDiaRate}, pointersWeight: ${pointersWeight}, goldRate: ${goldRate}, solitareRate: ${solitareRate}, multiDiaRate: ${multiDiaRate}, pointersRate: ${pointersRate}, diamondRate: ${diamondRate}, makingCharges: ${makingCharges}, pendantChainPrice: ${pendantChainPrice}, gemstonePointerRate: ${gemstonePointerRate}, gemstoneSolRate: ${gemstoneSolRate}`)
+    return { subTotal, total, grossWeight, goldRate, solitareRate, multiDiaRate, pointersRate, diamondRate, makingCharges, pendantChainPrice, gemstonePointerRate, gemstoneSolRate };
+};
+
+// export const getGemstonePrice= ({ isGemstone, isColouredDaimond, netWeight, karat, multiDiaWeight, pointersWeight, solitareWeight } : { isGemstone: boolean, isColouredDaimond: boolean, netWeight: number, karat: number, multiDiaWeight: number, pointersWeight: number, solitareWeight: number }) => {
+//     const grossWeight = (netWeight + ((solitareWeight + multiDiaWeight + pointersWeight) * 0.2));
+//     const GoldRate = netWeight * (karat == 14 ? goldRate14K : goldRate18K);
+//     const solitareRate = isGemstone ? solitareWeight * GEMSTONEPERKARAT : isColouredDaimond ? solitareWeight * COLOUREDDAIMONDRATEPERCARAT : 0;
+//     const pointersRate = isGemstone ? pointersWeight * GEMSTONEPERKARAT : isColouredDaimond ? pointersWeight * COLOUREDDAIMONDRATEPERCARAT : 0;
+//     const multiDiaRate = multiDiaWeight * 30000;
+//     const diamondRate = solitareRate + multiDiaRate + pointersRate;
+//     const makingCharges = (grossWeight * 1200);
+//     const subTotal = GoldRate + diamondRate + makingCharges;
+//     const total = Math.round(subTotal + (subTotal * (GST / 100)));
+//     return { grossWeight, GoldRate, solitareRate, multiDiaRate, diamondRate, pointersRate, makingCharges, subTotal, total };
+// }

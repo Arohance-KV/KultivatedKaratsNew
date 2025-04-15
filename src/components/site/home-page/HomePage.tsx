@@ -7,7 +7,7 @@ import { useEffect
     , useRef, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { BLOGDATA } from "@/utils/constants";
+import { BLOGDATA, FACEBOOK, INSTAGRAM } from "@/utils/constants";
 // import { TestimonialCard } from "./Text";
 
 const Reel = ({ reel, navigate } : { navigate: any, reel: {title: string, url: string, product: {
@@ -359,7 +359,7 @@ export const HomePage = () => {
                 translateX: "300px",
                 duration: 2,
                 rotateZ: 80,
-                onStart: () => {
+                onComplete: () => {
                         // @ts-ignore
                         categoriesImageRef.current.src = "/earring.png";
                 }
@@ -368,7 +368,7 @@ export const HomePage = () => {
                 translateX: "560px",
                 duration: 2,
                 rotateZ: 100,
-                onStart: () => {
+                onComplete: () => {
                     // @ts-ignore
                     categoriesImageRef.current.src = "/pendent.png";
                 }
@@ -377,7 +377,7 @@ export const HomePage = () => {
                 translateX: "0",
                 duration: 2,
                 rotateZ: 75,
-                onStart: () => {
+                onComplete: () => {
                     // @ts-ignore
                     categoriesImageRef.current.src = "/ring.png";
                 }
@@ -543,10 +543,10 @@ export const HomePage = () => {
                     <div id="hero-section-banner" className="sm:h-[90vh] h-[50vh] bg-[#E1C6B3] sm:w-full w-[90%] self-center justify-self-center relative">
                         <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" />
                         <div id="social-links" className="flex text-white flex-col gap-4 w-auto absolute right-[5%] bottom-[15%]">
-                            <Link to={"https://www.instagram.com"}>
+                            <Link to={INSTAGRAM}>
                                 <Instagram />
                             </Link>
-                            <Link to={"https://www.facebook.com"}>
+                            <Link to={FACEBOOK}>
                                 <Facebook />
                             </Link>
                         </div>
@@ -636,18 +636,19 @@ export const HomePage = () => {
                     <div className="gap-4 py-[5%] flex text-[#BFA6A1] text-[75px] h-[100%] justify-center w-[80%] relative ">
                         <div className="flex-1 h-full cursor-pointer flex justify-center items-center z-10" onClick={(e) => {
                             e.preventDefault();
+                            navigate("/products?category-filter=rings");
                         // }} onMouseOver={() => {
                             // @ts-ignore
                             // categoriesImageRef.current.src = "/ring.png";
                         }}>Rings</div>
-                        <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onMouseOver={() => {
-                            // @ts-ignore
-                            // categoriesImageRef.current.src = "/earring.png";
+                        <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onClick={(e) => {
+                            e.preventDefault();
+                            navigate("/products?category-filter=rings");
                         }}>Earings</div>
-                        <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onMouseOver={() => {
-                            // @ts-ignore
-                            // categoriesImageRef.current.src = "/pendent.png";
-                        }}>Pendants</div>
+                        <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onClick={(e) => {
+                            e.preventDefault();
+                            navigate("/products?category-filter=rings");
+                        }} >Pendants</div>
                         <div id="categories-hover-element" className="absolute bg-[#E9D6C8] z-[0] w-[350px] top-1/2 flex justify-end items-end -translate-y-1/2 overflow-hidden left-[10%] aspect-video rotate-[75deg]">
                             <img ref={categoriesImageRef} src="/ring.png" className="-rotate-[120deg] h-auto -translate-y-[10%] w-[70%]" alt="" />
                         </div>

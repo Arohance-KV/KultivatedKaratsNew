@@ -305,7 +305,7 @@ export const AccountSettings = () => {
                                     </form>
                                 </Form>    
                             </div>}
-                            {OPTIONS[currentOption] == "Orders" && <div className="overflow-y-scroll flex flex-col gap-4 h-full w-full">
+                            {OPTIONS[currentOption] == "Orders" && <div className="overflow-y-scroll flex flex-col gap-4 max-h-[450px] w-full">
                                 {/* {customerData?.orders?.map(order => ( */}
                                 {customerData?.orders?.map(order => (
                                     <div className="justify-between text-[#BFA6A1] p-[5%] rounded-md border border-[#BFA6A1] bg-white flex m-[10px]">

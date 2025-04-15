@@ -32,6 +32,17 @@ import { ToastSuccess } from "@/utils/UtilityComponents";
 
 // ]
 
+const getHTML = ({ items } : { items: ICartItem[]}) => {
+    
+    let html = "";
+
+    items.forEach(item => {
+        html += `Product: ${item?.product?.name} <br />Quantity: ${item?.quantity}`
+    });
+    
+    return html
+}
+
 export const VideoCartPage = () => {
 
     const customerData: IUser = useSelector((state: any) => state.website.customerData);
@@ -72,8 +83,23 @@ export const VideoCartPage = () => {
                     })}
                 </div>
                 <div className="flex-[0.2] w-[95%] items-center flex justify-end">
-                    <Button disabled={videoCallCartData?.length <= 0} className="border border-[#E1C6B3]  bg-white text-[#E1C6B3] hover:bg-gray-700/20 hover:text-white" onClick={() => {
-                        // navigate("/video-cart/book");
+                    <Button disabled={videoCallCartData?.length <= 0} className="border border-[#E1C6B3]  bg-white text-[#E1C6B3] hover:bg-gray-700/20 hover:text-white" onClick={async () => {
+                        try {
+                            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}email/send-email`, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                credentials: 'include',
+                                body: JSON.stringify({ email: { from: import.meta.env.VITE_TO_EMAIL, to: [ import.meta.env.VITE_TO_EMAIL, "maheksampat@gmail.com" ], subject: `Video call enquiry from : ${customerData?.email}`, html: getHTML({ items: customerData?.videoCallCart }) }})
+                            });
+                        
+                            const data = await response.json();
+                            console.log(data);
+                
+                        } catch (error) {
+                            console.log(error);
+                        }
                     }}>Create a video call session</Button>
                 </div>
             </div>

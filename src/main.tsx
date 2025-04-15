@@ -30,6 +30,11 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoldCoins } from './components/site/home-page/GoldCoins.tsx';
 import { GoldCoinPage } from './components/site/home-page/GoldCoinPage.tsx';
 import { Categories } from './components/site/home-page/Categories.tsx';
+import { TC } from './components/site/home-page/TermsConditions.tsx';
+import { PrivacyPolicy } from './components/site/home-page/PrivacyPolicy.tsx';
+import { ContactUs } from './components/site/home-page/ContactUs.tsx';
+import { ProductCare } from './components/site/home-page/ProductCare.tsx';
+import { ShippingPolicy } from './components/site/home-page/ShippingPolicy.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -63,6 +68,12 @@ const router = createBrowserRouter(
               <Route path="/blogs/:id" element={<BlogPage />} />
               <Route path="/set-shipping" element={<SetShipping />} />
               <Route path="/categories" element={<Categories />} />
+              <Route path="/terms-and-conditions" element={<TC />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/shipping-policy" element={<ShippingPolicy />} />
+              <Route path="/contact-us" element={<ContactUs />} />
+              <Route path="/product-care" element={<ProductCare />} />
+              
           </Route>
       </Route>
   )
@@ -74,6 +85,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
       <Provider store={store}>
         <GoogleOAuthProvider clientId={CLIENT_ID}>
+          {/* <ScrollToTop /> */}
           <RouterProvider router={router} />
         </GoogleOAuthProvider>
           {/* <AnimatedCursor /> */}
