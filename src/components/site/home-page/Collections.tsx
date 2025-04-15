@@ -79,7 +79,7 @@ export const Collections = () => {
             <div className="sm:bg-[#E1C6B3] sm:mt-56 mt-14 gap-4 flex flex-col sm:p-14 px-4 items-center sm:w-[80%] w-full justify-self-center rounded-t-[50px] aspect-video">
                 <div id="top-bar" className="items-center flex w-full text-white text-3xl">
                     <p className="flex items-center flex-1">
-                        <p className="sm:text-white sm:block hidden sm:text-lg text-sm text-[#e3b493]">
+                        <p className="sm:text-white sm:block sm:text-lg text-sm text-[#e3b493]">
                             Collections
                         </p>
                         <div className="relative ml-4 sm:block hidden bg-white w-[80px] h-[1px]">
