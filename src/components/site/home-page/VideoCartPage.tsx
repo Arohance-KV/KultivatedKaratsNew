@@ -1,4 +1,4 @@
-import { Loader, Minus, Plus, Trash2 } from "lucide-react";
+import { Loader, Loader2, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "../../ui/button";
 import { UIsideBar } from "./Solitare";
 // import { useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ export const VideoCartPage = () => {
     const [ cart, setCart ] = useState<Array<ICartItem>>([]);
     const [ wishList, setWishList ] = useState<Array<IWishListItem>>([]);
     // console.log(typeof wishListData, wishListData?.length, typeof JSON.parse(localStorage.getItem("wishList")!));
-    
+    const [ isCreateButtonLoading, setIsCreateButtonLoading ] = useState(false);;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -84,6 +84,7 @@ export const VideoCartPage = () => {
                 </div>
                 <div className="flex-[0.2] w-[95%] items-center flex justify-end">
                     <Button disabled={videoCallCartData?.length <= 0} className="border border-[#E1C6B3]  bg-white text-[#E1C6B3] hover:bg-gray-700/20 hover:text-white" onClick={async () => {
+                        setIsCreateButtonLoading(true);
                         try {
                             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}email/send-email`, {
                                 method: "POST",
@@ -99,8 +100,10 @@ export const VideoCartPage = () => {
                 
                         } catch (error) {
                             console.log(error);
+                        } finally {
+                            setIsCreateButtonLoading(false);
                         }
-                    }}>Create a video call session</Button>
+                    }}>{isCreateButtonLoading ? <Loader2 className="animate-spin" /> : "Create a video call session"}</Button>
                 </div>
             </div>
         </div>
@@ -113,6 +116,8 @@ export const CartItem = ({item} : { item : {name: string, code: string, price: n
     const [ isRemoveItemLoadingButton, setIsRemoveItemLoadingButton ] = useState(false);
     
     const [ isInCart, setIsInCart ] = useState(item?.cart?.filter(cartItem => cartItem?.product?._id == item?.product?._id)?.length > 0);
+
+    console.log(item);
 
     return (
         <div className="flex h-28 gap-4 \ relative">
@@ -130,10 +135,10 @@ export const CartItem = ({item} : { item : {name: string, code: string, price: n
             <div className="flex-[0.75] h-full text-[#A68A7E] p-4 rounded-md bg-white gap-4 border flex border-[#A68A7E] ">
                 <div className="flex justify-evenly flex-col flex-1 gap-4">
                     <p>Name: {item?.name}</p>
-                    <p>Code: {item?.code}</p>
+                    <p>Code: {item?.product?.code}</p>
                 </div> 
                 <div className="flex-col flex justify-evenly flex-1 gap-4">
-                    <p>Price: {item.price}</p>
+                    <p>Price: {Math.round(item?.product?.price)}</p>
                     <Button disabled={isCartAddedButtonLoading} className="bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={ async (e) => {
                         setIsCartAddedButtonLoading(true);
                         e.preventDefault();
