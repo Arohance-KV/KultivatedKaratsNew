@@ -20,91 +20,9 @@ const formSchema = z.object({
     state: z.string().min(1, "Field is required!"),
     postalCode: z.string().min(6, "Postal code must be at least 6 characters!"),
     addressLine1: z.string().min(1, "Field is required!"),
-    addressLine2: z.string().min(1, "Field is required!"),
+    addressLine2: z.string().optional(),
     company: z.string().optional(),
 });
-
-// const userDetailsFormSchema = z.object({
-//     firstName: z.string().min(1, "Field is required!"),
-//     lastName: z.string().min(1, "Field is required!"),
-//     email: z.string().email("Please enter a valid email!"),
-//     birthDate: z.string().optional(),
-//     gender: z.string().optional(),
-//     anivarsary: z.string().optional(),
-//     spouseBirthday: z.string().optional(),
-// });
-// const orders : IOrder[] = [
-//     {
-//         orderId: "1",
-//         customerId: "1",
-//         total: 5000,
-//         orderStatus: "Fulfilled",
-//     },
-//     {
-//         orderId: "1",
-//         customerId: "1",
-//         total: 5000,
-//         orderStatus: "Fulfilled",
-//     },
-//     {
-//         orderId: "1",
-//         customerId: "1",
-//         total: 5000,
-//         orderStatus: "Fulfilled",
-//         note: "Hello"
-//     },
-// ];
-
-// const videoCalls : {
-//     name: String,
-//     phoneNo: Number,
-//     status: "Pending" | "Concluded" ,
-//     email: String,
-//     createdAt: String,
-// }[] = [
-//     {
-//         name: "hello",
-//         phoneNo: 1234567890,
-//         status: "Pending",
-//         email: "email",
-//         createdAt: "Some time ago"
-//     },
-//     {
-//         name: "hello",
-//         phoneNo: 1234567890,
-//         status: "Pending",
-//         email: "email",
-//         createdAt: "Some time ago"
-//     },
-//     {
-//         name: "hello",
-//         phoneNo: 1234567890,
-//         status: "Pending",
-//         email: "email",
-//         createdAt: "Some time ago"
-//     },
-// ];
-
-// const giftCard: IGiftCard = {
-//     code: "code",
-//     amount: 0,
-//     occasion: "occasion",
-//     recipientName: "name",
-//     recipientEmail: "email",
-//     recipientPhone: 0,
-//     sender: "sender",
-//     message: "message",
-//     validUpto: "sometime in the future",
-//     used: true,
-//     price: 12,
-//     imageUrl: {
-//         url: "string",
-//         publicId: "string"
-//     }
-// }
-
-
-
 
 export const AccountSettings = () => {
 
@@ -128,7 +46,7 @@ export const AccountSettings = () => {
 
     const [ isShippingAddressButtonLoading, setIsShippingAddressButtonLoading ] = useState(false);
 
-const onShippingFormSubmit = async (values: z.infer<typeof formSchema>) => {
+    const onShippingFormSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values);
         console.log("Form submited");
         setIsShippingAddressButtonLoading(true);
@@ -146,22 +64,14 @@ const onShippingFormSubmit = async (values: z.infer<typeof formSchema>) => {
     
             if (!response.ok) {
                 console.log(response)
-                // const errData = await response.json();
-                // loginForm.setError(errData.errors[0].type, {type: "manual", message: errData.errors[0].errMsg})
                 throw new Error("HTTP error! status: "+response.status);
             }
     
             console.log(response);
             
             const data = await response.json();
-    
-            // if ( data.data.user.role !== "Admin" ) {
-            //     loginForm.setError("email", { type: "manual", message: "Unauthorized user!"})
-            //     throw new Error("Unauthorized user");
-            // }
             
             dispatch(setCustomerData(data.data));
-            navigate("/cart");
             console.log(data);
         } catch (error) {
             console.error("Error: ", error);
@@ -169,6 +79,8 @@ const onShippingFormSubmit = async (values: z.infer<typeof formSchema>) => {
             setIsShippingAddressButtonLoading(false);
         } 
     }
+
+    const { handleSubmit } = shippingAddressFrom; 
 
     const logout = async () => {
         setIsLogoutButtonLoading(true);
@@ -534,7 +446,10 @@ const onShippingFormSubmit = async (values: z.infer<typeof formSchema>) => {
                                                     </FormItem>
                                                 )}
                                             />
-                                            <Button type="submit" variant={"ghost"} className="mt-14" >{isShippingAddressButtonLoading ? <Loader2 className="animate-spin" /> : "Save changes"}</Button>
+                                            <Button type="submit" variant={"ghost"} className="mt-14" onClick={(e) => {
+                                                e.preventDefault();
+                                                handleSubmit(onShippingFormSubmit)();
+                                            }} >{isShippingAddressButtonLoading ? <Loader2 className="animate-spin" /> : "Save changes"}</Button>
                                         </div>
                                     </form>
                                 </Form>
