@@ -123,7 +123,7 @@ export const CartPage = () => {
                                         
                                     }} variant={"ghost"}>Apply</Button>
                                 </div>
-                                <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading || customerData._id == null } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
+                                <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading || customerData?._id == null } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
                                     e.preventDefault();
                                     setIsPlaceOrderButtonLoading(true);
                                     if ( customerData?.address?.city == null )
