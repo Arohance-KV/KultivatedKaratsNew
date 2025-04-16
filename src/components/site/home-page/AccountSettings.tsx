@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IUser } from "@/utils/interfaces";
 import { Check, Loader2, LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { resetCustomerData } from "@/redux/slices/websiteSlice";
+import { resetCustomerData, setCustomerData } from "@/redux/slices/websiteSlice";
 import { googleLogout } from "@react-oauth/google";
 
 const OPTIONS = [ "Shipping Details", "Orders", "Video Calls", "Giftcards/vouchers", "Personal details" ];
@@ -103,6 +103,9 @@ const formSchema = z.object({
 //     }
 // }
 
+
+
+
 export const AccountSettings = () => {
 
     const shippingAddressFrom = useForm<z.infer<typeof formSchema>>({
@@ -122,6 +125,50 @@ export const AccountSettings = () => {
     const [ isLogoutButtonLoading, setIsLogoutButtonLoading ] = useState(false);
 
     const dispatch = useDispatch();
+
+    const [ isShippingAddressButtonLoading, setIsShippingAddressButtonLoading ] = useState(false);
+
+const onShippingFormSubmit = async (values: z.infer<typeof formSchema>) => {
+        console.log(values);
+        console.log("Form submited");
+        setIsShippingAddressButtonLoading(true);
+        try {
+            // @ts-ignore
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}users/update-user-details`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "updateType": "self"
+                },
+                credentials: 'include',
+                body: JSON.stringify({ user: { address: { ...values, postalCode: Number(values?.postalCode) } } })
+            });
+    
+            if (!response.ok) {
+                console.log(response)
+                // const errData = await response.json();
+                // loginForm.setError(errData.errors[0].type, {type: "manual", message: errData.errors[0].errMsg})
+                throw new Error("HTTP error! status: "+response.status);
+            }
+    
+            console.log(response);
+            
+            const data = await response.json();
+    
+            // if ( data.data.user.role !== "Admin" ) {
+            //     loginForm.setError("email", { type: "manual", message: "Unauthorized user!"})
+            //     throw new Error("Unauthorized user");
+            // }
+            
+            dispatch(setCustomerData(data.data));
+            navigate("/cart");
+            console.log(data);
+        } catch (error) {
+            console.error("Error: ", error);
+        } finally {
+            setIsShippingAddressButtonLoading(false);
+        } 
+    }
 
     const logout = async () => {
         setIsLogoutButtonLoading(true);
@@ -213,7 +260,7 @@ export const AccountSettings = () => {
                         <div className="flex-1">
                             {OPTIONS[currentOption] == "Shipping Details" && <div className="h-full">
                                 <Form {...shippingAddressFrom}>
-                                    <form className="flex-1 inria-serif-regular h-full text-white w-full p-[5%]" onSubmit={() => {}}>
+                                    <form className="flex-1 inria-serif-regular h-full text-white w-full p-[5%]" onSubmit={shippingAddressFrom?.handleSubmit(onShippingFormSubmit)}>
                                         <div className="flex-1 flex flex-col gap-6 ">
                                             <FormField
                                                 control={shippingAddressFrom.control}
@@ -487,7 +534,7 @@ export const AccountSettings = () => {
                                                     </FormItem>
                                                 )}
                                             />
-                                            <Button type="submit" variant={"ghost"} className="mt-14" >Save changes</Button>
+                                            <Button type="submit" variant={"ghost"} className="mt-14" >{isShippingAddressButtonLoading ? <Loader2 className="animate-spin" /> : "Save changes"}</Button>
                                         </div>
                                     </form>
                                 </Form>
