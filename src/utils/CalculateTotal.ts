@@ -53,8 +53,8 @@ export const getProductPriceDetails = ({ isGemStoneProduct, isChainAdded, chainK
     const goldRate = (netWeight * (karat == 14 ? goldRate14K : goldRate18K)); // Todo: Confirm
     const makingCharges = grossWeight * 1200;
     const solitareRate = newSolitareWeight ? getSolRate(newSolitareWeight) : 0;
-    const gemstoneSolRate = isGemStoneProduct ? isColouredDiamond ? newSolitareWeight * COLOUREDDAIMONDRATEPERCARAT : gemStoneSolWeight * GEMSTONEPERKARAT : 0;
-    const gemstonePointerRate = isGemStoneProduct ? isColouredDiamond ? newPointerWeight * COLOUREDDAIMONDRATEPERCARAT : gemStonePointerWeight * GEMSTONEPERKARAT : 0;
+    const gemstoneSolRate = isGemStoneProduct ? isColouredDiamond ? gemStoneSolWeight * COLOUREDDAIMONDRATEPERCARAT : gemStoneSolWeight * GEMSTONEPERKARAT : 0;
+    const gemstonePointerRate = isGemStoneProduct ? isColouredDiamond ? gemStonePointerWeight * COLOUREDDAIMONDRATEPERCARAT : gemStonePointerWeight * GEMSTONEPERKARAT : 0;
     const multiDiaRate = newMultiDaiWeight * 30000;
     const pointersRate = newPointerWeight ? newPointerWeight * 48000 : 0;   
     const diamondRate = solitareRate + multiDiaRate + pointersRate + gemstonePointerRate + gemstoneSolRate;
