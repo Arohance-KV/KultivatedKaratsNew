@@ -12,7 +12,7 @@ export const BlogsPage = () => {
                     <div className="w-[200px] flex flex-col" onClick={() => {
                         navigate(`/blogs/${blog?._id}`);
                     }}>
-                        <img src={blog?.blogImageUrl?.url} alt="" className="w-full object cover" />
+                        <img src={blog?.blogImageUrl?.url} alt="" className="w-1/2 object cover" />
                         <p>{blog?.title}</p>
                     </div>
                 )

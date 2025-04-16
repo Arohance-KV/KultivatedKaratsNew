@@ -15,16 +15,18 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { getProductPriceDetails } from "@/utils/CalculateTotal";
-import { Select, SelectContent, SelectGroup, SelectItem, 
+// import { Select, SelectContent, SelectGroup, SelectItem, 
     // SelectLabel
-    SelectTrigger, SelectValue } from "@/components/ui/select";
+    // SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+// import { ColorSelector } from "../home-page/ColourSelector";
 
 export const ProductPage = () => {
     const { productId }= useParams();
 
     // const [ product, setProduct ] = useState<IProduct>();
     const [ productData, setProductData ] = useState<IProduct>(useSelector((state: any) => state.website.productData));
+    const [ isDataLoading, setIsDataLoading ] =useState(true);
     const dispatch = useDispatch();
     const userData: IUser = useSelector((state: any) => state.website.customerData);
     const currentWishlist: IWishListItem[] = userData?._id ? userData?.wishList : JSON.parse(localStorage.getItem("wishList")!) ;
@@ -75,6 +77,7 @@ export const ProductPage = () => {
             console.log(cart);
             localStorage.setItem("recentlyViewedCart", JSON.stringify(cart));
         } 
+        setIsDataLoading(false);
     }, [ productData ]);
 
     const getProductFromId = async () => {
@@ -115,9 +118,9 @@ export const ProductPage = () => {
                 <p className="text-xl my-2">
                     {productData?.name}
                 </p>
-                <p>
+                {isDataLoading ? <Loader2 className="stroke-[#E1C6B3] animate-spin" /> : <p>
                     ₹{Math.round(diamondCalculation?.subTotal!)} <span className="text-xs">(excluding GST)</span>
-                </p>
+                </p>}
                 <div className="flex flex-col-reverse">
                 <div className="text-[#A68A7E] flex flex-col #A68A7E  justify-evenly  p-8 inria-serif-regular text-[] w-full flex-1/2" id="price-calculation">
                     <p className="text-[#A68A7E] mb-8 text-xl inria-serif-regular">Detailed price breakdown:</p>
@@ -214,24 +217,21 @@ export const ProductPage = () => {
                         <p className="">
                             Colours:
                         </p>
-                        <Select onValueChange={(value) => {
+                        {/* <Select onValueChange={(value) => {
                             colourRef.current = value;
                         }} defaultValue={colourRef.current}>
-                            {/* <SelectTrigger className={cn("w-[180px] text-white", colourRef.current == "White" && "bg-gradient-to-r from-[#8A8A8A] to-[#A8A8A8]", colourRef.current == "Yellow" && "bg-gradient-to-r from-[#D4AF37] to-[#D8B74C]", colourRef.current == "Rose" && "bg-gradient-to-r from-[#B76E79A8] to-[#D2A7AE]")}> */}
-                            <SelectTrigger className={"w-[auto]"}>
+                           <SelectTrigger className={"w-[auto]"}>
                                 <SelectValue placeholder="Select a colour" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent side="bottom" position="popper" className="z-[60]" avoidCollisions={false}>
                                 <SelectGroup className="">
-                                    {/* <SelectLabel>Gold colours</SelectLabel> */}
                                     <SelectItem value="White" className="text-white bg-gradient-to-r from-[#8A8A8A] to-[#A8A8A8]">White</SelectItem>
                                     <SelectItem value="Yellow" className="text-white mt-2 bg-gradient-to-r from-[#D4AF37] to-[#D8B74C]">Yellow Gold</SelectItem>
                                     <SelectItem value="Rose" className="mt-2 text-white bg-gradient-to-r from-[#B76E79A8] to-[#D2A7AE]">Rose Gold</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
-                        </Select>
-                        {/* <RadioGroup defaultValue={Array.isArray(productData?.goldColor) ? productData?.goldColor[0] + "" : productData?.goldColor + ""}> */}
-                        {/* <RadioGroup id="colour-input" defaultValue={colourRef.current} onValueChange={(value) => {
+                        </Select> */}
+                        <RadioGroup id="colour-input" defaultValue={colourRef.current} onValueChange={(value) => {
                             console.log(value);
                             colourRef.current = value;
                         }}>
@@ -247,7 +247,7 @@ export const ProductPage = () => {
                                 <RadioGroupItem value={"Rose"} id="Rose" className="" />
                                 <Label className="captalize" htmlFor="Rose">{`Rose`}</Label>
                             </Label>
-                        </RadioGroup> */}
+                        </RadioGroup>
                     </div>
                     <div className="flex my-4">
                         {productData?.containsGemstone &&
@@ -335,22 +335,37 @@ export const ProductPage = () => {
                                 <p className="">
                                     Colours:
                                 </p>
-                                <Select onValueChange={(value) => {
+                                {/* <Select onValueChange={(value) => {
                                     colourRef.current = value;
                                 }} defaultValue={colourRef.current}>
-                                    {/* <SelectTrigger className={cn("w-[180px] text-white", colourRef.current == "White" && "bg-gradient-to-r from-[#8A8A8A] to-[#A8A8A8]", colourRef.current == "Yellow" && "bg-gradient-to-r from-[#D4AF37] to-[#D8B74C]", colourRef.current == "Rose" && "bg-gradient-to-r from-[#B76E79A8] to-[#D2A7AE]")}> */}
                                     <SelectTrigger className={"w-[180px]"}>
                                         <SelectValue placeholder="Select a colour" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup className="">
-                                            {/* <SelectLabel>Gold colours</SelectLabel> */}
                                             <SelectItem value="White" className="text-white bg-gradient-to-r from-[#8A8A8A] to-[#A8A8A8]">White</SelectItem>
                                             <SelectItem value="Yellow" className="text-white mt-2 bg-gradient-to-r from-[#D4AF37] to-[#D8B74C]">Yellow Gold</SelectItem>
                                             <SelectItem value="Rose" className="mt-2 text-white bg-gradient-to-r from-[#B76E79A8] to-[#D2A7AE]">Rose Gold</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
-                                </Select>
+                                </Select> */}
+                                <RadioGroup id="colour-input" defaultValue={colourRef.current} onValueChange={(value) => {
+                                    console.log(value);
+                                    colourRef.current = value;
+                                }}>
+                                    <Label className={cn("flex items-center space-x-2 w-44 px-6 text-white py-4 rounded-md bg-gradient-to-r from-[#8A8A8A] to-[#A8A8A8]")}>
+                                        <RadioGroupItem value={"White"} id="White" className="" />
+                                        <Label className="captalize" htmlFor="White">{`White`}</Label>
+                                    </Label>
+                                    <Label className={cn("flex items-center space-x-2 w-44 px-6 text-white py-4 rounded-md bg-gradient-to-r from-[#D4AF37] to-[#D8B74C]")}>
+                                        <RadioGroupItem value={"Yellow"} id="Yellow" className="" />
+                                        <Label className="captalize" htmlFor="Yellow">{`Yellow`}</Label>
+                                    </Label>
+                                    <Label className={cn("flex items-center space-x-2 w-44 px-6 text-white py-4 rounded-md bg-gradient-to-r from-[#B76E79A8] to-[#D2A7AE]")}>
+                                        <RadioGroupItem value={"Rose"} id="Rose" className="" />
+                                        <Label className="captalize" htmlFor="Rose">{`Rose`}</Label>
+                                    </Label>
+                                </RadioGroup>
                                 {productData?.containsGemstone && <div className="flex flex-col gap-4">
                                     <p className="">
                                         Coloured stone type: 
@@ -552,7 +567,7 @@ export const ProductPage = () => {
                 </div>
                 {(JSON.parse(localStorage?.getItem("recentlyViewedCart")!)) && <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
                     <p>Recently viewed products</p>
-                    <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
+                    <div className="flex flex-wrap gap-4 items-center justify-center">
                         {JSON.parse(localStorage?.getItem("recentlyViewedCart")!)?.map((product : IProduct, index : number) => {
                             return ((Array.isArray(product)) || index > 5) ?  <></> : (
                                 <a href={`/product/${product?._id}`} className="flex border border-[#A68A7E] flex-col  w-44 aspect-square py-4 justify-center items-center col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4">

@@ -31,9 +31,9 @@ export const Products = () => {
         gemStoneColour: []
     });
 
-    const productDataFromStore: IProduct[] = useSelector((state: any) => state.website.productData);
-
     const categoryDataFromStore: ICategory[] = useSelector((state: any) => state.website.categories);
+
+    const productDataFromStore = useSelector((state: any) => state.website.productData)
 
     const [ products, setProducts ] = useState<IProduct[]>([]);
 
@@ -42,16 +42,19 @@ export const Products = () => {
     const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(() => {
+        setProducts(productDataFromStore);
+    }, [ productDataFromStore ])
+
+    useEffect(() => {
         if ( categoryFilter ) {
-            console.log(categoryFilter, productDataFromStore[0]?.category)
+            console.log(categoryFilter, products[0]?.category)
             const category = categoryDataFromStore?.filter(category => category?.name?.trim()?.toLowerCase() == categoryFilter.trim()?.toLowerCase())[0];
             setProducts(category?.products!);
             setIsLoading(false);
             return console.log(categoryDataFromStore, categoryFilter, category, products);
         };
-        setProducts(productDataFromStore);
         setIsLoading(false);
-    }, [ productDataFromStore, categoryDataFromStore ]);
+    }, [ products ]);
 
     const [ showFilter, setShowFilter ] = useState<Boolean>(false);
     const [ showSortOptions, setShowSortOptions ] = useState<Boolean>(false);
@@ -78,22 +81,15 @@ export const Products = () => {
                                 <ArrowUpDown className="fill-[#A68A7E] stroke-[#A68A7E] w-10 h-10"/>
                             </Button>
                             {showSortOptions && (
-                                <div className="bg-white rounded-md text-black flex-col absolute min-w-24 top-[150%] left-0 -translate-x-1/2 flex">
+                                <div className="bg-white rounded-md z-50 text-black flex-col absolute min-w-24 top-[150%] left-0 -translate-x-1/2 flex">
                                     <Button className="bg-transparent hover:bg-gray-800/10 text-black rounded-b-none" variant={"ghost"} onClick={(e) => {
                                         e.preventDefault();
-                                        // setCollections(collections => collections.map(collectionsFromStore))
-                                        setProducts(productDataFromStore?.map((product: IProduct) => ({
-                                            ...product,
-                                            // products: [...(product || [])].sort((a: IProduct, b: IProduct) => (b?.price ?? 0) - (a?.price ?? 0))
-                                        })));                  
+                                        setProducts([...products].sort((a, b) => b.price - a.price));
                                         setShowSortOptions(!showSortOptions);                      
                                     }}>Price: high to low</Button>
                                     <Button className="bg-transparent hover:bg-gray-800/10 text-black rounded-t-none" variant={"ghost"} onClick={(e) => {
                                         e.preventDefault();
-                                        setProducts(productDataFromStore.map((products: IProduct) => ({
-                                            ...products,
-                                            // products: [...(collection.products || [])].sort((a: IProduct, b: IProduct) => (a?.price ?? 0) - (b?.price ?? 0))
-                                        })));
+                                        setProducts([...products].sort((a, b) => a.price - b.price));
                                         setShowSortOptions(!showSortOptions);                      
                                     }}>Price: low to high</Button>
                                 </div>
@@ -123,7 +119,7 @@ export const Products = () => {
                                         </div>
                                         <div className="flex justify-center items-center gap-2">
                                             <Label>Female</Label>
-                                            <Checkbox  onCheckedChange={(value) => {
+                                            <Checkbox checked={filters?.gender?.includes("female")} onCheckedChange={(value) => {
                                                 setFilters((prev) => ({
                                                 ...prev,
                                                 gender: value

@@ -5,7 +5,7 @@ export const About = () => {
         <div className="flex justify-center items-center relative min-h-[100vh] sm:mt-64">
             <UIsideBar side="left" />
             <UIsideBar side="right" />
-            <svg width="100%" height="auto" className="sm:block hidden" viewBox="0 0 1268 3038" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+            <svg width="80%" height="auto" className="sm:block hidden mb-8" viewBox="0 0 1268 3038" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
 <g filter="url(#filter0_d_485_706)">
 <g clip-path="url(#clip0_485_706)">
 <rect x="400" y="23" width="238" height="342" rx="10" fill="url(#pattern0_485_706)"/>

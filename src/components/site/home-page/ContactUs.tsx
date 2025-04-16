@@ -57,7 +57,7 @@ export const ContactUs = () => {
   };
 
   return (
-    <section className="mt-56 min-h-screen w-full flex">
+    <section className="sm:mt-56 mt-14 min-h-screen w-full sm:flex-row flex-col-reverse flex">
       <div className="w-full !inria-serif-regular text-[#E1C6B3]  flex-1 mx-auto p-6">
         <div className="mb-6 inria-serif-regular">
           <h2 className="text-2xl font-semibold mb-2">Connect with us.</h2>
@@ -124,10 +124,10 @@ export const ContactUs = () => {
         <div className="mt-8">
           <h3 className="text-lg font-semibold mb-2">More Links</h3>
           <div className="space-y-2 text-sm text-gray-700">
-            <div className="flex items-center">
+            <a href='' className="flex items-center">
               <Mail className="mr-2 h-4 w-4" />
-              info@cultivatedkarats.com
-            </div>
+              info@Kultivatedkarats.com
+            </a>
             <div className="flex items-center">
               <Phone className="mr-2 h-4 w-4" />
               +91 99014 45209

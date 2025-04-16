@@ -9,12 +9,12 @@ const CITIES = [
     },
     { 
         name: "Chandigarh",
-        iFrame: <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.4412787477204!2d77.60587177484085!3d12.943590687369232!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae154af3ed4c2d%3A0xc6c6a1628e3a979!2sKultivated%20Karats!5e0!3m2!1sen!2sin!4v1743439439976!5m2!1sen!2sin" width="80%" height="100%" loading="lazy"></iframe>,
+        iFrame: <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.260211297885!2d76.8410788753721!3d30.711084374594698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390f93e04a33787d%3A0x44d0ce2e572f8705!2sKultivated%20Karats%20-%20Chandigarh!5e0!3m2!1sen!2sin!4v1743439407443!5m2!1sen!2sin" width="80%" height="100%" loading="lazy"></iframe>,
         location: "",
     },
     { 
+        iFrame: <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.4412787477204!2d77.60587177484085!3d12.943590687369232!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae154af3ed4c2d%3A0xc6c6a1628e3a979!2sKultivated%20Karats!5e0!3m2!1sen!2sin!4v1743439439976!5m2!1sen!2sin" width="80%" height="100%" loading="lazy"></iframe>,
         name: "Bengaluru",
-        iFrame: <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.260211297885!2d76.8410788753721!3d30.711084374594698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390f93e04a33787d%3A0x44d0ce2e572f8705!2sKultivated%20Karats%20-%20Chandigarh!5e0!3m2!1sen!2sin!4v1743439407443!5m2!1sen!2sin" width="80%" height="100%" loading="lazy"></iframe>,
         location: "",
     },
 ];

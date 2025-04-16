@@ -160,9 +160,9 @@ export const UIsideBar = ({ side } : { side : "left" | "right" }) => {
 
     return (
         <>
-            <div id='first' className={cn('-top-[5%] hidden sm:block absolute bottom-0 bg-[#BFA6A173] rounded-tr-full z-[5]', side == "left" ? "left-0 " : "right-0 -scale-x-[1]")} />
-            <div id='second' className={cn('-top-[5%] bottom-0 absolute hidden sm:block bg-[#BFA6A1A6] rounded-tr-full z-[10]', side == "left" ? "left-0" : "right-0 -scale-x-[1]")} />
-            <div id='third' className={cn('-top-[5%] bottom-0 absolute bg-[#BFA6A1] hidden sm:block rounded-tr-full z-[15]', side == "left" ? "left-0" : "right-0 -scale-x-[1]")} />
+            <div id='first' className={cn('-top-[50px] hidden sm:block absolute bottom-0 bg-[#BFA6A173] rounded-tr-full z-[5]', side == "left" ? "left-0 " : "right-0 -scale-x-[1]")} />
+            <div id='second' className={cn('-top-[50px] bottom-0 absolute hidden sm:block bg-[#BFA6A1A6] rounded-tr-full z-[10]', side == "left" ? "left-0" : "right-0 -scale-x-[1]")} />
+            <div id='third' className={cn('-top-[50px] bottom-0 absolute bg-[#BFA6A1] hidden sm:block rounded-tr-full z-[15]', side == "left" ? "left-0" : "right-0 -scale-x-[1]")} />
         </>
     );
 }

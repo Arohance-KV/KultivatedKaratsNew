@@ -783,7 +783,7 @@ export const HomePage = () => {
                                 Image
                             </div> */}
                             <div id="collections-home-banner" className="flex-[0.33] opacity-0 flex justify-center items-center">
-                                <div id="carousel" className="bg-pink-300/30 aspect-video h-[80%]">
+                                <div id="carousel" className="bg-pink-300/30 aspect-video h-[60%]">
                                     <img src="/KultivatedKaratsAssets/collections-banner.png" className="w-full h-full object-cover" alt="" />
                                 </div>
                             </div>

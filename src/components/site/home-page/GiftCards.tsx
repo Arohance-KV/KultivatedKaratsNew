@@ -247,6 +247,8 @@ export const GiftCards = () => {
         }
     };
 
+    const [ selectedGiftCard, setSelectedGiftCards ] = useState("");
+
     return (
         <div className='w-full relative pb-28 sm:text-white!'>
             <UIsideBar side="left"/>
@@ -271,19 +273,22 @@ export const GiftCards = () => {
                                         <RadioGroup
   {...field}
   value={field.value} // Bind to form state
-  onValueChange={field.onChange} // Update form on change
+  onValueChange={(value) => {
+    field.onChange(value);
+    setSelectedGiftCards(value);
+  }} // Update form on change
   className="grid grid-cols-2 max-h-full h-full gap-4"
 >
   {GIFTCARDS.map((card) => (
     <Label
       key={card.name}
       htmlFor={card.name} // Connect label to radio input
-      className="bg-white peer-checked:text-white text-[#E1C6B3] flex flex-col pt-2 gap-2 justify-between items-center sm:border-white border border-[#E1C6B3] rounded-lg aspect-video col-span-1 cursor-pointer peer-checked:border-[#D4A373] peer-checked:bg-[#E1C6B3]"
+      className={cn("bg-white peer-checked:text-white text-[#E1C6B3] flex flex-col pt-2 gap-2 justify-between items-center sm:border-white border border-[#E1C6B3] rounded-lg aspect-video col-span-1 cursor-pointer peer-checked:border-[#D4A373] peer-checked:bg-[#E1C6B3]", selectedGiftCard == card?.name && "shadow-lg !border-2 !border-red-300")}
     >
       <RadioGroupItem
         id={card.name} // Ensure unique ID
         value={card.name} // Ensure correct value
-        className="peer" // Keep it functional but visually hidden
+        className="peer hidden" // Keep it functional but visually hidden
       />
       {card.name}
       <img
@@ -314,7 +319,7 @@ export const GiftCards = () => {
                                         className="grid grid-cols-4 w-full  gap-4"
                                     >
                                         <p className='col-span-1 flex items-center'>Name :</p>
-                                        <Input {...field} placeholder="" className='col-span-3' type="text" />
+                                        <Input {...field} placeholder="" className='col-span-3 border-white' type="text" />
                                     </div>
                                     </FormControl>
                                     <FormDescription />
@@ -333,7 +338,7 @@ export const GiftCards = () => {
                                         className="grid grid-cols-4 w-full  gap-4"
                                     >
                                         <p className='col-span-1 flex items-center'>Amount :</p>
-                                        <Input {...field} placeholder="" className='col-span-3' type="number" />
+                                        <Input {...field} placeholder="" className='col-span-3 border-white' type="number" />
                                     </div>
                                     </FormControl>
                                     <FormDescription />
@@ -352,7 +357,7 @@ export const GiftCards = () => {
                                         className="grid grid-cols-4 w-full  gap-4"
                                     >
                                         <p className='col-span-1 flex items-center'>Phone no :</p>
-                                        <Input {...field} placeholder="" className='col-span-3' type="number" />
+                                        <Input {...field} placeholder="" className='col-span-3 border-white' type="number" />
                                     </div>
                                     </FormControl>
                                     <FormDescription />
@@ -371,7 +376,7 @@ export const GiftCards = () => {
                                         className="grid gap-4 grid-cols-4 w-full"
                                     >
                                         <p className='col-span-1 flex items-center'>Email address</p>
-                                        <Input {...field} placeholder="" className='col-span-3' type="email" />
+                                        <Input {...field} placeholder="" className='col-span-3 border-white' type="email" />
                                     </div>
                                     </FormControl>
                                     <FormMessage className="" />
@@ -389,7 +394,7 @@ export const GiftCards = () => {
                                             className="grid gap-4 grid-cols-4 w-full"
                                         >
                                             <p className='col-span-1 flex items-center'>Message</p>
-                                            <Textarea {...field} placeholder="" className='col-span-3 resize-none' />
+                                            <Textarea {...field} placeholder="" className='col-span-3 border-white resize-none' />
                                         </div>
                                         </FormControl>
                                         <FormMessage className="" />

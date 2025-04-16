@@ -293,16 +293,15 @@ export const GoldCoinPage = () => {
                                     <p className="">
                                         Gold karats: 
                                     </p>
-                                    <RadioGroup id="karat-input" disabled defaultValue={ "24" }>
-                                        {/* {productData?.totalKarats?.map(karat => { */}
-                                            {/* return ( */}
+                                    {/* <RadioGroup id="karat-input" disabled defaultValue={ "24" }>
                                         <Label className={cn("items-center flex justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
                                             <Label className="captalize" htmlFor="r3">{24}k</Label>
                                             <RadioGroupItem value={"24"} id="14karat" className="" />
                                         </Label>
-                                            {/* ); */}
-                                        {/* })} */}
-                                    </RadioGroup>
+                                    </RadioGroup> */}
+                                    <div className="px-4 py-2 text-[#A68A7E] border border-[#A68A7E] rounded-md w-20">
+                                        24k
+                                    </div>
                                     <div className="flex flex-col relative gap-4">
                                         <p>Quantity :</p>
                                         <NumberInput quantityRef={quantityRef} />

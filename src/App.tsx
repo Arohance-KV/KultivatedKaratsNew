@@ -29,6 +29,28 @@ function App() {
 
   useEffect(() => {
     // console.log(recentlyViewed);
+      (async function() {
+        try {
+            // @ts-ignore
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}products/get-all-products`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include"
+            });
+            // console.log(response);
+
+            if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+            
+            const data = await response.json();
+            dispatch(setProductData(data.data));
+            console.log(data.data);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    })();
     (async function verify() {
       try {
         console.log(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}`);
@@ -69,28 +91,6 @@ function App() {
       } catch (error) {
         
       }
-    })();
-    (async function() {
-        try {
-            // @ts-ignore
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}products/get-all-products`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include"
-            });
-            // console.log(response);
-
-            if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
-            
-            const data = await response.json();
-            dispatch(setProductData(data.data));
-            console.log(data.data);
-            
-        } catch (error) {
-            console.log(error);
-        }
     })();
     (async function () {
         try {
