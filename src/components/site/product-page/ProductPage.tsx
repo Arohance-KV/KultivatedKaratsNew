@@ -565,7 +565,7 @@ export const ProductPage = () => {
                     <p className="flex border-b py-4 w-full justify-between items-center"> + GST : <span>{ `3%` }</span></p>
                     <p className="flex border-b py-4 w-full justify-between items-center"> Total : <span>₹{ diamondCalculation?.total }</span></p>
                 </div>
-                {(JSON.parse(localStorage?.getItem("recentlyViewedCart")!)) && <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
+                {/* {(JSON.parse(localStorage?.getItem("recentlyViewedCart")!)) && <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
                     <p>Recently viewed products</p>
                     <div className="flex flex-wrap gap-4 items-center justify-center">
                         {JSON.parse(localStorage?.getItem("recentlyViewedCart")!)?.map((product : IProduct, index : number) => {
@@ -579,7 +579,7 @@ export const ProductPage = () => {
                             );
                         })}
                     </div>
-                </div>}
+                </div>} */}
                 {productData?.category?.products?.length! > 0 && <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
                     <p>Similar products: </p>
                     <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
