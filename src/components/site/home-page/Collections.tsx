@@ -54,12 +54,12 @@ export const Collections = () => {
         let filteredCollections = collectionsFromStore.map((collection: ICollection) => {
             let products = collection.products || [];
 
-            if (filter === "60k") {
-                products = products.filter(product => product.price < 60000);
-            } else if (filter === "30k") {
-                products = products.filter(product => product.price < 30000);
-            } else if (filter === "15k") {
-                products = products.filter(product => product.price < 15000);
+            if (filter === "100k") {
+                products = products.filter(product => product.price < 100000);
+            } else if (filter === "75k") {
+                products = products.filter(product => product.price < 75000);
+            } else if (filter === "50k") {
+                products = products.filter(product => product.price < 50000);
             }
 
             return {
@@ -69,7 +69,7 @@ export const Collections = () => {
         });
 
         setCollections(filteredCollections);
-    }, [collectionsFromStore, filter]);
+    }, [ collectionsFromStore ]);
     // const [ showFilter, setShowFilter ] = useState<Boolean>(true);
     const [ showSortOptions, setShowSortOptions ] = useState<Boolean>(false); 
 

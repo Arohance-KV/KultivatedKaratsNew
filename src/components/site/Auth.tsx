@@ -228,9 +228,9 @@ export const Auth = () => {
                         
                         console.log(data);
 
-                        dispatch(setCustomerData(data?.data?.user))
+                        dispatch(setCustomerData(data?.data?.user));
 
-                        navigate("/")
+                        navigate("/");
 
                     } catch (error) {
                         console.log(error);

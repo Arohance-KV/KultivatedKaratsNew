@@ -557,13 +557,13 @@ export const ProductPage = () => {
                 <div className="text-[#A68A7E] flex flex-col #A68A7E  justify-evenly  p-8 inria-serif-regular text-[] w-full flex-1/2" id="price-calculation">
                     <p className="text-[#A68A7E] mb-8 text-xl inria-serif-regular">Detailed price breakdown:</p>
                     {/* <p className="flex border-b py-4 w-full justify-between items-center"> Approx Gold weight { productData?.goldWeight }</p> */}
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Approx Net weight: <span>{ productData?.netWeight }g</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Approx Gold rate: <span>₹{ diamondCalculation?.goldRate }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Approx diamond rate: <span>₹{ diamondCalculation?.diamondRate }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Making charges : <span>₹{ diamondCalculation?.makingCharges }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Sub total : <span>₹{ diamondCalculation?.subTotal }</span></p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Approx Net weight: <span>{ Math.round(productData?.netWeight) }g</span></p>
+                    {diamondCalculation?.goldRate && <p className="flex border-b py-4 w-full justify-between items-center"> Approx Gold rate: <span>₹{ Math.round(diamondCalculation?.goldRate) }</span></p>}
+                    {diamondCalculation?.diamondRate && <p className="flex border-b py-4 w-full justify-between items-center"> Approx diamond rate: <span>₹{ Math.round(diamondCalculation?.diamondRate) }</span></p>}
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Making charges : <span>₹{ Math.round(diamondCalculation?.makingCharges!) }</span></p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Sub total : <span>₹{ Math.round(diamondCalculation?.subTotal!) }</span></p>
                     <p className="flex border-b py-4 w-full justify-between items-center"> + GST : <span>{ `3%` }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Total : <span>₹{ diamondCalculation?.total }</span></p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Total : <span>₹{ Math.round(diamondCalculation?.total!) }</span></p>
                 </div>
                 {/* {(JSON.parse(localStorage?.getItem("recentlyViewedCart")!)) && <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
                     <p>Recently viewed products</p>
