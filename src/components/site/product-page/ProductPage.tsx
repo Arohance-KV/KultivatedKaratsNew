@@ -68,15 +68,15 @@ export const ProductPage = () => {
         const price = getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight });
         setDiamondCalculation(price); 
         console.log(productData)
-        const rawData = localStorage.getItem('recentlyViewedCart');
-        if (!rawData) return;
-        const cart = JSON.parse(rawData)
-        console.log(cart);
-        if ( cart?.length == 0 || cart?.filter((item: IProduct) => item?._id == productData?._id).length == 0 ) {
-            cart?.push(productData);
-            console.log(cart);
-            localStorage.setItem("recentlyViewedCart", JSON.stringify(cart));
-        } 
+        // const rawData = localStorage.getItem('recentlyViewedCart');
+        // if (!rawData) return;
+        // const cart = JSON.parse(rawData)
+        // console.log(cart);
+        // if ( cart?.length == 0 || cart?.filter((item: IProduct) => item?._id == productData?._id).length == 0 ) {
+        //     cart?.push(productData);
+        //     console.log(cart);
+        //     localStorage.setItem("recentlyViewedCart", JSON.stringify(cart));
+        // } 
         setIsDataLoading(false);
     }, [ productData ]);
 
