@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { IUser } from "@/utils/interfaces";
-import { Check, LogOut, X } from "lucide-react";
+import { Check, Loader2, LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { resetCustomerData } from "@/redux/slices/websiteSlice";
 import { googleLogout } from "@react-oauth/google";
@@ -119,9 +119,12 @@ export const AccountSettings = () => {
 
     const [ currentOption, setCurrentOption ] = useState(4);
 
+    const [ isLogoutButtonLoading, setIsLogoutButtonLoading ] = useState(false);
+
     const dispatch = useDispatch();
 
     const logout = async () => {
+        setIsLogoutButtonLoading(true);
         try {
             googleLogout();
             // @ts-ignore
@@ -145,6 +148,8 @@ export const AccountSettings = () => {
             console.log(data);
         } catch (error) {
             console.error("Error: ", error);
+        } finally {
+            setIsLogoutButtonLoading(false);
         }
     }
 
@@ -192,7 +197,7 @@ export const AccountSettings = () => {
                             e.preventDefault();
                             await logout();
                         }} className="absolute right-5 bottom-5" variant={"ghost"}>
-                            <LogOut />
+                            {isLogoutButtonLoading ? <Loader2 className="animate-spin" /> : <LogOut />}
                         </Button>
                     </div>
                 </div>
