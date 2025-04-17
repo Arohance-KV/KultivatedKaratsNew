@@ -12,7 +12,7 @@ import { Button } from '../../ui/button';
 import { cn } from '../../../lib/utils';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IUser } from '@/utils/interfaces';
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ToastSuccess } from '@/utils/UtilityComponents';
+import { setCustomerData } from '@/redux/slices/websiteSlice';
 
 const GIFTCARDS = [
     {
@@ -51,7 +52,7 @@ const GIFTCARDS = [
 enum GiftCardNames {
     CONGRATULATIONS = "Congratulations",
     THANK_YOU = "Thank you",
-    HAPPY_ANNIVERSARY = "Happy Anniversary",
+    HAPPY_ANNIVERSARY = "Happy Aniversary",
     HAPPY_BIRTHDAY = "Happy Birthday",
     CUSTOM = "Custom",
     BEST_WISHES = "Best Wishes",
@@ -119,6 +120,7 @@ export const GiftCards = () => {
     const navigate = useNavigate();
 
     const customerData: IUser = useSelector((state: any) => state.website.customerData);
+    const dispatch = useDispatch();
 
     const [ isSubmitButtonLoading, setIsSubmitButtonLoading ] = useState(false);
 
@@ -219,9 +221,9 @@ export const GiftCards = () => {
                         
                         const giftCardResponse = await giftCardCreationResponse.json();
                         console.log( giftCardResponse , giftCardCreationResponse );
-                        // dispatch(setCustomerData(orderData?.data));
+                        dispatch(setCustomerData(giftCardResponse?.data?.user));
                         // await clearCart(dispatch, customerData?._id ? true : false);
-                        toast.success("Giftcard added successfully!", { icon: <ToastSuccess />, className: "!bg-white text-[#A68A7E] border border-[#A68A7E] inria-serif-regular" });
+                        toast.success("Giftcard added successfully!", { icon: <ToastSuccess />, className: "!bg-white !text-[#A68A7E] !border !border-[#A68A7E] !inria-serif-regular" });
                         navigate("/payment-success");
                     } catch (error) {
                         console.log(error);
@@ -273,35 +275,34 @@ export const GiftCards = () => {
                                     <div id="card" className="flex h-full gap-5 flex-col">
                                         <p className='text-center'>Select a gift card</p>
                                         <RadioGroup
-  {...field}
-  value={field.value} // Bind to form state
-  onValueChange={(value) => {
-    field.onChange(value);
-    setSelectedGiftCards(value);
-  }} // Update form on change
-  className="grid grid-cols-2 max-h-full h-full gap-4"
->
-  {GIFTCARDS.map((card) => (
-    <Label
-      key={card.name}
-      htmlFor={card.name} // Connect label to radio input
-      className={cn("bg-white peer-checked:text-white text-[#E1C6B3] flex flex-col pt-2 gap-2 justify-between items-center sm:border-white border border-[#E1C6B3] rounded-lg aspect-video col-span-1 cursor-pointer peer-checked:border-[#D4A373] peer-checked:bg-[#E1C6B3]", selectedGiftCard == card?.name && "shadow-lg !border-2 !border-red-300")}
-    >
-      <RadioGroupItem
-        id={card.name} // Ensure unique ID
-        value={card.name} // Ensure correct value
-        className="peer hidden" // Keep it functional but visually hidden
-      />
-      {card.name}
-      <img
-        src={card.image}
-        alt={card.name}
-        className="w-full h-full rounded-[inherit] self-end bg-white"
-      />
-    </Label>
-  ))}
-</RadioGroup>
-
+                                            {...field}
+                                            value={field.value} // Bind to form state
+                                            onValueChange={(value) => {
+                                                field.onChange(value);
+                                                setSelectedGiftCards(value);
+                                            }} 
+                                            className="grid grid-cols-2 max-h-full h-full gap-4"
+                                        >
+                                            {GIFTCARDS.map((card) => (
+                                                <Label
+                                                key={card.name}
+                                                htmlFor={card.name} // Connect label to radio input
+                                                className={cn("bg-white peer-checked:text-white text-[#E1C6B3] flex flex-col pt-2 gap-2 justify-between items-center sm:border-white border border-[#E1C6B3] rounded-lg aspect-video col-span-1 cursor-pointer peer-checked:border-[#D4A373] peer-checked:bg-[#E1C6B3]", selectedGiftCard == card?.name && "shadow-lg !border-2 !border-red-300")}
+                                                >
+                                                <RadioGroupItem
+                                                    id={card.name} // Ensure unique ID
+                                                    value={card.name} // Ensure correct value
+                                                    className="peer hidden" // Keep it functional but visually hidden
+                                                />
+                                                {card.name}
+                                                <img
+                                                    src={card.image}
+                                                    alt={card.name}
+                                                    className="w-full h-full rounded-[inherit] self-end bg-white"
+                                                />
+                                                </Label>
+                                            ))}
+                                        </RadioGroup>
                                     </div>
                                     </FormControl>
                                     <FormMessage className="" />
