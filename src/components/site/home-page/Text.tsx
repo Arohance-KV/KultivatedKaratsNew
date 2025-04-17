@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { getProductPriceDetails } from '@/utils/CalculateTotal';
+import { ICartItem, IProduct } from '@/utils/interfaces';
 
 interface RadioCardProps {
   value: string;
@@ -19,28 +20,49 @@ const RadioCard: React.FC<RadioCardProps> = ({ value, label, description }) => (
   </div>
 );
 
-
-
-const ColoursStonePicker = () => {
-  const [stoneType, setStoneType] = useState<string | undefined>("gem");
-  useEffect(() => {
-    const price = getProductPriceDetails({ gemStoneSolWeight: 3.7, gemStonePointerWeight: 0, isGemStoneProduct: true, isChainAdded: false, chainKarat: 14, isColouredDiamond: false, karat: 14, pointersWeight: 0.11 , solitareWeight: 0, multiDiaWeight: 0.1, netWeight: 3.3 });
-    console.log(`subTotal: ${price?.subTotal}, total: ${price?.total}, grossWeight: ${price?.grossWeight}, goldRate: ${price?.goldRate}, solitareRate: ${price?.solitareRate}, multiDiaRate: ${price?.multiDiaRate}, pointersRate: ${price?.pointersRate}, diamondRate: ${price?.diamondRate}, makingCharges: ${price?.makingCharges}, pendantChainPrice: ${price?.pendantChainPrice}`)
-  }, []);
-  return (
-    <div className="rounded-md border p-4 space-y-4 w-full max-w-sm">
-      <h2 className="text-lg font-semibold">Colours Stone</h2>
-      <RadioGroup defaultValue="gem" onValueChange={setStoneType}>
-        <RadioCard value="gem" label="Gem Stone" />
-        <RadioCard value="lab" label="Lab grown diamond" description="(VVS-VS-EF)" />
-      </RadioGroup>
-      {stoneType && (
-        <p className="text-sm text-muted-foreground">
-          Selected Stone Type: <span className="font-medium">{stoneType === "gem" ? "Gem Stone" : "Lab grown diamond (VVS-VS-EF)"}</span>
-        </p>
-      )}
-    </div>
-  );
+const videoCall: {
+  name: String,
+  phoneNo: Number,
+  status: "Pending" | "Concluded",
+  email: String,
+  videoCallCart: [ { quantity: number, totalPrice: number, status: "Pending" | "Completed", color: string, product: { productId: string, name: string } }]
+  // createdAt?: String,
+} = {
+    name: "Aaryan",
+    phoneNo: 9301690113,
+    status: "Pending",
+    email: "Rohraaaryan@gmail.com",
+    videoCallCart: [
+      {
+        quantity: 1,
+        totalPrice: 5000,
+        color: "white",
+        status: "Pending",
+        product: {
+          productId: "p2",
+          name: "A pendant"
+        }
+      }
+    ]
 };
 
-export default ColoursStonePicker;
+export const Test = () => {
+  return (
+    <div className='bg-white rounded-md border p-6 border-[#E1C6B3]'>
+      <p>Video call enquiry</p>
+      <p>Name: </p>
+      <p>Phone number: </p>
+      <p>Email: </p>
+      <p>In video call cart: </p>
+      {videoCall?.videoCallCart?.map(cartItem => {
+        return (
+          <div className='flex flex-col gap-2'>
+            <p>Product name: {cartItem?.product?.name}, ProductId: {cartItem?.product?.productId}</p>
+            <p>Quantity: {cartItem?.quantity}, ProductId: {cartItem?.product?.productId}</p>
+            
+          </div>
+        );
+      })}
+    </div>
+  );
+}

@@ -10,7 +10,7 @@ import { GiftCards } from './components/site/home-page/GiftCards.tsx';
 import { StoreLocator } from './components/site/home-page/StoreLocator.tsx';
 import { Provider } from "react-redux";
 import { Collections } from './components/site/home-page/Collections.tsx';
-import Test from "./components/site/home-page/Text.tsx";
+import { Test } from "./components/site/home-page/Text.tsx";
 import { DashboardMain } from './components/adminPanel/DashboardMain.tsx';
 import { DashboardHomePage } from './components/adminPanel/DashboardHomePage.tsx';
 import { VideoCartPage } from './components/site/home-page/VideoCartPage.tsx';

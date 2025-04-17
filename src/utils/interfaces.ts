@@ -78,6 +78,10 @@ export interface ICartItem {
     product: IProduct,
     quantity: number,
     color: string,
+    addChain?: boolean,
+    containsGemstone: boolean,
+    isGemStone?: boolean,
+    chainGoldCarat?: number,
     karat: number,
     totalPrice: number
 };
@@ -146,6 +150,7 @@ export interface IUser {
             phoneNo: Number,
             status: "Pending" | "Concluded",
             email: String,
+            videoCallCart: ICartItem[]
             createdAt?: String,
         }
     ]
