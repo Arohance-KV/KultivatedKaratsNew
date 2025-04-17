@@ -9,6 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { BLOGDATA, FACEBOOK, INSTAGRAM } from "@/utils/constants";
 // import { TestimonialCard } from "./Text";
+import Marquee from "react-fast-marquee";
 
 const Reel = ({ reel, navigate } : { navigate: any, reel: {title: string, url: string, product: {
     imageUrl: {
@@ -97,10 +98,29 @@ const TESTIMONIALS = [
             url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
             publicId: ""
         }
-    }
+    },
+    {
+        customerName: "Ritu Jain",
+        rating: 5,
+        descripttion: `All the jewellery is uniquely and thoughtfully designed and each piece is very meticulously created. You won't be disappointed. I highly recommend their collection!!!`,
+        sourceLogo: {
+            url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
+            publicId: ""
+        }
+    },
+    {
+        customerName: "Shashank SK",
+        rating: 5,
+        descripttion: `Exceptional quality and service! Kultivated Karats delivers brilliant lab grown diamonds with unmatched elegance.👏`,
+        sourceLogo: {
+            url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
+            publicId: ""
+        }
+    },
+    
 ];
 
-const ReviewCard = ({ name, rating, review, imageUrl } : { name: string, rating: number, review: string, imageUrl: string }) => {
+export const ReviewCard = ({ name, rating, review, imageUrl, className } : { name: string, rating: number, review: string, imageUrl: string, className: string }) => {
 
     const renderStars = () => {
       const filledStars = Math.floor(rating);
@@ -120,7 +140,7 @@ const ReviewCard = ({ name, rating, review, imageUrl } : { name: string, rating:
     };
   
     return (
-      <div className="bg-[#E1C6B3] rounded-[15px] p-6 flex items-center sm:w-[656px] sm:h-[222px] w-[350px] ">
+      <div className={"bg-[#E1C6B3] rounded-[15px] p-6 flex items-center sm:h-[222px] w-[350px] "+className}>
         <div className="bg-white rounded-full w-[20%] h-[full] mr-6 flex-shrink-0">
           <img src={imageUrl} className="w-full h-full rounded-[inherit]" alt="" />
         </div>
@@ -523,7 +543,7 @@ export const HomePage = () => {
                     <div className="text-[#BFA6A1] justify-evenly gap-4 flex flex-col items-center w-full h-full text-[200%] sm:mb-0 sm:text-[500%]">
                         What people say
                         <div>
-                            {TESTIMONIALS.map(testimonial => <ReviewCard name={testimonial?.customerName} rating={testimonial?.rating} imageUrl={testimonial?.sourceLogo?.url} review={testimonial?.descripttion} />)}
+                            {TESTIMONIALS.map(testimonial => <ReviewCard name={testimonial?.customerName} rating={testimonial?.rating} imageUrl={testimonial?.sourceLogo?.url} className="" review={testimonial?.descripttion} />)}
                         </div>
                     </div>
                 </section>
@@ -918,9 +938,9 @@ export const HomePage = () => {
                         <div className="flex-1 ">
                             <div className="text-[#BFA6A1] justify-evenly flex flex-col items-center w-full h-full text-[200%] mb-14 sm:mb-0 sm:text-[500%]">
                                 What people say
-                                <div>
-                                    {TESTIMONIALS.map(testimonial => <ReviewCard name={testimonial?.customerName} rating={testimonial?.rating} imageUrl={testimonial?.sourceLogo?.url} review={testimonial?.descripttion} />)}
-                                </div>
+                                <Marquee className="flex rounded-md justify-evenly items-center w-full" autoFill speed={100}>
+                                    {TESTIMONIALS.map(testimonial => <ReviewCard name={testimonial?.customerName} className="mr-4 sm:w-[656px]" rating={testimonial?.rating} imageUrl={testimonial?.sourceLogo?.url} review={testimonial?.descripttion} />)}
+                                </Marquee>
                             </div>
                         </div>
                         {/* <div className="sm:flex-1 flex-[0.25] relative">

@@ -271,7 +271,7 @@ export const Solitare = () => {
                                         <FormControl className='w-full h-full'>
                                             <div className='grid grid-cols-4 sm:text-white text-[#E1C6B3]  gap-4 items-center'>
                                                 <p className='col-span-1 sm:text-white text-[#E1C6B3]'>Email Address</p>
-                                                <Input {...field} className='col-span-3' placeholder="" type="email" />
+                                                <Input {...field} className='col-span-3 border-white' placeholder="" type="email" />
                                             </div>
                                         </FormControl>
                                         <FormMessage />
@@ -286,7 +286,7 @@ export const Solitare = () => {
                                     <FormLabel className="col-span-1">Any Additional requests?</FormLabel>
                                     <FormControl className='col-span-3'>
                                         <Textarea
-                                            className="min-h-[73px] resize-none"
+                                            className="min-h-[73px] resize-none border-white"
                                             placeholder="Type any additional details here."
                                         {...field}
                                         />
@@ -310,7 +310,7 @@ export const Solitare = () => {
                                                 className="grid grid-cols-4 w-full gap-4 justify-center items-center"
                                             >
                                             <p className='col-span-1 flex justify-center items-center'>Phone number :</p>
-                                            <Input {...field} type="number" className="no-spinner col-span-3" />
+                                            <Input {...field} type="number" className="no-spinner col-span-3 border-white" />
                                             </div>
                                         </FormControl>
                                         <FormMessage className='flex justify-center items-center self-center justify-self-center' />
@@ -372,7 +372,7 @@ export const Solitare = () => {
                                         className="grid gap-4 grid-cols-4 w-full"
                                     >
                                         <p className='col-span-1 flex items-center'>Carat :</p>
-                                        <Input {...field} placeholder="" className='col-span-3' type="number" />
+                                        <Input {...field} placeholder="" className='col-span-3 border-white' type="number" />
                                     </div>
                                     </FormControl>
                                     <FormMessage />
@@ -390,7 +390,7 @@ export const Solitare = () => {
                                             className="grid gap-4 grid-cols-4 w-full"
                                         >
                                             <p className='col-span-1 flex items-center'>Gold weight</p>
-                                            <Input {...field} placeholder="" className='col-span-3' type="number" />
+                                            <Input {...field} placeholder="" className='col-span-3 border-white' type="number" />
                                         </div>
                                         </FormControl>
                                         <FormMessage />
@@ -441,7 +441,7 @@ export const Solitare = () => {
                                         >
                                         <p className={cn('col-span-1 text-gray-500 flex justify-center items-center gap-4', form.getValues('multiDiamonds') && 'text-white')}>No of stones</p>
                                         <Input
-                                            className='col-span-3'
+                                            className='col-span-3 border-white'
                                             {...field}
                                             disabled={!showNoOfDiamonds}
                                             type="number"

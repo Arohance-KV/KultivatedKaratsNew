@@ -19,7 +19,39 @@ import { getProductPriceDetails } from "@/utils/CalculateTotal";
     // SelectLabel
     // SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ReviewCard } from "../home-page/HomePage";
 // import { ColorSelector } from "../home-page/ColourSelector";
+import Marquee from "react-fast-marquee";
+
+const TESTIMONIALS = [
+    {
+        customerName: "Karandeep",
+        rating: 5,
+        descripttion: `I couldn’t be happier with my decision to purchase a lab-grown diamond from Kultivated Carats! From start to finish, the experience was exceptional.`,
+        sourceLogo: {
+            url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
+            publicId: ""
+        }
+    },
+    {
+        customerName: "Ritu Jain",
+        rating: 5,
+        descripttion: `All the jewellery is uniquely and thoughtfully designed and each piece is very meticulously created. You won't be disappointed. I highly recommend their collection!!!`,
+        sourceLogo: {
+            url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
+            publicId: ""
+        }
+    },
+    {
+        customerName: "Shashank SK",
+        rating: 5,
+        descripttion: `Exceptional quality and service! Kultivated Karats delivers brilliant lab grown diamonds with unmatched elegance.👏`,
+        sourceLogo: {
+            url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
+            publicId: ""
+        }
+    },  
+];
 
 export const ProductPage = () => {
     const { productId }= useParams();
@@ -582,7 +614,7 @@ export const ProductPage = () => {
                 </div>} */}
                 {productData?.category?.products?.length! > 0 && <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
                     <p>Similar products: </p>
-                    <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
+                    <div className="flex flex-wrap gap-4 items-center">
                         {productData?.category?.products?.slice(-5)?.map((product : IProduct, index : number) => {
                             return ((Array.isArray(product)) || index > 5) ?  <></> : (
                                 <a href={`/product/${product?._id}`} className="flex border border-[#A68A7E] flex-col  w-44 aspect-square py-4 justify-center items-center col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4">
@@ -595,6 +627,12 @@ export const ProductPage = () => {
                         })}
                     </div>
                 </div>}
+                <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
+                    <p>Reviews: </p>
+                    <Marquee className="flex rounded-md justify-evenly items-center w-full" autoFill speed={100}>
+                        {TESTIMONIALS.map(testimonial => <ReviewCard name={testimonial?.customerName} className="mr-4 sm:w-[656px]" rating={testimonial?.rating} imageUrl={testimonial?.sourceLogo?.url} review={testimonial?.descripttion} />)}
+                    </Marquee>
+                </div>
                 
             </div>
         </section>
