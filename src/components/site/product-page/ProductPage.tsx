@@ -203,12 +203,12 @@ export const ProductPage = () => {
                             e.preventDefault();
                             if( isInCart )
                             {
-                                await updateCart({ product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
+                                await updateCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                 setIsCartAddedButtonLoading(false);
                                 setIsInCart(false);
                                 return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                             }
-                            await updateCart({ product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
+                            await updateCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                             setIsCartAddedButtonLoading(false);
                             setIsInCart(true);
                             return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
@@ -234,12 +234,12 @@ export const ProductPage = () => {
                         e.preventDefault();
                         if( isInVideoCallCart )
                         {
-                            await updateVideoCallCart({ product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
+                            await updateVideoCallCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
                             setIsInVideoCallCartButtonLoading(false);
                             setIsInVideoCallCart(false);
                             return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                         }
-                        await updateVideoCallCart({ product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
+                        await updateVideoCallCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
                         setIsInVideoCallCartButtonLoading(false);
                         setIsInVideoCallCart(true);
                         return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
@@ -513,12 +513,12 @@ export const ProductPage = () => {
                                     e.preventDefault();
                                     if( isInCart )
                                     {
-                                        await updateCart({ product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
+                                        await updateCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                         setIsCartAddedButtonLoading(false);
                                         setIsInCart(false);
                                         return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                     }
-                                    await updateCart({ product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
+                                    await updateCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                     setIsCartAddedButtonLoading(false);
                                     setIsInCart(true);
                                     return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
@@ -544,12 +544,12 @@ export const ProductPage = () => {
                                 e.preventDefault();
                                 if( isInVideoCallCart )
                                 {
-                                    await updateVideoCallCart({ product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
+                                    await updateVideoCallCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
                                     setIsInVideoCallCartButtonLoading(false);
                                     setIsInVideoCallCart(false);
                                     return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                 }
-                                await updateVideoCallCart({ product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
+                                await updateVideoCallCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
                                 setIsInVideoCallCartButtonLoading(false);
                                 setIsInVideoCallCart(true);
                                 return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
