@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { GoogleLogin } from "@react-oauth/google";
 import { IUser } from "@/utils/interfaces";
 import { setCustomerData } from "@/redux/slices/websiteSlice";
+import { toast } from "sonner";
+import { ToastSuccess } from "@/utils/UtilityComponents";
 // import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 // import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
@@ -229,7 +231,7 @@ export const Auth = () => {
                         console.log(data);
 
                         dispatch(setCustomerData(data?.data?.user));
-
+                        toast.success("Logged In successfully!", { icon: <ToastSuccess />, className: "!bg-white text-[#A68A7E] border border-[#A68A7E] inria-serif-regular" });
                         navigate("/");
 
                     } catch (error) {

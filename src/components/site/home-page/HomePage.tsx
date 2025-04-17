@@ -95,7 +95,7 @@ const TESTIMONIALS = [
         rating: 5,
         descripttion: `I couldn’t be happier with my decision to purchase a lab-grown diamond from Kultivated Carats! From start to finish, the experience was exceptional.`,
         sourceLogo: {
-            url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
+            url: `/male.png`,
             publicId: ""
         }
     },
@@ -104,7 +104,7 @@ const TESTIMONIALS = [
         rating: 5,
         descripttion: `All the jewellery is uniquely and thoughtfully designed and each piece is very meticulously created. You won't be disappointed. I highly recommend their collection!!!`,
         sourceLogo: {
-            url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
+            url: `/female.png`,
             publicId: ""
         }
     },
@@ -113,7 +113,7 @@ const TESTIMONIALS = [
         rating: 5,
         descripttion: `Exceptional quality and service! Kultivated Karats delivers brilliant lab grown diamonds with unmatched elegance.👏`,
         sourceLogo: {
-            url: `https://i2.wp.com/appfinite.com/wp-content/plugins/wp-first-letter-avatar/images/default/256/latin_k.png?ssl=1`,
+            url: `/male.png`,
             publicId: ""
         }
     },

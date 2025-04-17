@@ -35,6 +35,7 @@ import { PrivacyPolicy } from './components/site/home-page/PrivacyPolicy.tsx';
 import { ContactUs } from './components/site/home-page/ContactUs.tsx';
 import { ProductCare } from './components/site/home-page/ProductCare.tsx';
 import { ShippingPolicy } from './components/site/home-page/ShippingPolicy.tsx';
+import { Toaster } from './components/ui/sonner.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -87,6 +88,7 @@ createRoot(document.getElementById("root")!).render(
         <GoogleOAuthProvider clientId={CLIENT_ID}>
           {/* <ScrollToTop /> */}
           <RouterProvider router={router} />
+          <Toaster />
         </GoogleOAuthProvider>
           {/* <AnimatedCursor /> */}
       </Provider>
