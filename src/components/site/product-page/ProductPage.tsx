@@ -617,10 +617,10 @@ export const ProductPage = () => {
                     <div className="flex flex-wrap gap-4 items-center">
                         {productData?.category?.products?.slice(-5)?.map((product : IProduct, index : number) => {
                             return ((Array.isArray(product)) || index > 5) ?  <></> : (
-                                <a href={`/product/${product?._id}`} className="flex border border-[#A68A7E] flex-col  w-44 aspect-square py-4 justify-center items-center col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4">
+                                <a href={`/product/${product?._id}`} className="flex border border-[#A68A7E] flex-col w-44 aspect-square py-4 justify-center items-center col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4">
                                     <img src={product?.imageUrl?.[0]?.url} alt="" className="bg-white justify-self-center sm:w-36 object-cover aspect-square"/>
                                     <div className="text-[#E1C6B3] text-[4px] flex justify-between">
-                                        <p className="capitalize w-full text-[8px] sm:text-sm">Name: {product.name}</p>
+                                        <p className="capitalize w-full text-[8px] sm:text-sm px-4">{product.name}</p>
                                     </div>
                                 </a>
                             );

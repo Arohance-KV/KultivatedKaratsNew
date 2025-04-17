@@ -656,18 +656,18 @@ export const HomePage = () => {
                     <div className="gap-4 py-[5%] flex text-[#BFA6A1] text-[75px] h-[100%] justify-center w-[80%] relative ">
                         <div className="flex-1 h-full cursor-pointer flex justify-center items-center z-10" onClick={(e) => {
                             e.preventDefault();
-                            navigate("/products?category-filter=rings");
+                            navigate("/products?category-filter=ring");
                         // }} onMouseOver={() => {
                             // @ts-ignore
                             // categoriesImageRef.current.src = "/ring.png";
                         }}>Rings</div>
                         <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onClick={(e) => {
                             e.preventDefault();
-                            navigate("/products?category-filter=rings");
+                            navigate("/products?category-filter=earrings");
                         }}>Earings</div>
                         <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onClick={(e) => {
                             e.preventDefault();
-                            navigate("/products?category-filter=rings");
+                            navigate("/products?category-filter=pendant");
                         }} >Pendants</div>
                         <div id="categories-hover-element" className="absolute bg-[#E9D6C8] z-[0] w-[350px] top-1/2 flex justify-end items-end -translate-y-1/2 overflow-hidden left-[10%] aspect-video rotate-[75deg]">
                             <img ref={categoriesImageRef} src="/ring.png" className="-rotate-[120deg] h-auto -translate-y-[10%] w-[70%]" alt="" />

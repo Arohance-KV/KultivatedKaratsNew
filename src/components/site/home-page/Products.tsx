@@ -47,9 +47,12 @@ export const Products = () => {
 
     useEffect(() => {
         if ( categoryFilter ) {
-            console.log(categoryFilter, products[0]?.category)
-            const category = categoryDataFromStore?.filter(category => category?.name?.trim()?.toLowerCase() == categoryFilter.trim()?.toLowerCase())[0];
-            setProducts(category?.products!);
+            const category = categoryDataFromStore?.filter(category => {
+                console.log(category?.name?.trim()?.toLowerCase(), categoryFilter.trim()?.toLowerCase())
+                return (category?.name?.trim()?.toLowerCase() == categoryFilter.trim()?.toLowerCase());
+            })?.[0];
+            if ( category?.products )
+                setProducts(category?.products);
             setIsLoading(false);
             return console.log(categoryDataFromStore, categoryFilter, category, products);
         };

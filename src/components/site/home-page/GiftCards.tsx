@@ -18,6 +18,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { ToastSuccess } from '@/utils/UtilityComponents';
 
 const GIFTCARDS = [
     {
@@ -185,8 +187,6 @@ export const GiftCards = () => {
                         const data = await response.json();
                         console.log(data, response);
 
-                        console.log(response);
-
                         const giftCardCreationResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}giftcards/create-a-gift-card`, {
                             method: "POST",
                             headers: {
@@ -206,9 +206,9 @@ export const GiftCards = () => {
                                 used: false,
                                 imageUrl: [ {
                                     url: GIFTCARDS?.filter(giftCard => {
-                                        giftCard?.name == values?.giftCardDesign
-                                    })[0],
-                                    publicId: ""
+                                        return giftCard?.name?.trim()?.toLowerCase() == values?.giftCardDesign?.trim()?.toLowerCase()
+                                    })[0]?.image,
+                                    publicId: "none"
                                 } ]
                             }}),
                         });
@@ -221,6 +221,7 @@ export const GiftCards = () => {
                         console.log( giftCardResponse , giftCardCreationResponse );
                         // dispatch(setCustomerData(orderData?.data));
                         // await clearCart(dispatch, customerData?._id ? true : false);
+                        toast.success("Giftcard added successfully!", { icon: <ToastSuccess />, className: "!bg-white text-[#A68A7E] border border-[#A68A7E] inria-serif-regular" });
                         navigate("/payment-success");
                     } catch (error) {
                         console.log(error);
