@@ -10,7 +10,6 @@ import { GiftCards } from './components/site/home-page/GiftCards.tsx';
 import { StoreLocator } from './components/site/home-page/StoreLocator.tsx';
 import { Provider } from "react-redux";
 import { Collections } from './components/site/home-page/Collections.tsx';
-import { Test } from "./components/site/home-page/Text.tsx";
 import { DashboardMain } from './components/adminPanel/DashboardMain.tsx';
 import { DashboardHomePage } from './components/adminPanel/DashboardHomePage.tsx';
 import { VideoCartPage } from './components/site/home-page/VideoCartPage.tsx';
@@ -36,6 +35,7 @@ import { ContactUs } from './components/site/home-page/ContactUs.tsx';
 import { ProductCare } from './components/site/home-page/ProductCare.tsx';
 import { ShippingPolicy } from './components/site/home-page/ShippingPolicy.tsx';
 import { Toaster } from './components/ui/sonner.tsx';
+import { Test } from './components/site/home-page/Text.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(

@@ -286,11 +286,13 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
 
     return (    
         <div className="w-full relative flex gap-4">
-            <img src={cartItem?.product?.imageUrl[0]?.url} className="sm:h-32 h-20 border-2 border-[#BFA6A1] aspect-square sm:aspect-video object-cover rounded-md" alt="" />
+            <img src={cartItem?.product?.imageUrl[0]?.url} className="sm:h-32 h-20 border-2 border-[#BFA6A1] aspect-square object-cover rounded-md" alt="" />
             <div className=" flex-1 bg-white border-2 border-[#BFA6A1] px-8 flex rounded-md text-[#A68A7E] inria-serif-regular">
                 <div className="flex-1 flex flex-col justify-around items-start">
                     <p>{cartItem?.product?.name}</p>
+                    {cartItem?.ringSize && <p>Ring size: {cartItem?.ringSize}</p>}
                     {/* {cartItem?.product?.productId! && <p>code: {cartItem?.product?.productId}</p>} */}
+
                 </div>
                 <div className="flex-1 flex flex-col justify-around items-end">
                     <p>{Math.round(cartItem?.totalPrice)}</p>
