@@ -231,7 +231,7 @@ export const Auth = () => {
                         console.log(data);
 
                         dispatch(setCustomerData(data?.data?.user));
-                        toast.success("Logged In successfully!", { icon: <ToastSuccess />, className: "!bg-white text-[#A68A7E] border border-[#A68A7E] inria-serif-regular" });
+                        toast.success("Logged In successfully!", { icon: <ToastSuccess />, className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white" });
                         navigate("/");
 
                     } catch (error) {

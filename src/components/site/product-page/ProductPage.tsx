@@ -1,9 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { UIsideBar } from "../home-page/Solitare";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ICartItem, IProduct, IUser, IWishListItem } from "../../../utils/interfaces";
-// import EmblaCarousel from "./carousel-components/EmblaCarousel";
-import "./../../../index.css";
 import { Button } from "../../ui/button";
 import { updateCart, updateVideoCallCart, updateWishList } from "../../../utils/utilityFunctions";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,13 +13,15 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { getProductPriceDetails } from "@/utils/CalculateTotal";
-// import { Select, SelectContent, SelectGroup, SelectItem, 
-    // SelectLabel
-    // SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ReviewCard } from "../home-page/HomePage";
-// import { ColorSelector } from "../home-page/ColourSelector";
 import Marquee from "react-fast-marquee";
+import { Skeleton } from "@/components/ui/skeleton";
+import React, { useCallback } from 'react';
+import { ChevronDown, Check } from 'lucide-react'; // Assuming you have lucide-react for icons
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+// import "./../../../index.css";
 
 const TESTIMONIALS = [
     {
@@ -53,12 +53,39 @@ const TESTIMONIALS = [
     },  
 ];
 
+const ringSizes = [
+    { value: '6', label: '6' },
+    { value: '7', label: '7' },
+    { value: '8', label: '8' },
+    { value: '9', label: '9' },
+    { value: '10', label: '10' },
+    { value: '11', label: '11' },
+    { value: '12', label: '12' },
+    { value: '13', label: '13' },
+    { value: '14', label: '14' },
+    { value: '15', label: '15' },
+    { value: '16', label: '16' },
+    { value: '17', label: '17' },
+    { value: '18', label: '18' },
+    { value: '19', label: '19' },
+    { value: '20', label: '20' },
+    { value: '21', label: '21' },
+    { value: '22', label: '22' },
+    { value: '23', label: '23' },
+    { value: '24', label: '24' },
+    { value: '25', label: '25' },
+    { value: '26', label: '26' },
+    { value: '27', label: '27' },
+    { value: '28', label: '28' },
+    { value: '29', label: '29' },
+    { value: '30', label: '30' },
+];
+
 export const ProductPage = () => {
     const { productId }= useParams();
-
+    const ringSizeRef = useRef(6);
     // const [ product, setProduct ] = useState<IProduct>();
     const [ productData, setProductData ] = useState<IProduct>(useSelector((state: any) => state.website.productData));
-    const [ isDataLoading, setIsDataLoading ] =useState(true);
     const dispatch = useDispatch();
     const userData: IUser = useSelector((state: any) => state.website.customerData);
     const currentWishlist: IWishListItem[] = userData?._id ? userData?.wishList : JSON.parse(localStorage.getItem("wishList")!) ;
@@ -67,20 +94,15 @@ export const ProductPage = () => {
     const [ isInWishList, setIsInWishList ] = useState<boolean>(false);
     const [ isInCart, setIsInCart ] = useState<boolean>(false);
     const [ isInVideoCallCart, setIsInVideoCallCart ] = useState(false);
-    // @ts-ignore
     const [ isWishListAddedButtonLoading, setIsWishListAddedButtonLoading ] = useState<boolean>(false);
     const [ isCartAddedButtonLoading, setIsCartAddedButtonLoading ] = useState<boolean>(false);
-    // @ts-ignore
     const [ isInVideoCallCartButtonLoading, setIsInVideoCallCartButtonLoading ] = useState(false);
-
-    // const [ price, setPrice ] = useState<number>(0);
     const quantityRef = useRef(1);
     const karatRef = useRef(14);
     const colourRef = useRef("White");
     const chainKaratRef = useRef(14);
     const addChainRef = useRef(false);
     const gemstoneRef = useRef("gemstone");
-    // const [ getChain, setGetChain ] = useState(false);
 
     useEffect(() => {
         (async function () {
@@ -100,16 +122,6 @@ export const ProductPage = () => {
         const price = getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight });
         setDiamondCalculation(price); 
         console.log(productData)
-        // const rawData = localStorage.getItem('recentlyViewedCart');
-        // if (!rawData) return;
-        // const cart = JSON.parse(rawData)
-        // console.log(cart);
-        // if ( cart?.length == 0 || cart?.filter((item: IProduct) => item?._id == productData?._id).length == 0 ) {
-        //     cart?.push(productData);
-        //     console.log(cart);
-        //     localStorage.setItem("recentlyViewedCart", JSON.stringify(cart));
-        // } 
-        setIsDataLoading(false);
     }, [ productData ]);
 
     const getProductFromId = async () => {
@@ -128,7 +140,8 @@ export const ProductPage = () => {
             
             const data = await response.json();
             console.log(data.data);
-            setProductData(data.data)
+            setProductData(data?.data);
+            // setProductData(data.data)
         } catch (error) {
             console.log(error);
         }
@@ -150,20 +163,19 @@ export const ProductPage = () => {
                 <p className="text-xl my-2">
                     {productData?.name}
                 </p>
-                {isDataLoading ? <Loader2 className="stroke-[#E1C6B3] animate-spin" /> : <p>
+                {diamondCalculation?.subTotal ? <p>
                     ₹{Math.round(diamondCalculation?.subTotal!)} <span className="text-xs">(excluding GST)</span>
-                </p>}
+                </p> : <Loader2 className="stroke-[#E1C6B3] animate-spin" />}
                 <div className="flex flex-col-reverse">
                 <div className="text-[#A68A7E] flex flex-col #A68A7E  justify-evenly  p-8 inria-serif-regular text-[] w-full flex-1/2" id="price-calculation">
                     <p className="text-[#A68A7E] mb-8 text-xl inria-serif-regular">Detailed price breakdown:</p>
                     {/* <p className="flex border-b py-4 w-full justify-between items-center"> Approx Gold weight { productData?.goldWeight }</p> */}
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Approx Net weight: <span>{ productData?.netWeight }g</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Approx Gold rate: <span>₹{ diamondCalculation?.goldRate }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Approx diamond rate: <span>₹{ diamondCalculation?.diamondRate }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Making charges : <span>₹{ diamondCalculation?.makingCharges }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Sub total : <span>₹{ diamondCalculation?.subTotal }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> + GST : <span>{ `3%` }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Total : <span>₹{ diamondCalculation?.total }</span></p>
+                    {<p className="flex border-b py-4 w-full justify-between items-center"> Diamond rate: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.diamondRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
+                    {<p className="flex border-b py-4 w-full justify-between items-center"> Gold rate: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.goldRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Making charges : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.makingCharges!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Sub total : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.subTotal!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> + GST : {productData?._id ? <span>{ `3%` }</span> : <Skeleton className="bg-red-500/10 w-6 h-4 rounded-md" />}</p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Total : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.total!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
                 </div>
                     <div className="py-6">
                         <h2 className="text-2xl font-semibold mb-4 text-gray-800">Our Promises</h2>
@@ -203,15 +215,15 @@ export const ProductPage = () => {
                             e.preventDefault();
                             if( isInCart )
                             {
-                                await updateCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
+                                await updateCart({ addChain: addChainRef?.current, isGemStone: gemstoneRef?.current == "gemstone" ? true : false, chainGoldCarat: chainKaratRef?.current, ringSize: ringSizeRef?.current, containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                 setIsCartAddedButtonLoading(false);
                                 setIsInCart(false);
-                                return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                             }
-                            await updateCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
+                            await updateCart({ addChain: addChainRef?.current, isGemStone: gemstoneRef?.current == "gemstone" ? true : false, chainGoldCarat: chainKaratRef?.current, ringSize: ringSizeRef?.current, containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                             setIsCartAddedButtonLoading(false);
                             setIsInCart(true);
-                            return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                            return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                         }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button>
                         <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
                             setIsWishListAddedButtonLoading(true);
@@ -221,12 +233,12 @@ export const ProductPage = () => {
                                 await updateWishList({ product: productData!, color: colourRef.current, karat: karatRef.current }, false, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                 setIsWishListAddedButtonLoading(false);
                                 setIsInWishList(false);
-                                return toast.success("Product deleted from wishlist successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                return toast.success("Product deleted from wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                             }
                             await updateWishList({ product: productData!, color: colourRef.current, karat: karatRef.current}, true, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                             setIsWishListAddedButtonLoading(false);
                             setIsInWishList(true);
-                            return toast.success("Product added to wishlist successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                            return toast.success("Product added to wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                         }}>{isWishListAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInWishList ? <>Remove from wishlist <ListMinus /></> : <>Add to wishlist <ListPlus /></>}</Button>
                     </div>
                     <Button className="border-[#A68A7E] border text-[#A68A7E] bg-white hover:bg-[#A68A7E] hover:text-white" onClick={async (e) => {
@@ -234,15 +246,15 @@ export const ProductPage = () => {
                         e.preventDefault();
                         if( isInVideoCallCart )
                         {
-                            await updateVideoCallCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
+                            await updateVideoCallCart({ addChain: addChainRef?.current, isGemStone: gemstoneRef?.current == "gemstone" ? true : false, chainGoldCarat: chainKaratRef?.current, ringSize: ringSizeRef?.current, containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
                             setIsInVideoCallCartButtonLoading(false);
                             setIsInVideoCallCart(false);
-                            return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                            return toast.success("Product deleted from video call cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                         }
-                        await updateVideoCallCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
+                        await updateVideoCallCart({ addChain: addChainRef?.current, isGemStone: gemstoneRef?.current == "gemstone" ? true : false, chainGoldCarat: chainKaratRef?.current, ringSize: ringSizeRef?.current, containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
                         setIsInVideoCallCartButtonLoading(false);
                         setIsInVideoCallCart(true);
-                        return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                        return toast.success("Product added to video call cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                     }}>{isInVideoCallCartButtonLoading ? <Loader2 className="animate-spin"/> : isInVideoCallCart ? <>Remove from video call cart <VideoOff /></> : <>Add to video call cart <Video /></>}</Button>
                 </div>
                     <div className="flex-1 flex w flex-col gap-4">
@@ -288,6 +300,14 @@ export const ProductPage = () => {
                             </div>
                         }
                         <div className="flex-1">
+                            {productData?.category?._id == "67fe5da50254f62d3e5fe917" &&
+                            <div className="w-full my-4">
+                                Select a ring size:
+                                <CustomSelect options={ringSizes} value="6" placeholder="Select ring size" onValueChange={(value) => {
+                                    console.log(value);
+                                    ringSizeRef.current = Number(value);
+                                }} />
+                            </div>}
                             <div className="flex-1 flex w-full h-full flex-col gap-4">
                                 <p className="">
                                     Gold karats: 
@@ -309,6 +329,34 @@ export const ProductPage = () => {
                                         {/* ); */}
                                     {/* })} */}
                                 </RadioGroup>
+                                {(productData?.isPendantFixed == false) && <div className="flex flex-col gap-4">
+                                    <p className="flex justify-around items-center gap-2">
+                                        Get a chain with the pendant: <Checkbox onCheckedChange={(value) => {
+                                            console.log(typeof value);
+                                            addChainRef.current = value ? true : false;
+                                            if ( productData?.containsGemstone ) setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }))
+                                            else setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                        }} />
+                                    </p>
+                                    {(addChainRef.current == true) && <RadioGroup className="w-full" id="karat-input" onValueChange={(value) => {
+                                            chainKaratRef.current = Number(value);
+                                            setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                            // karatRef.current = Number(value);
+                                    }} defaultValue={ "14" }>
+                                        {/* {productData?.totalKarats?.map(karat => { */}
+                                            {/* return ( */}
+                                        <Label className={cn("items-center flex justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
+                                            <Label className="captalize" htmlFor="pc-14karat">{14}k</Label>
+                                            <RadioGroupItem value={"14"} id="pc-14karat" className="" />
+                                        </Label>
+                                        <Label className={cn("flex items-center justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
+                                            <Label className="captalize" htmlFor="pc-18karat">{18}k</Label>
+                                            <RadioGroupItem value={"18"} id="pc-18karat" className="" />
+                                        </Label>
+                                            {/* ); */}
+                                        {/* })} */}
+                                    </RadioGroup>}
+                                </div>}
                                 <div className="flex flex-col relative gap-4">
                                     <p>Quantity :</p>
                                     <NumberInput quantityRef={quantityRef} />
@@ -353,16 +401,16 @@ export const ProductPage = () => {
                         </div>
                     </div>
                     <div className="border-l-2 flex flex-col justify-evenly pl-8 text-[#A68A7E] inria-serif-regular border-l-[#E1C6B3]  flex-[0.45]">
-                        <p>{productData?.name}</p>
-                        <p className="text-xl flex flex-col">
-                            <p>
+                        {productData?.name ? <p>{productData?.name}</p> : <Skeleton className="w-1/4 h-4 rounded-md bg-gray-500/10" />}
+                        <p className="text-xl flex flex-col gap-4">
+                            {productData?.name ? <p className="">
                                 {productData?.name}
-                            </p>
-                            <p>
+                            </p> : <Skeleton className="w-1/3 h-6 rounded-md bg-gray-500/10" />}
+                            {diamondCalculation?.subTotal ? <p className="">
                                 ₹{Math.round(diamondCalculation?.subTotal!)} <span className="text-xs">(excluding GST)</span>
-                            </p>
+                            </p> : <Skeleton className="w-1/2 h-6 rounded-md bg-gray-500/10" />}                            
                         </p>
-                        <div className="flex">
+                        {productData._id ? <div className="flex">
                             <div className="flex-1 flex w flex-col gap-4">
                                 <p className="">
                                     Colours:
@@ -420,7 +468,7 @@ export const ProductPage = () => {
                                             {/* ); */}
                                         {/* })} */}
                                     </RadioGroup>
-                                    </div>}
+                                </div>}
                                 {(productData?.isPendantFixed == false) && <div className="flex flex-col gap-4">
                                     <p className="flex justify-around items-center gap-2">
                                         Get a chain with the pendant: <Checkbox onCheckedChange={(value) => {
@@ -448,7 +496,7 @@ export const ProductPage = () => {
                                             {/* ); */}
                                         {/* })} */}
                                     </RadioGroup>}
-                                    </div>}
+                                </div>}
                                 {/* <RadioGroup defaultValue={Array.isArray(productData?.goldColor) ? productData?.goldColor[0] + "" : productData?.goldColor + ""}> */}
                                 {/* <RadioGroup id="colour-input" defaultValue={colourRef.current} onValueChange={(value) => {
                                     console.log(value);
@@ -469,9 +517,18 @@ export const ProductPage = () => {
                                 </RadioGroup> */}
                             </div>
                             <div className="flex-1">
+                                {productData?.category?._id == "67fe5da50254f62d3e5fe917" &&
+                                <div className="w-full my-4">
+                                    {/* Desktop view */}
+                                    Select a ring size:
+                                    <CustomSelect options={ringSizes} value="6" placeholder="Select ring size" onValueChange={(value) => {
+                                        console.log(value);
+                                        ringSizeRef.current = Number(value);
+                                    }} />
+                                </div>}
                                 <div className="flex-1 flex w-full h-full flex-col gap-4">
                                     <p className="">
-                                        Gold karats: 
+                                        Gold karats:
                                     </p>
                                     <RadioGroup id="karat-input" onValueChange={(value) => {
                                             karatRef.current = Number(value);
@@ -490,6 +547,29 @@ export const ProductPage = () => {
                                             {/* ); */}
                                         {/* })} */}
                                     </RadioGroup>
+                                    {productData?.containsGemstone && <div className="flex flex-col gap-4">
+                                        <p className="">
+                                            Coloured stone type: 
+                                        </p>
+                                        <RadioGroup id="gem-stone-input" onValueChange={(value) => {
+                                                // karatRef.current = Number(value);
+                                                gemstoneRef.current = value;
+                                                setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                        }} defaultValue={ gemstoneRef?.current }>
+                                            {/* {productData?.totalKarats?.map(karat => { */}
+                                                {/* return ( */}
+                                            <Label className={cn("items-center flex justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
+                                                <Label className="captalize" htmlFor="r8">Lab grown coloured diamond</Label>
+                                                <RadioGroupItem value={"lab-grown-coloured-diamond"} id="Lab-grown-diamond" className="" />
+                                            </Label>
+                                            <Label className={cn("flex items-center justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
+                                                <Label className="captalize" htmlFor="r9">Gemstone</Label>
+                                                <RadioGroupItem value={'gemstone'} id="18karat" className="" />
+                                            </Label>
+                                                {/* ); */}
+                                            {/* })} */}
+                                        </RadioGroup>
+                                    </div>}
                                     <div className="flex flex-col relative gap-4">
                                         <p>Quantity :</p>
                                         <NumberInput quantityRef={quantityRef} />
@@ -497,33 +577,30 @@ export const ProductPage = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {productData?.gemStoneColour!= "" && <div className="w-full items-center flex">
+                        </div> : <Skeleton className="bg-gray-500/10 rounded-md h-1/4 aspect-square" />}
+                        {productData?._id ? productData?.gemStoneColour!= "" && <div className="w-full items-center flex">
                             <p className="flex items-center gap-4">Gemstone colour: <span className="px-4 py-2 border border-[#A68A7E] rounded-md">{productData?.gemStoneColour}</span></p>
-                        </div>}
-                        {(productData?.isPendantFixed == false) && <div className="w-full bg-green-600">
-                            
-                        </div>}
+                        </div> : <Skeleton className="w-1/3 h-4 rounded-md bg-gray-500/10" />}
                         <div className="w-[80%] gap-2 justify-self-center flex-col flex">
                             <div className="flex w-full gap-2">
-                                <Button 
+                                {productData?._id ? <Button 
                                     className={cn("flex hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
                                     onClick={async (e) => {
                                     setIsCartAddedButtonLoading(true);
                                     e.preventDefault();
                                     if( isInCart )
                                     {
-                                        await updateCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
+                                        await updateCart({ addChain: addChainRef?.current, isGemStone: gemstoneRef?.current == "gemstone" ? true : false, chainGoldCarat: chainKaratRef?.current, ringSize: ringSizeRef?.current, containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                         setIsCartAddedButtonLoading(false);
                                         setIsInCart(false);
-                                        return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                        return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                     }
-                                    await updateCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
+                                    await updateCart({ addChain: addChainRef?.current, isGemStone: gemstoneRef?.current == "gemstone" ? true : false, chainGoldCarat: chainKaratRef?.current, ringSize: ringSizeRef?.current, containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                     setIsCartAddedButtonLoading(false);
                                     setIsInCart(true);
-                                    return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
-                                }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button>
-                                <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
+                                    return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
+                                }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button> : <Skeleton className="flex-1 h-10 rounded-md bg-gray-500/10" />}
+                                {productData?._id ? <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
                                     setIsWishListAddedButtonLoading(true);
                                     e.preventDefault();
                                     if( isInWishList )
@@ -531,29 +608,29 @@ export const ProductPage = () => {
                                         await updateWishList({ product: productData!, color: colourRef.current, karat: karatRef.current }, false, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                         setIsWishListAddedButtonLoading(false);
                                         setIsInWishList(false);
-                                        return toast.success("Product deleted from wishlist successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                        return toast.success("Product deleted from wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                     }
                                     await updateWishList({ product: productData!, color: colourRef.current, karat: karatRef.current}, true, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                     setIsWishListAddedButtonLoading(false);
                                     setIsInWishList(true);
-                                    return toast.success("Product added to wishlist successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
-                                }}>{isWishListAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInWishList ? <>Remove from wishlist <ListMinus /></> : <>Add to wishlist <ListPlus /></>}</Button>
+                                    return toast.success("Product added to wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
+                                }}>{isWishListAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInWishList ? <>Remove from wishlist <ListMinus /></> : <>Add to wishlist <ListPlus /></>}</Button> : <Skeleton className="flex-1 h-10 rounded-md bg-gray-500/10" />}
                             </div>
-                            <Button className="border-[#A68A7E] border text-[#A68A7E] bg-white hover:bg-[#A68A7E] hover:text-white" onClick={async (e) => {
+                            {productData?._id ? <Button className="border-[#A68A7E] border text-[#A68A7E] bg-white hover:bg-[#A68A7E] hover:text-white" onClick={async (e) => {
                                 setIsInVideoCallCartButtonLoading(true);
                                 e.preventDefault();
                                 if( isInVideoCallCart )
                                 {
-                                    await updateVideoCallCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
+                                    await updateVideoCallCart({ addChain: addChainRef?.current, isGemStone: gemstoneRef?.current == "gemstone" ? true : false, chainGoldCarat: chainKaratRef?.current, ringSize: ringSizeRef?.current, containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
                                     setIsInVideoCallCartButtonLoading(false);
                                     setIsInVideoCallCart(false);
-                                    return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                    return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                 }
-                                await updateVideoCallCart({ containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
+                                await updateVideoCallCart({ addChain: addChainRef?.current, isGemStone: gemstoneRef?.current == "gemstone" ? true : false, chainGoldCarat: chainKaratRef?.current, ringSize: ringSizeRef?.current, containsGemstone: productData?.containsGemstone, product: productData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(diamondCalculation?.subTotal!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentVideoCallCart, currentWishlist);
                                 setIsInVideoCallCartButtonLoading(false);
                                 setIsInVideoCallCart(true);
-                                return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
-                            }}>{isInVideoCallCartButtonLoading ? <Loader2 className="animate-spin"/> : isInVideoCallCart ? <>Remove from video call cart <VideoOff /></> : <>Add to video call cart <Video /></>}</Button>
+                                return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
+                            }}>{isInVideoCallCartButtonLoading ? <Loader2 className="animate-spin"/> : isInVideoCallCart ? <>Remove from video call cart <VideoOff /></> : <>Add to video call cart <Video /></>}</Button> : <Skeleton className="w-full h-10 rounded-md bg-gray-500/10" />}
                         </div>
                         <p className="text-2xl">Our promises</p>
                         <svg width="478" className="sm:w-[478px] w-full" height="88" viewBox="0 0 478 88" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -588,14 +665,12 @@ export const ProductPage = () => {
                 </div>
                 <div className="text-[#A68A7E] flex flex-col #A68A7E  justify-evenly  p-8 inria-serif-regular text-[] w-full flex-1/2" id="price-calculation">
                     <p className="text-[#A68A7E] mb-8 text-xl inria-serif-regular">Detailed price breakdown:</p>
-                    {/* <p className="flex border-b py-4 w-full justify-between items-center"> Approx Gold weight { productData?.goldWeight }</p> */}
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Approx Net weight: <span>{ Math.round(productData?.netWeight) }g</span></p>
-                    {diamondCalculation?.goldRate && <p className="flex border-b py-4 w-full justify-between items-center"> Approx Gold rate: <span>₹{ Math.round(diamondCalculation?.goldRate) }</span></p>}
-                    {diamondCalculation?.diamondRate && <p className="flex border-b py-4 w-full justify-between items-center"> Approx diamond rate: <span>₹{ Math.round(diamondCalculation?.diamondRate) }</span></p>}
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Making charges : <span>₹{ Math.round(diamondCalculation?.makingCharges!) }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Sub total : <span>₹{ Math.round(diamondCalculation?.subTotal!) }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> + GST : <span>{ `3%` }</span></p>
-                    <p className="flex border-b py-4 w-full justify-between items-center"> Total : <span>₹{ Math.round(diamondCalculation?.total!) }</span></p>
+                    {<p className="flex border-b py-4 w-full justify-between items-center"> Diamond rate: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.diamondRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
+                    {<p className="flex border-b py-4 w-full justify-between items-center"> Gold rate: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.goldRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Making charges : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.makingCharges!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Sub total : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.subTotal!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> + GST : {productData?._id ? <span>{ `3%` }</span> : <Skeleton className="bg-red-500/10 w-6 h-4 rounded-md" />}</p>
+                    <p className="flex border-b py-4 w-full justify-between items-center"> Total : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.total!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
                 </div>
                 {/* {(JSON.parse(localStorage?.getItem("recentlyViewedCart")!)) && <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
                     <p>Recently viewed products</p>
@@ -615,7 +690,7 @@ export const ProductPage = () => {
                 {productData?.category?.products?.length! > 0 && <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
                     <p>Similar products: </p>
                     <div className="flex flex-wrap gap-4 items-center">
-                        {productData?.category?.products?.slice(-5)?.map((product : IProduct, index : number) => {
+                        {productData?._id ? productData?.category?.products?.slice(-5)?.map((product : IProduct, index : number) => {
                             return ((Array.isArray(product)) || index > 5) ?  <></> : (
                                 <a href={`/product/${product?._id}`} className="flex border border-[#A68A7E] flex-col w-44 aspect-square py-4 justify-center items-center col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4">
                                     <img src={product?.imageUrl?.[0]?.url} alt="" className="bg-white justify-self-center sm:w-36 object-cover aspect-square"/>
@@ -624,7 +699,7 @@ export const ProductPage = () => {
                                     </div>
                                 </a>
                             );
-                        })}
+                        }): [1, 2, 3].map(() => <Skeleton className="w-44 aspect-square bg-gray-500/10" />)}
                     </div>
                 </div>}
                 <div className="p-3 sm:p-6 flex flex-col gap-4 inria-serif-regular text-[#A68A7E]">
@@ -639,71 +714,136 @@ export const ProductPage = () => {
     );
 }
 
-const JewelryCarousel = ({ imageUrl }: { imageUrl: { url: string; publicId: string }[] }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const JewelryCarousel = ({ imageUrl }: { imageUrl: {
+    url: string,
+    publicId: string,
+}[]}) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isMagnified, setIsMagnified] = useState(false);
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const imageRef = useRef<HTMLImageElement>(null);
   
-  // Sample product images - replace with your actual images
+    const goToPrevious = () => {
+      setCurrentIndex((prev) => (prev === 0 ? imageUrl.length - 1 : prev - 1));
+      setIsMagnified(false); // Reset magnification on image change
+    };
   
-  // Thumbnail images - replace with your actual thumbnails
+    const goToNext = () => {
+      setCurrentIndex((prev) => (prev === imageUrl.length - 1 ? 0 : prev + 1));
+      setIsMagnified(false); // Reset magnification on image change
+    };
   
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? imageUrl.length - 1 : prev - 1));
-  };
+    const handleMouseEnter = () => {
+      setIsMagnified(true);
+    };
   
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev === imageUrl.length - 1 ? 0 : prev + 1));
-  };
-
-  return (
-    <div className="w-full max-w-md mx-auto relative sm:static">
-      {/* Main image container */}
-      <div className="border border-[#A68A7E] rounded-lg mb-4 relative aspect-square">
-        <img 
-          src={imageUrl?.[currentIndex]?.url}
-          alt="Gold earrings with diamonds"
-          className="w-full h-full object-contain rounded-[inherit]"
-        />
-      </div>
-      
-      {/* Thumbnails column - positioned to the right */}
-      <div className="absolute right-4 top-1/4 flex flex-col space-y-2">
-        {imageUrl?.map((thumb, index) => (
-          <div 
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-16 h-16 border border-[#A68A7E] rounded-lg p-2 cursor-pointer flex items-center justify-center ${currentIndex === index ? 'ring-2 ring-[#A68A7E]' : ''}`}
-          >
-            <img 
-              src={thumb?.url}
-              alt={`Product view ${index + 1}`}
-              className="max-w-full max-h-full object-contain"
+    const handleMouseLeave = () => {
+      setIsMagnified(false);
+    };
+  
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!isMagnified || !imageRef.current) {
+        return;
+      }
+  
+      const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+      const x = (e.clientX - left) / width;
+      const y = (e.clientY - top) / height;
+  
+      setMousePosition({ x, y });
+    };
+  
+    const toggleMagnify = () => {
+      setIsMagnified(!isMagnified);
+    };
+  
+    const magnifiedStyle: React.CSSProperties = {};
+  
+    if (isMagnified && imageRef.current) {
+      const imgWidth = imageRef.current.naturalWidth;
+      const imgHeight = imageRef.current.naturalHeight;
+      const containerWidth = imageRef.current.offsetWidth;
+      const containerHeight = imageRef.current.offsetHeight;
+  
+      const bgX = `${-mousePosition.x * (imgWidth - containerWidth)}px`;
+      const bgY = `${-mousePosition.y * (imgHeight - containerHeight)}px`;
+      const bgSize = `${imgWidth * 2}px ${imgHeight * 2}px`; // Adjust zoom level here
+  
+      magnifiedStyle.backgroundImage = `url(${imageUrl?.[currentIndex]?.url})`;
+      magnifiedStyle.backgroundPosition = `${bgX} ${bgY}`;
+      magnifiedStyle.backgroundSize = bgSize;
+      magnifiedStyle.cursor = 'zoom-out';
+    } else {
+      magnifiedStyle.cursor = 'zoom-in';
+    }
+  
+    return (
+      <div className="w-full max-w-md mx-auto relative sm:static">
+        {/* Main image container */}
+        <div
+          className="border border-[#A68A7E] rounded-lg mb-4 relative aspect-square overflow-hidden"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onMouseMove={handleMouseMove}
+          onClick={toggleMagnify}
+          style={isMagnified ? magnifiedStyle : {}}
+        >
+          {imageUrl?.[currentIndex]?.url ? (
+            <img
+              ref={imageRef}
+              src={imageUrl?.[currentIndex]?.url}
+              alt="Gold earrings with diamonds"
+              className={`w-full h-full object-contain rounded-[inherit] transition-transform duration-300 ${isMagnified ? 'scale-200 transform-origin-top-left' : ''}`}
+              style={{ transformOrigin: `${mousePosition.x * 100}% ${mousePosition.y * 100}%` }}
             />
-          </div>
-        ))}
+          ) : (
+            <div className="w-full h-full object-contain flex justify-center items-center rounded-[inherit]">
+              <Loader2 className="animate-spin stroke-[#A68A7E]" />
+            </div>
+          )}
+        </div>
+  
+        {/* Thumbnails column - positioned to the right */}
+        <div className="absolute right-4 top-1/4 flex flex-col space-y-2">
+          {imageUrl?.map((thumb, index) => (
+            <div
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-16 h-16 border border-[#A68A7E] rounded-lg p-2 cursor-pointer flex items-center justify-center ${
+                currentIndex === index ? 'ring-2 ring-[#A68A7E]' : ''
+              }`}
+            >
+              <img
+                src={thumb?.url}
+                alt={`Product view ${index + 1}`}
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
+          ))}
+        </div>
+  
+        {/* Navigation arrows - centered at bottom */}
+        <div className="flex justify-center space-x-4 text-gray-400">
+          <button
+            onClick={goToPrevious}
+            className="hover:text-gray-600 focus:outline-none"
+            aria-label="Previous image"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <button
+            onClick={goToNext}
+            className="hover:text-gray-600 focus:outline-none"
+            aria-label="Next image"
+          >
+            <ChevronRight size={24} />
+          </button>
+        </div>
       </div>
-      
-      {/* Navigation arrows - centered at bottom */}
-      <div className="flex justify-center space-x-4 text-gray-400">
-        <button 
-          onClick={goToPrevious}
-          className="hover:text-gray-600 focus:outline-none"
-          aria-label="Previous image"
-        >
-          <ChevronLeft size={24} />
-        </button>
-        <button 
-          onClick={goToNext}
-          className="hover:text-gray-600 focus:outline-none"
-          aria-label="Next image"
-        >
-          <ChevronRight size={24} />
-        </button>
-      </div>
-    </div>
-  );
-};
+    );
+  };
 
-const NumberInput = ({ quantityRef } : { quantityRef: MutableRefObject<number>}) => {
+const NumberInput = ({ quantityRef } : { quantityRef: any}) => {
 
     const [ quantity, setQuantity ] = useState(1);
 
@@ -726,4 +866,109 @@ const NumberInput = ({ quantityRef } : { quantityRef: MutableRefObject<number>})
             }}/>
     </div>
 </div>
+};
+
+interface Option {
+  value: string;
+  label: string;
 }
+
+interface CustomSelectProps {
+  options: Option[];
+  value?: string;
+  onValueChange?: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+}
+
+const CustomSelect: React.FC<CustomSelectProps> = ({
+  options,
+  value: controlledValue,
+  onValueChange,
+  placeholder = 'Select an option',
+  className = '',
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(controlledValue);
+  const selectRef = useRef<HTMLDivElement>(null);
+
+  const displayValue = options.find((option) => option.value === selectedValue)?.label || placeholder;
+
+  const handleOpenChange = useCallback((open: boolean) => {
+    setIsOpen(open);
+  }, []);
+
+  const handleValueChange = useCallback(
+    (newValue: string) => {
+      setSelectedValue(newValue);
+      onValueChange?.(newValue);
+      setIsOpen(false);
+    },
+    [onValueChange]
+  );
+
+  const handleOutsideClick = useCallback(
+    (event: MouseEvent) => {
+      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [handleOutsideClick]);
+
+  useEffect(() => {
+    if (controlledValue !== undefined) {
+      setSelectedValue(controlledValue);
+    }
+  }, [controlledValue]);
+
+  return (
+    <div ref={selectRef} className={`relative ${className}`}>
+      <button
+        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+        onClick={() => handleOpenChange(!isOpen)}
+        aria-expanded={isOpen}
+        aria-controls="radix-select-content-9rkhw0" // Replace with a dynamically generated ID for better uniqueness
+        data-state={isOpen ? 'open' : 'closed'}
+      >
+        <span className="flex-1 text-left">{displayValue}</span>
+        <ChevronDown className="h-4 w-4 opacity-50" />
+      </button>
+
+      {isOpen && (
+        <div
+          className="absolute z-50 mt-1 w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
+          data-state={isOpen ? 'open' : 'closed'}
+          id="radix-select-content-9rkhw0" // Ensure this matches aria-controls
+        >
+          <ScrollArea className="relative p-1 h-[200px]">
+                {options.map((option) => (
+                <button
+                    key={option.value}
+                    className={`relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground ${
+                    selectedValue === option.value ? 'bg-accent text-accent-foreground' : ''
+                    }`}
+                    onClick={() => handleValueChange(option.value)}
+                    role="option"
+                    aria-selected={selectedValue === option.value}
+                    data-state={selectedValue === option.value ? 'checked' : 'unchecked'}
+                >
+                    {option.label}
+                    {selectedValue === option.value && (
+                    <Check className="ml-auto h-4 w-4" />
+                    )}
+                </button>
+                ))}
+          </ScrollArea>
+        </div>
+      )}
+    </div>
+  );
+};

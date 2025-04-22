@@ -105,7 +105,7 @@ export const Products = () => {
                                 <Filter className="fill-[#A68A7E] stroke-[#A68A7E] w-10 h-10"/>
                             </Button>
                             {showFilter && (
-                                <div className="min-w-14 z-50 absolute flex flex-col border border-[#A68A7E] p-6 bottom-[150%] right-0 rounded-lg bg-white text-[#A68A7E]">
+                                <div className="sm:min-w-14 z-50 absolute flex flex-col border border-[#A68A7E] p-6 sm:bottom-[150%] top-[150%]  right-0 rounded-lg bg-white text-[#A68A7E]">
                                     <div className="flex text-lg items-center gap-2">
                                         Gender:
                                         <div className="flex justify-center items-center gap-2">
@@ -132,10 +132,10 @@ export const Products = () => {
                                             }}/>
                                         </div>
                                     </div>
-                                    <div className="flex justify-center text-lg items-center gap-2">
+                                    <div className="flex sm:flex-row justify-center text-lg items-center gap-2">
                                         Price:
                                         <RadioGroup defaultValue={filters?.price?.max == 20000 ? "<20k" : filters?.price?.max == 40000 ? "<40k" : filters?.price?.max == 60000 ? "<60k" : filters?.price?.max == 80000 ? "<80k" : filters?.price?.max == 100000 ? "<100k" : ">100k"}
-                                            className="flex gap-4" onValueChange={(value) => {
+                                            className="flex sm:flex-row flex-col gap-4" onValueChange={(value) => {
                                                 switch (value) {
                                                     case "<20k":
                                                         setFilters({ ...filters, price: { min: 0, max: 20000 }});

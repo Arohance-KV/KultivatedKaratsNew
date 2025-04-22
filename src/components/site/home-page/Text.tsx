@@ -1,25 +1,8 @@
-import { useEffect, useState } from 'react';
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { getProductPriceDetails } from '@/utils/CalculateTotal';
-import { ICartItem, IProduct } from '@/utils/interfaces';
-
-interface RadioCardProps {
-  value: string;
-  label: string;
-  description?: string;
-}
-
-const RadioCard: React.FC<RadioCardProps> = ({ value, label, description }) => (
-  <div className="flex items-center space-x-2">
-    <RadioGroupItem value={value} id={value} className="peer appearance-none w-4 h-4 border border-primary rounded-full focus:ring-2 focus:ring-ring focus:ring-offset-2 checked:bg-primary checked:border-primary" />
-    <Label htmlFor={value} className="peer-checked:font-semibold">
-      {label}
-      {description && <div className="text-sm text-muted-foreground">{description}</div>}
-    </Label>
-  </div>
-);
-
+// import { useEffect, useState } from 'react';
+// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+// import { Label } from "@/components/ui/label";
+// import { getProductPriceDetails } from '@/utils/CalculateTotal';
+// import { ICartItem, IProduct } from '@/utils/interfaces';
 const videoCall: {
   name: String,
   phoneNo: Number,
@@ -59,7 +42,7 @@ export const Test = () => {
           <div className='flex flex-col gap-2'>
             <p>Product name: {cartItem?.product?.name}, ProductId: {cartItem?.product?.productId}</p>
             <p>Quantity: {cartItem?.quantity}, ProductId: {cartItem?.product?.productId}</p>
-            
+
           </div>
         );
       })}

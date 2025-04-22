@@ -23,7 +23,7 @@ export const Footer = () => {
                     </div>
                     <div className="flex-1 flex">
                         <div className="flex-1 h-full flex flex-col gap-8">
-                            <p className="text-3xl">Our Company</p>
+                            <p className="text-2xl text-nowrap">Our Company</p>
                             <div className="flex flex-col flex-1 h-full text-xl gap-4">
                                 <Link to={"/about"}>About us</Link>
                                 <Link to={"/blogs"}>Blogs</Link>
@@ -31,7 +31,7 @@ export const Footer = () => {
                             </div>
                         </div>
                         <div className="flex-1 flex flex-col gap-8">
-                            <p className="text-3xl">Our Policies</p>
+                            <p className="text-2xl text-nowrap">Our Policies</p>
                             <div className="flex h-full gap-4 flex-col text-xl">
                                 <Link to={"/privacy-policy"}>Privacy policy</Link>
                                 <Link to={"/terms-and-conditions"}>Terms and conditions</Link>
@@ -40,7 +40,7 @@ export const Footer = () => {
                             </div>
                         </div>
                         <div className="flex-1 flex flex-col gap-8">
-                            <p className="text-3xl">Customer Care</p>
+                            <p className="text-2xl text-nowrap">Customer Care</p>
                             <div className="flex text-xl flex-col gap-4 h-full">
                                 <Link to={"/contact-us"}>Contact us</Link>
                                 <Link to={"/product-care"}>product care & repair</Link>
@@ -50,7 +50,7 @@ export const Footer = () => {
                 </div>
                 <p className="flex justify-center items-center gap-2"><Copyright /> 2025 Kultivated Karats</p>
             </div>
-            <footer className="bg-[#E1C6B3] sm:hidden block inria-serif-regular mt-56 py-8 text-white text-center">
+            <footer className="bg-[#E1C6B3] sm:hidden block inria-serif-regular mt-14 py-8 text-white text-center">
                 <div className="container mx-auto px-4 flex flex-col justify-center items-center">
                     {/* Copyright */}
                     <div className="mb-6">

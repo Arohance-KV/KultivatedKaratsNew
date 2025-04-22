@@ -4,7 +4,7 @@ import { Button } from "../../ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IProduct, IUser } from "@/utils/interfaces";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { MobileNav } from "./MobileNav";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,13 +26,28 @@ export const HomePageNavBar = () => {
         console.log(avatarUrl);
     }, [ customerData ]);
 
+    const [ isSearchBarOpen, setIsSearchBarOpen ] = useState(false);
+    const searchRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                    setIsSearchBarOpen(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     const [query, setQuery] = useState("");
 
     const filteredProducts = products.filter((product) =>
-      product.name.toLowerCase().trim().includes(query.toLowerCase())
+      product.name.toLowerCase().trim().includes(query.toLowerCase()) || product?.category?.name?.trim()?.toLowerCase()?.includes(query?.toLowerCase())
     );
 
-    const [ isSearchBarOpen, setIsSearchBarOpen ] = useState(false);
 
     // const [ isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
@@ -47,10 +62,10 @@ export const HomePageNavBar = () => {
                     <div className="flex-[0.4] gap-[3%] !stroke-white!text-white flex justify-center items-center">
                         <Link to={"/store-locator"}><MapPinned className="stroke-[1.5] stroke-[#A68A7E]" /></Link>
                         {/* <Link to={"/gold-coins"}><CoinsIcon className="stroke-[1.5] stroke-[#FFD700]" /></Link> */}
-                        <div className="relative w-full">
+                        <div ref={searchRef} className="relative w-full">
                             <Input type="text" onClick={(e) => {
                                 e.preventDefault();
-                                setIsSearchBarOpen(!isSearchBarOpen);
+                                setIsSearchBarOpen(true);
                             }} placeholder="Search" value={query}
                             onChange={(e) => setQuery(e.target.value)} className="pl-6 h-8 border-[#A68A7E] border-2 bg-transparent text-[#A68A7E] placeholder:text-[#A68A7E]" />
                             <Search className="absolute top-1/2 left-2 -translate-y-1/2 w-3 h-3 stroke-[#A68A7E] stroke-2"/>

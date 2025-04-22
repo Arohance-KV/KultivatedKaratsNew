@@ -223,7 +223,7 @@ export const GiftCards = () => {
                         console.log( giftCardResponse , giftCardCreationResponse );
                         dispatch(setCustomerData(giftCardResponse?.data?.user));
                         // await clearCart(dispatch, customerData?._id ? true : false);
-                        toast.success("Giftcard added successfully!", { icon: <ToastSuccess />, className: "!bg-white !text-[#A68A7E] !border !border-[#A68A7E] !inria-serif-regular" });
+                        toast.success("Giftcard added successfully!", { icon: <ToastSuccess />, className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white" });
                         navigate("/payment-success");
                     } catch (error) {
                         console.log(error);

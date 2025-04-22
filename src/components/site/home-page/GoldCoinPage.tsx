@@ -135,13 +135,13 @@ export const GoldCoinPage = () => {
                                 await updateCart({ product: goldCoinData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(goldCoinData?.price!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                 setIsCartAddedButtonLoading(false);
                                 setIsInCart(false);
-                                return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                             }
                             // @ts-ignore
                             await updateCart({ product: goldCoinData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(goldCoinData?.price!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                             setIsCartAddedButtonLoading(false);
                             setIsInCart(true);
-                            return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                            return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                         }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button>
                         <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
                             setIsWishListAddedButtonLoading(true);
@@ -152,13 +152,13 @@ export const GoldCoinPage = () => {
                                 await updateWishList({ product: goldCoinData!, color: colourRef.current, karat: karatRef.current }, false, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                 setIsWishListAddedButtonLoading(false);
                                 setIsInWishList(false);
-                                return toast.success("Product deleted from wishlist successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                return toast.success("Product deleted from wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                             }
                             // @ts-ignore
                             await updateWishList({ product: goldCoinData!, color: colourRef.current, karat: karatRef.current}, true, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                             setIsWishListAddedButtonLoading(false);
                             setIsInWishList(true);
-                            return toast.success("Product added to wishlist successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                            return toast.success("Product added to wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                         }}>{isWishListAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInWishList ? <>Remove from wishlist <ListMinus /></> : <>Add to wishlist <ListPlus /></>}</Button>
                     </div>
                     <Button className="border-[#A68A7E] border text-[#A68A7E] bg-white hover:bg-[#A68A7E] hover:text-white" onClick={async (e) => {
@@ -170,13 +170,13 @@ export const GoldCoinPage = () => {
                             await updateVideoCallCart({ product: goldCoinData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(goldCoinData?.price!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                             setIsInVideoCallCartButtonLoading(false);
                             setIsInVideoCallCart(false);
-                            return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                            return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                         }
                         // @ts-ignore
                         await updateVideoCallCart({ product: goldCoinData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(goldCoinData?.price!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                         setIsInVideoCallCartButtonLoading(false);
                         setIsInVideoCallCart(true);
-                        return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                        return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                     }}>{isInVideoCallCartButtonLoading ? <Loader2 className="animate-spin"/> : isInVideoCallCart ? <>Remove from video call cart <VideoOff /></> : <>Add to video call cart <Video /></>}</Button>
                 </div>
                     <div className="flex-1 flex w flex-col gap-4">
@@ -323,13 +323,13 @@ export const GoldCoinPage = () => {
                                         await updateCart({ product: goldCoinData, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(goldCoinData?.price!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                         setIsCartAddedButtonLoading(false);
                                         setIsInCart(false);
-                                        return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                        return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                     }
                                     // @ts-ignore
                                     await updateCart({ product: goldCoinData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(goldCoinData?.price!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                     setIsCartAddedButtonLoading(false);
                                     setIsInCart(true);
-                                    return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                                    return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                                 }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button>
                                 <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
                                     setIsWishListAddedButtonLoading(true);
@@ -340,13 +340,13 @@ export const GoldCoinPage = () => {
                                         await updateWishList({ product: goldCoinData!, color: colourRef.current, karat: karatRef.current }, false, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                         setIsWishListAddedButtonLoading(false);
                                         setIsInWishList(false);
-                                        return toast.success("Product deleted from wishlist successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                        return toast.success("Product deleted from wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                     }
                                     // @ts-ignore
                                     await updateWishList({ product: goldCoinData!, color: colourRef.current, karat: karatRef.current}, true, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                     setIsWishListAddedButtonLoading(false);
                                     setIsInWishList(true);
-                                    return toast.success("Product added to wishlist successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                                    return toast.success("Product added to wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                                 }}>{isWishListAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInWishList ? <>Remove from wishlist <ListMinus /></> : <>Add to wishlist <ListPlus /></>}</Button>
                             </div>
                             <Button className="border-[#A68A7E] border text-[#A68A7E] bg-white hover:bg-[#A68A7E] hover:text-white" onClick={async (e) => {
@@ -358,13 +358,13 @@ export const GoldCoinPage = () => {
                                     await updateVideoCallCart({ product: goldCoinData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(goldCoinData?.price!) }, false, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                     setIsInVideoCallCartButtonLoading(false);
                                     setIsInVideoCallCart(false);
-                                    return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                    return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                 }
                                 // @ts-ignore
                                 await updateVideoCallCart({ product: goldCoinData!, quantity: quantityRef.current, color: colourRef.current, karat: karatRef.current, totalPrice: Math.round(goldCoinData?.price!) }, true, false, currentCart, dispatch, userData?._id ? true : false, currentWishlist, currentVideoCallCart);
                                 setIsInVideoCallCartButtonLoading(false);
                                 setIsInVideoCallCart(true);
-                                return toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });
+                                return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                             }}>{isInVideoCallCartButtonLoading ? <Loader2 className="animate-spin"/> : isInVideoCallCart ? <>Remove from video call cart <VideoOff /></> : <>Add to video call cart <Video /></>}</Button>
                         </div>
                         <p className="text-2xl">Our promises</p>

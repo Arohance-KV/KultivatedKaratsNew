@@ -62,7 +62,7 @@ export const MobileNav = () => {
               <li key={item.name}>
                 <a
                   href={item.href}
-                  className="block py-2 px-4 hover:bg-gray-100 rounded-md"
+                  className="block py-2 px-4 z-0 hover:bg-gray-100 rounded-md"
                   onClick={toggleMenu} // Close menu on item click (optional)
                 >
                   {item.name}

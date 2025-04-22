@@ -37,6 +37,7 @@ export const CartPage = () => {
     }, [ cartItems ]);
 
     // const [ isOrderPlacing, setIsOrderPlacing ] = useState(false);
+    const [ applyCouponButtonLoading, setApplyCouponButtonLoading ] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -48,8 +49,10 @@ export const CartPage = () => {
         document.body.appendChild(script);
     }, []);
 
-    const couponRef = useRef<HTMLInputElement>(null);
+    const couponRef = useRef<string>("");
     const voucherOrGiftCardRef = useRef(null);
+    const [ couponError, setCouponError ] = useState("");
+    const couponDiscountRef = useRef<number>(0);
 
     return (
         <div className='w-full playfair-display! relative pb-14'>
@@ -70,10 +73,11 @@ export const CartPage = () => {
                                 <p>Total items : {cartItems?.reduce((total, item) => {
                                     return total + item?.quantity;
                                 }, 0)}</p>
-                                <p>Price : {Math.round(cartTotal)}</p>
+                                <p>Price : {Math.round(cartTotal + couponDiscountRef?.current)}</p>
                             </div>
+                            {couponDiscountRef?.current > 0 && <p className="uppercase w-[90%] mb-4 justify-self-center self-center flex justify-between">({couponRef?.current}) <span>- {couponDiscountRef?.current}</span></p>}
                             <div className="w-[90%] mb-4 flex justify-between justify-self-center self-center">
-                                <p>+ 3% GST</p>
+                                <p className="">+ 3% GST</p>
                                 <p>{(Math.round((cartTotal) * (3 / 100)))}</p>
                             </div>
                             <div className="w-[90%] mb-4 self-center flex justify-between">
@@ -82,14 +86,19 @@ export const CartPage = () => {
                             </div>
                             <div className="flex flex-col gap-4 justify-center items-center">
                                 <div className="relative w-[80%]">
-                                    <Input ref={couponRef} className="justify-self-center w-full border border-dashed" placeholder="Enter coupon code" />
-                                    <Button onClick={ async (e) => {
+                                    <Input disabled={couponDiscountRef?.current > 0} onChange={(e) => {
+                                        console.log(e?.target?.value);
+                                        // if ( couponRef?.current != null )
+                                        couponRef.current = e?.target?.value;
+                                        console.log(couponRef?.current)
+                                    }} className="justify-self-center w-full border border-dashed" placeholder="Enter coupon code" />
+                                    <Button disabled={couponDiscountRef?.current > 0 || applyCouponButtonLoading} onClick={ async (e) => {
                                         e.preventDefault();
-                                        
-                                        const code = couponRef?.current?.value!;
-                                        if ( code ) {
+                                        setApplyCouponButtonLoading(true);
+                                        const code = couponRef?.current;
+                                        setCouponError("");
+                                        if ( code && code != "" ) {
                                             try {
-                                                
                                                 const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}coupons/verify-coupon`, {
                                                     method: "POST",
                                                     headers: {
@@ -97,24 +106,33 @@ export const CartPage = () => {
                                                     },
                                                     credentials: "include",
                                                     body: JSON.stringify({
-                                                        code: code
+                                                        code: code,
+                                                        cart: customerData?.cart,
                                                     }),
                                                 });
                                                 // console.log(response);
-                                    
-                                                if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
-                                                
                                                 const data = await response.json();
+                                    
+                                                if (!response.ok) {
+                                                    console.log(data);
+                                                    setCouponError(data?.errors?.[0] || "");
+                                                    throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+                                                }
+                                                
                                                 console.log(data.data);
-
+                                                couponDiscountRef.current = data?.data?.discount;
+                                                setCartTotal((cartTotal - couponDiscountRef?.current));
                                                 // setProductData(data.data)
                                             } catch (error) {
                                                 console.log(error);
+                                            } finally {
+                                                setApplyCouponButtonLoading(false);
                                             }
                                         }
-                                    
+                                            console.log("request not sent, coupon code: "+code)
                                         }
-                                    } className="border absolute border-dashed top-0 right-0" variant={"ghost"}>Apply</Button>
+                                    } className="border absolute border-dashed top-0 right-0" variant={"ghost"}>{applyCouponButtonLoading ? <Loader2 className="stroke-[#A68A7E] animate-spin" /> : "Apply"}</Button>
+                                    {couponError != "" && <p id="coupon-error" className="self-start mt-2 inria-serif-regular text-red-500 text-xs">{couponError}</p>}
                                 </div>
                                 <div className="relative w-[80%]">
                                     <Input ref={voucherOrGiftCardRef} className="justify-self-center w-full border border-dashed" placeholder="Enter Voucher code/Giftcard code" />
@@ -281,12 +299,12 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
                 <Button disabled={isRemoveItemLoadingButton} variant={"ghost"} className="rounded-full py-3 px-1 w-0 h-0 ml-4 mt-4 bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={async (e) => {
                     e.preventDefault();
                     setIsRemoveItemLoadingButton(true);
-                    const response = await updateCart({ product: cartItem.product!, quantity: 1, color: "white", karat: 14, totalPrice: 0 }, false, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
+                    const response = await updateCart({ containsGemstone: cartItem?.product?.containsGemstone , product: cartItem.product!, quantity: 1, color: "white", karat: 14, totalPrice: 0 }, false, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
                     setIsRemoveItemLoadingButton(false);
                     console.log(customerData?.cart, response)
                     setCartItems(customerData?.cart);
                     // setIsInVideoCallCart(false);
-                    return toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });            
+                    return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });            
                 }}>{isRemoveItemLoadingButton ? <Loader2 className="w-2 h-2 animate-spin" /> : <Minus className="w-2 h-2" />}</Button>
             </div>
         </div>

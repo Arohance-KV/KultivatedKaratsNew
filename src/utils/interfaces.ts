@@ -78,12 +78,13 @@ export interface ICartItem {
     product: IProduct,
     quantity: number,
     color: string,
-    addChain?: boolean,
+    karat: number,
     containsGemstone: boolean,
+    addChain?: boolean,
     isGemStone?: boolean,
     chainGoldCarat?: number,
-    karat: number,
-    totalPrice: number
+    totalPrice: number,
+    ringSize?: number
 };
 
 export interface IWishListItem {

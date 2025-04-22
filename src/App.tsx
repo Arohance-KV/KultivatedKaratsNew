@@ -170,7 +170,7 @@ function App() {
     if(localStorage.getItem("recentlyViewedCart")) return;
     localStorage.setItem("recentlyViewedCart", JSON.stringify([]));
   }, []);
-
+  
   return (
     <div className=''>
       {/* <ReactLenis root> */}
@@ -178,27 +178,48 @@ function App() {
         <HomePageNavBar />
           <Outlet />
           <AnimatedCursor
-      innerSize={8}
-      outerSize={8}
-      // color='#E1C6B3'
-      // color='225, 198, 179'
-      outerAlpha={0.2}
-      innerScale={0.7}
-      outerScale={5}
-      clickables={[
-        'a',
-        'input[type="text"]',
-        'input[type="email"]',
-        'input[type="number"]',
-        'input[type="submit"]',
-        'input[type="image"]',
-        'label[for]',
-        'select',
-        'textarea',
-        'button',
-        '.link'
-      ]}
-    />
+            innerSize={8}
+            outerSize={8}
+            // color='#A68A7E'
+            // color='166, 138, 126'
+            // color='#A68A7E'
+            outerAlpha={0.5}
+            innerScale={0.1}
+            outerScale={7}
+            outerStyle={{
+              mixBlendMode: 'exclusion'
+            }}
+            innerStyle={{
+              backgroundColor: "#A68A7E",
+            }}
+            clickables={[
+              'a',
+              'input[type="text"]',
+              'input[type="email"]',
+              'input[type="number"]',
+              'input[type="submit"]',
+              'input[type="image"]',
+              'label[for]',
+              'select',
+              'textarea',
+              'button',
+              '.link'
+            ]}
+        />
+        {/* <AnimatedCursor
+          color="#fff"
+          innerStyle={{
+            backgroundColor: "#A68A7E"
+          }}
+          innerSize={8}
+          outerSize={35}
+          innerScale={1}
+          outerScale={1.7}
+          outerAlpha={0}
+          outerStyle={{
+            mixBlendMode: 'exclusion'
+          }}
+        /> */}
         <Footer />
       {/* </ReactLenis> */}
     </div>

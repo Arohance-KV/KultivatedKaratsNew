@@ -3,10 +3,13 @@ import { ICartItem, IUser, IWishListItem } from "../../../utils/interfaces";
 import { UIsideBar } from "./Solitare";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { Loader, Minus, Plus } from "lucide-react";
+import { Loader, Minus, Plus, Trash2 } from "lucide-react";
 // import { toast } from "sonner";
 import { updateCart, updateWishList } from "@/utils/utilityFunctions";
 import { Dispatch } from "@reduxjs/toolkit";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
+import { ToastSuccess } from "@/utils/UtilityComponents";
 // import { ToastSuccess } from "@/utils/UtilityComponents";
 
 export const WishListPage = () => {
@@ -37,7 +40,7 @@ export const WishListPage = () => {
                 <div style={{
                      
                 }} className="grid grid-cols-2 overflow-y-scroll h-auto max-h-[100%] no-scrollbar gap-4 flex-1 w-full">
-                    {wishListData?.map((item : IWishListItem) => <WishListItem cartItem={{...item, quantity: 1, totalPrice: 50000}} cartItems={cart} dispatch={dispatch} customerData={customerData} />)}
+                    {wishListData?.map((item : IWishListItem) => <WishListItem cartItem={{...item, containsGemstone: item?.product?.containsGemstone, quantity: 1, totalPrice: item?.product?.price}} cartItems={cart} dispatch={dispatch} customerData={customerData} />)}
                 </div>
             </div>
         </div>    
@@ -65,23 +68,21 @@ const WishListItem = ( { cartItems, cartItem, dispatch, customerData } : { cartI
                             <p>Code: {cartItem?.product?.code}</p>
                         </div>
                         <div className="flex-col flex justify-evenly sm:text-[16px] text-[8px] flex-1">
-                            <p>Price: {cartItem?.product?.price}</p>
+                            <p>Price: {(cartItem?.product?._id) ? Math.round(cartItem?.product?.price) : <Skeleton className="w-8 h-4 rounded-md bg-red-100/10" />}</p>
                             <Button className="bg-white sm:flex hidden justify-center items-center text-[#A68A7E] border  border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={ async (e) => {
                                 setIsCartButtonLoading(true);
                                 e.preventDefault();
                                 if( isInCart )
                                     {
-                                        await updateCart({ product: cartItem?.product!, quantity: 1, color: "white", karat: 14, totalPrice: 0 }, false, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
+                                        await updateCart({ containsGemstone: cartItem?.product?.containsGemstone , product: cartItem?.product!, quantity: 1, color: "white", karat: 14, totalPrice: cartItem?.product?.price }, false, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
                                         setIsCartButtonLoading(false)
                                         // setIsInCart(false);
-                                        return; 
-                                        // toast.success("Product deleted from cart successfully!", { className: "font-[quicksand]", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                        return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
                                     }
-                                    await updateCart({ product: cartItem?.product!, quantity: 1, color: "white", karat: 14, totalPrice: 50 }, true, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
+                                    await updateCart({ containsGemstone: cartItem?.product?.containsGemstone , product: cartItem?.product!, quantity: 1, color: "white", karat: 14, totalPrice: cartItem?.product?.price }, true, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
                                     setIsCartButtonLoading(false);
                                     // setIsInCart(true);
-                                    return
-                                    // toast.success("Product added to cart successfully!", { className: "font-[quicksand]", icon: <ToastSuccess /> });    
+                                    return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });    
                                 }}>{isCartButtonLoading ? <Loader className="animate-spin w-4 h-4"/> : isInCart ? <>Remove from cart <Minus /></>: <>Add to cart <Plus /></>}</Button>
                         </div>
                         <Button disabled={isRemoveItemLoadingButton} variant={"ghost"} className="rounded-full py-3 px-1 w-0 h-0 bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={async (e) => {
