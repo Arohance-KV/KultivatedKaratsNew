@@ -838,6 +838,8 @@ export const HomePage = () => {
 
 const BlogSection = () => {
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         gsap.fromTo(".blog-section-fade", {
             opacity: "0%"
@@ -857,7 +859,12 @@ const BlogSection = () => {
 
     return (
         <section id="blog-section" className="w-[100%] py-4 relative playfair-display transition-all snap-start text-[#BFA6A1] h-screen items-center gap-4 flex flex-col">
-            <p className="sm:text-5xl">Our blog</p>
+            <p className="sm:text-5xl text-center w-full relative">Our blog
+                <Button onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/blogs");
+                }} className="absolute right-0 text-xl hover:text-[#A68A7E] top-1/2 m-0 -translate-1/2" variant={"ghost"}>See more</Button>
+            </p>
             <p className="sm:text-lg">Discover the Brilliance Behind Every Gem Where Every Karat Tells a Story.</p>
             <div className="p-[5%] justify-evenly gap-[5%] flex w-full flex-1">
                 <div className="flex flex-col rounded-md flex-1">
