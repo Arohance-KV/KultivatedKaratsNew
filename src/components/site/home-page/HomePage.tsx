@@ -634,7 +634,7 @@ export const HomePage = () => {
                     </div>
                 </section>
                 {/* <section id="categories" className="playfair-display hidden opacity-0 relative w-full flex items-center snap-start h-[100vh] flex-col"  */}
-                <section id="categories" className="playfair-display hidden opacity-0 relative w-full items-center snap-start h-[100vh] flex-col" 
+                <section id="categories" className="playfair-display hidden bg-green-500/50 opacity-0 relative w-full items-center snap-start max-h-screen flex-col" 
                 // onMouseMove={( event ) => {
                     // if ( event.pageX < 465 || event.pageX > 1200 ) return;
                     // if ( event.pageX < 750 )
@@ -672,7 +672,7 @@ export const HomePage = () => {
                             e.preventDefault();
                             navigate("/categories");
                         }} className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all">See more <ArrowRight /></Button> */}
-                    <img src={"/category-section-animation.gif"} className="w-full" />
+                    <video src={"/category-section-animation.mp4"} autoPlay={true} controls={false} className="object-cover h-screen w-full" />
                 </section>
                 <section id="shop-by-budget" className="w-full snap-start opacity-0 min-h-screen playfair-display relative mb-14 justify-center items-center">
                     {/* <div className="flex bg-yellow-900/50 rotate-z-[-30deg] w-[80%] justify-between overflow-x-hidden overflow-y-hidden py-10"> */}

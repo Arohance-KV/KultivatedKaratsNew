@@ -289,11 +289,11 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
             <img src={cartItem?.product?.imageUrl[0]?.url} className="sm:h-32 h-20 border-2 border-[#BFA6A1] aspect-square sm:aspect-video object-cover rounded-md" alt="" />
             <div className=" flex-1 bg-white border-2 border-[#BFA6A1] px-8 flex rounded-md text-[#A68A7E] inria-serif-regular">
                 <div className="flex-1 flex flex-col justify-around items-start">
-                    <p>Name: {cartItem?.product?.name}</p>
-                    {cartItem?.product?.productId! && <p>code: {cartItem?.product?.productId}</p>}
+                    <p>{cartItem?.product?.name}</p>
+                    {/* {cartItem?.product?.productId! && <p>code: {cartItem?.product?.productId}</p>} */}
                 </div>
                 <div className="flex-1 flex flex-col justify-around items-end">
-                    <p>Price for 1: {Math.round(cartItem?.totalPrice)}</p>
+                    <p>{Math.round(cartItem?.totalPrice)}</p>
                     <p>Quantity: {cartItem?.quantity}</p>
                 </div>
                 <Button disabled={isRemoveItemLoadingButton} variant={"ghost"} className="rounded-full py-3 px-1 w-0 h-0 ml-4 mt-4 bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={async (e) => {

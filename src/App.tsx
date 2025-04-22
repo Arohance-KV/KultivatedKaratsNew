@@ -206,7 +206,7 @@ function App() {
               '.link'
             ]}
         />
-        {/* <AnimatedCursor
+        <AnimatedCursor
           color="#fff"
           innerStyle={{
             backgroundColor: "#A68A7E"
@@ -219,7 +219,7 @@ function App() {
           outerStyle={{
             mixBlendMode: 'exclusion'
           }}
-        /> */}
+        />
         <Footer />
       {/* </ReactLenis> */}
     </div>
