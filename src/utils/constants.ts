@@ -6,6 +6,9 @@ export enum DashboardOptions {
 
 export const INSTAGRAM = `https://www.instagram.com/kultivatedkarats/`;
 export const FACEBOOK = `https://www.facebook.com/61555613443273`;
+export const LINKEDIN = `https://www.linkedin.com/company/kultivated-karats/`;
+export const WHATSAPP = `https://wa.link/9y955q`;
+export const YOUTUBE = `https://wa.link/9y955q`;
 
 export const BLOGDATA = [
     {
