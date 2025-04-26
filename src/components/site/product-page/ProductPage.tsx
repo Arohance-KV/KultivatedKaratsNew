@@ -379,8 +379,8 @@ export const ProductPage = () => {
                     </div>
                 </div>
             </div> */}
+            {/* Desktop view code below */}
             <div id='solitare-main' className="border-[#E1C6B3] sm:flex hidden flex-col border opacity-0 w-[90%] justify-self-center rounded-lg aspect-video">
-                {/* Fix phone view */}
                 <div className="px-[5%] flex sm:flex-row flex-col h-full">
                     <div className="relative min-h-80 flex flex-col justify-between flex-[0.55]">
                         <Button className="absolute top-5 left-0" variant={"ghost"} onClick={(e) => {
@@ -401,7 +401,7 @@ export const ProductPage = () => {
                         </div>
                     </div>
                     <div className="border-l-2 flex flex-col justify-evenly pl-8 text-[#A68A7E] inria-serif-regular border-l-[#E1C6B3]  flex-[0.45]">
-                        {productData?.name ? <p>{productData?.name}</p> : <Skeleton className="w-1/4 h-4 rounded-md bg-gray-500/10" />}
+                        {/* {productData?.name ? <p>{productData?.name}</p> : <Skeleton className="w-1/4 h-4 rounded-md bg-gray-500/10" />} */}
                         <p className="text-xl flex flex-col gap-4">
                             {productData?.name ? <p className="">
                                 {productData?.name}
