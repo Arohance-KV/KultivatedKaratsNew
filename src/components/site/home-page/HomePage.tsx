@@ -893,7 +893,7 @@ const BlogSection = () => {
                             {BLOGDATA[0]?.title}
                         </p>
                         <p className="text-wrap">
-                            {BLOGDATA[0]?.blogContent?.description}
+                            .env{BLOGDATA[0]?.blogContent?.description}
                         </p>
                         <div className="flex-1 flex items-end">
                             <Link to={`/blogs/${BLOGDATA[0]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>

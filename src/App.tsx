@@ -114,7 +114,10 @@ function App() {
     (async function () {
         try {
             // @ts-ignore
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}collections/get-all-collections`);
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}collections/get-all-collections`{
+              method: 'GET',
+              referrerPolicy: 'no-referrer' // Example: This removes the referer completely
+            });
         
             const data = await response.json();
         
@@ -177,7 +180,7 @@ function App() {
       <ScrollToTop />
         <HomePageNavBar />
           <Outlet />
-          <AnimatedCursor
+          <AnimatedCursor 
             innerSize={8}
             outerSize={8}
             // color='#A68A7E'
