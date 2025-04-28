@@ -191,6 +191,9 @@ export const Products = () => {
                 </div>
                 {<div id="sub-collection-section" className="gap-8 w-full">
                     <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
+                        {/* <div className="col-span-1 w-full h-full row-span-1 row-start-[-2] col-start-1 bg-red-500"> */}
+                            
+                        {/* </div> */}
                         {isLoading ? <Loader2 className="sm:stroke-white stroke-[#E1C6B3] self-center justify-self-center" /> : products
                         ?.filter((item: IProduct) => {
                         const withinPriceRange =
@@ -204,6 +207,7 @@ export const Products = () => {
                         })?.map((item : IProduct) => {
                             // return ((item?.price > filters?.price?.min && item?.price < filters?.price?.max) && (filters?.gemStoneColour?.filter((colour:string)  => colour?.toLowerCase()?.trim() == item?.gemStoneColour).length > 0) ) ? (
                             // return ((item?.price > filters?.price?.min && item?.price < filters?.price?.max)) ? (
+                                // return (<button className="flex w-full h-full bg-green-500 flex-col col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4" onClick={(e) => {
                                 return (<button className="flex flex-col col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4" onClick={(e) => {
                                     e.preventDefault();
                                     navigate(`/product/${item?._id}`);

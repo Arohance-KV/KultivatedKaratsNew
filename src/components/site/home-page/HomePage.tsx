@@ -92,7 +92,7 @@ const REELS_DATA = [
 
 // const scrollAnimationTimeline = gsap.timeline();
 
-const TESTIMONIALS = [
+export const TESTIMONIALS = [
     {
         customerName: "Karandeep",
         rating: 5,
@@ -877,13 +877,8 @@ const BlogSection = () => {
     }, []);
 
     return (
-        <section id="blog-section" className="w-[100%] py-4 relative playfair-display transition-all snap-start text-[#BFA6A1] h-screen items-center gap-4 flex flex-col">
-            <p className="sm:text-5xl text-center w-full relative">Our blog
-                <Button onClick={(e) => {
-                    e.preventDefault();
-                    navigate("/blogs");
-                }} className="absolute right-0 text-xl hover:text-[#A68A7E] top-1/2 m-0 -translate-1/2" variant={"ghost"}>See more</Button>
-            </p>
+        <section id="blog-section" className="w-[100%] py-4 relative playfair-display transition-all snap-start text-[#BFA6A1] min-h-screen items-center gap-4 flex flex-col">
+            <p className="sm:text-5xl text-center w-full relative">Our blog</p>
             <p className="sm:text-lg">Discover the Brilliance Behind Every Gem Where Every Karat Tells a Story.</p>
             <div className="p-[5%] justify-evenly gap-[5%] flex w-full flex-1">
                 <div className="flex flex-col rounded-md flex-1">
@@ -928,7 +923,12 @@ const BlogSection = () => {
                         </div>
                     </div>
                 </div>
+                {/* }} className="absolute right-0 text-xl hover:text-[#A68A7E] top-1/2 m-0 -translate-1/2" variant={"ghost"}>See more</Button> */}
             </div>
+            <Button onClick={(e) => {
+                e.preventDefault();
+                navigate("/blogs");
+            }} className="text-xl hover:text-[#A68A7E]m-0" variant={"ghost"}>See more</Button>
         </section>
     );
 };

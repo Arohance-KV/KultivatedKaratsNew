@@ -3,7 +3,7 @@ import { UIsideBar } from "./Solitare";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { clearCart, updateCart } from "@/utils/utilityFunctions";
+import { clearCart, sendEmail, updateCart } from "@/utils/utilityFunctions";
 import { Loader2, Minus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Dispatch } from "@reduxjs/toolkit";
@@ -29,7 +29,6 @@ export const CartPage = () => {
         }, 0));
     }, [ customerData ]);
 
-
     useEffect(() => {
         setCartTotal(cartItems?.reduce((total, cartItem) => {
             return total + (cartItem?.totalPrice * cartItem?.quantity)
@@ -53,6 +52,50 @@ export const CartPage = () => {
     const voucherOrGiftCardRef = useRef(null);
     const [ couponError, setCouponError ] = useState("");
     const couponDiscountRef = useRef<number>(0);
+
+    const getOrderEmailHtml = () => {
+        return (
+            `<div style="width: 90%; margin: 1rem; padding: 1rem; border: 1px solid #A68A7E; border-radius: 8px; color: #A68A7E;">
+                <p>Email: ${customerData?.email}</p>
+                <p>Phone number: ${customerData?.phoneNumber}</p>
+                <p>Name: ${customerData?.firstName} ${customerData?.lastName}</p>
+                <p>Cart: </p>
+                ${cartItems?.map((cartItem: ICartItem) => {
+                    return (
+                        `<div style="display: flex; flex-direction: column;">
+                            <p>
+                                Name: ${cartItem?.product?.name}
+                            </p>
+                            <p>
+                                Quantity: ${cartItem?.quantity}
+                            </p>
+                            <p>
+                                ${cartItem?.containsGemstone && <>Gem stone option: {cartItem?.isGemStone ? "Gemstone" : "Labgrown diamond"}</>}
+                            </p>
+                            <p>
+                                ${cartItem?.addChain && <>Add pendant chain: {cartItem?.addChain ? "Yes" : "No"}</>}
+                            </p>
+                            <p>
+                                ${cartItem?.addChain && <>Chain gold karat: {cartItem?.chainGoldCarat}</>}
+                            </p>
+                            <p>
+                                ${cartItem?.ringSize! > 0 && <>Ring size: {cartItem?.ringSize}</>}
+                            </p>
+                            <p>
+                                Gold colour: ${cartItem?.color}
+                            </p>
+                            <p>
+                                Gold karat: ${cartItem?.karat}
+                            </p>
+                            <p>
+                                Total: ${cartItem?.totalPrice}
+                            </p>
+                        </div>`
+                    );
+                })}
+            </div>`
+        );
+    }
 
     return (
         <div className='w-full playfair-display! relative pb-14'>
@@ -141,7 +184,8 @@ export const CartPage = () => {
                                         
                                     }} variant={"ghost"}>Apply</Button>
                                 </div>
-                                <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading || customerData?._id == null } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
+                                <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
+                                    if ( customerData?._id == null ) return navigate("/auth");
                                     e.preventDefault();
                                     setIsPlaceOrderButtonLoading(true);
                                     if ( customerData?.address?.city == null )
@@ -230,7 +274,11 @@ export const CartPage = () => {
                                                     console.log(orderResponse);
                                                     
                                                     const orderData = await orderResponse.json();
-                                                    console.log(orderData, orderResponse);
+
+                                                    const emailToCusomter = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ customerData?.email ], subject : "", html:"" });
+                                                    const emailToOwner = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ "info@kultivatedkarats.com", "sampathraj@ketandiamonds.com", "manishkumar@ketandiamonds.com", "deepaksagar@ketandiamonds.com", "deepaksagar@ketandiamonds", "mehek@kultivatedkarats.com", "rohraaaryan.ryp@gmail.com" ], subject : "Order received from kultivatedkarats.com!", html: getOrderEmailHtml() });
+
+                                                    console.log(orderData, orderResponse, emailToCusomter, emailToOwner);
                                                     dispatch(setCustomerData(orderData?.data));
                                                     await clearCart(dispatch, customerData?._id ? true : false);
                                                     navigate("/payment-success");

@@ -19,6 +19,7 @@ import { IUser } from "@/utils/interfaces";
 import { setCustomerData } from "@/redux/slices/websiteSlice";
 import { toast } from "sonner";
 import { ToastSuccess } from "@/utils/UtilityComponents";
+// import { updateCart, updateVideoCallCart, updateWishList } from "@/utils/utilityFunctions";
 // import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 // import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
@@ -230,6 +231,54 @@ export const Auth = () => {
                         
                         console.log(data);
 
+                        const guestCart = JSON.parse(localStorage.getItem('cart')!);
+                        // const guestVideoCallCart = JSON.parse(localStorage.getItem('videoCallCart')!);
+                        // const guestWishList = JSON.parse(localStorage.getItem('wishList')!);
+
+                        console.log(guestCart, guestCart?.length);
+
+                        // guestCart.forEach((item : ICartItem) => {
+                        //     console.log(item, data?.data?.user?.cart);
+                        //     if ( guestCart?.filter((cartItem : ICartItem) => cartItem?.product?._id == item?.product?._id)?.length > 0 ) {
+                        //         return updateCart(item, true, true, data?.data?.user?.cart, dispatch, true, data?.data?.user?.wishList, data?.data?.user?.videoCallCart);
+                        //     }
+                        //     updateCart(item, true, false, data?.data?.user?.cart, dispatch, true, data?.data?.user?.wishList, data?.data?.user?.videoCallCart);
+                        // });
+
+                        // guestWishList.forEach((item : IWishListItem) => {
+                        //     if ( guestWishList?.filter((wishListItem : IWishListItem) => wishListItem?.product?._id == item?.product?._id)?.length > 0 )
+                        //         return
+                        //     updateWishList(item, true, data?.data?.user?.wishList, dispatch, true, data?.data?.user?.cart, data?.data?.user?.videoCallCart);
+                        // });
+
+                        // guestVideoCallCart.forEach((item : ICartItem) => {
+                        //     if ( guestVideoCallCart?.filter((cartItem : ICartItem) => cartItem?.product?._id == item?.product?._id)?.length > 0 )
+                        //         return;
+                        //     updateVideoCallCart(item, true, false, data?.data?.user?.cart, dispatch, true, data?.data?.user?.videoCallCart, data?.data?.user?.wishList);
+                        // });
+
+                        // const currentUserResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}users/current-user`, {
+                        //     method: "GET",
+                        //     headers: {
+                        //         "Content-Type": "application/json",
+                        //     },
+                            // credentials: "include"
+                        // });
+                        // console.log(currentUserResponse);
+              
+                        // if (!currentUserResponse.ok) {
+                        //   if ( currentUserResponse.statusText == "Unauthorized" || currentUserResponse.status == 401 ) {
+                            // console.log(await createGuestUser());
+                        //   }
+                        //   throw new Error("HTTP error! status: "+currentUserResponse.status+", "+currentUserResponse.statusText);
+                        // }
+                        // const currentUserData = await currentUserResponse.json();
+              
+                        // console.log("currentUserData?.data: ", currentUserData?.data, "data?.data: ", data?.data);
+              
+                        // if (data.data.role !== "Customer") throw new Error(`Error: ${401}, Unauthorised user`);
+                        // dispatch(setCustomerData(currentUserData.data));
+              
                         dispatch(setCustomerData(data?.data?.user));
                         toast.success("Logged In successfully!", { icon: <ToastSuccess />, className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white" });
                         navigate("/");

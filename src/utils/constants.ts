@@ -10,6 +10,72 @@ export const LINKEDIN = `https://www.linkedin.com/company/kultivated-karats/`;
 export const WHATSAPP = `https://wa.link/9y955q`;
 export const YOUTUBE = `https://www.youtube.com/@Kultivated-Karats/`;
 
+export const smallRandomBanners = [
+	{
+		name: "ring banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+	{
+		name: "pendant banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+	{
+		name: "braclet banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+	{
+		name: "bangle banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+	{
+		name: "Earring banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+	{
+		name: "new banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+	{
+		name: "random banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+	{
+		name: "collection banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+	{
+		name: "new random banner",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		}
+	},
+]
+
 export const BLOGDATA = [
     {
         _id: "01",

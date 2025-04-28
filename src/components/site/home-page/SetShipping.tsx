@@ -63,7 +63,7 @@ const onShippingFormSubmit = async (values: z.infer<typeof shippingFormSchema>) 
             //     loginForm.setError("email", { type: "manual", message: "Unauthorized user!"})
             //     throw new Error("Unauthorized user");
             // }
-            
+            console.log(data?.data)
             dispatch(setUser(data.data));
             navigate("/cart");
             console.log(data);

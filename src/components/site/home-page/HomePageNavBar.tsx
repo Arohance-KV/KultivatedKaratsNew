@@ -139,6 +139,9 @@ export const HomePageNavBar = () => {
                 <Link to={"/cart"}>
                     <ShoppingCart className="fill-[#E1C6B3] w-4 h-4 stroke-[#E1C6B3]" />
                 </Link>
+                <Link to={"/auth"}>
+                    <CircleUser className="fill-[#E1C6B3] w-4 h-4 stroke-[#E1C6B3]" />
+                </Link>
                 {/* <Hamburger color="#E1C6B3" toggled={isHamburgerMenuOpen} onToggle={() => {
                     setIsHamburgerMenuOpen(!isHamburgerMenuOpen);
                 }} size={14} /> */}

@@ -4,6 +4,26 @@ import { setCustomerData } from "../redux/slices/websiteSlice.ts";
 import { z } from "zod";
 import { formSchema } from "@/components/site/home-page/Solitare.tsx";
 
+export const sendEmail = async (email: { from: string, to: string[], subject: string, html: string }) => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}email/send-email`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: 'include',
+            body: JSON.stringify({ email: email })
+        });
+    
+        const data = await response.json();
+        console.log(data);
+        return { data };
+    } catch (error) {
+        console.log(error);
+        return { error };
+    }
+};
+
 export const updateWishList = async ( wishListItem: IWishListItem, isAdd: boolean, currentWishlist: IWishListItem[], dispatch: Dispatch<UnknownAction>, isUserPresent: boolean, cart?: ICartItem[], videoCallCart?: ICartItem[] ) => {
     console.log(videoCallCart);
     // const dispatch = useDispatch();

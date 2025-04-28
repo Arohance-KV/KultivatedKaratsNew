@@ -68,6 +68,10 @@ function App() {
             if ( response.statusText == "Unauthorized" || response.status == 401 ) {
               // console.log(await createGuestUser());
             }
+            const guestCart = JSON.parse(localStorage.getItem('cart')!);
+            const guestWishList = JSON.parse(localStorage.getItem('wishList')!);
+            const guestVideoCallCart = JSON.parse(localStorage.getItem('videoCallCart')!);
+            dispatch(setCustomerData({ cart: guestCart, wishList: guestWishList, videoCallCart: guestVideoCallCart }));
             throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
           }
           const data = await response.json();
