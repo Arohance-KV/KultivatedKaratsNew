@@ -176,7 +176,7 @@ export const ProductPage = () => {
                             </div>
                         </div>
                     </div>
-                <div className="w-[100%] gap-2 my-4 justify-self-center flex-col flex">
+                {productData?._id ? <div className="w-[100%] gap-2 my-4 justify-self-center flex-col flex">
                     <div className="flex my4 w-full gap-2">
                         <Button 
                             className={cn("flex hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
@@ -235,16 +235,34 @@ export const ProductPage = () => {
                     }}>{isInVideoCallCartButtonLoading ? <Loader2 className="animate-spin"/> : isInVideoCallCart ? <>Remove from video call cart <VideoOff /></> : <>Add to video call cart <Video /></>}</Button>
                     {(productData?.category?._id == "67fe5da50254f62d3e5fe917" && ringSize == (0)) && <p className="text-red-500 text-xs">
                         Please select a ring size!
-                    </p> }
-                </div>
+                    </p>}
+                </div> : <Skeleton className="w-full h-full bg-red-500" />}
                     <p className="text-xs font-bold"><span className="capitalize">{productData?.category?.name}</span> selected in {karatRef.current}karat gold</p>
                     <div className="flex my-4">
-                        {productData?.containsGemstone &&
-                            <div className="flex-1">
-
-                            </div>
-                        }
-                        <Accordion type="single" collapsible className="w-full">
+                    {productData?.containsGemstone && <div className="flex flex-col gap-4">
+                        <p className="">
+                            Coloured stone type: 
+                        </p>
+                        <RadioGroup id="gem-stone-input" onValueChange={(value) => {
+                                // karatRef.current = Number(value);
+                                gemstoneRef.current = value;
+                                setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                        }} defaultValue={ gemstoneRef?.current }>
+                            {/* {productData?.totalKarats?.map(karat => { */}
+                                {/* return ( */}
+                            <Label className={cn("items-center flex justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
+                                <Label className="captalize" htmlFor="r8">Lab grown coloured diamond</Label>
+                                <RadioGroupItem value={"lab-grown-coloured-diamond"} id="Lab-grown-diamond" className="" />
+                            </Label>
+                            <Label className={cn("flex items-center justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
+                                <Label className="captalize" htmlFor="r9">Gemstone</Label>
+                                <RadioGroupItem value={'gemstone'} id="18karat" className="" />
+                            </Label>
+                                {/* ); */}
+                            {/* })} */}
+                        </RadioGroup>
+                    </div>}
+                        {productData?._id ? <Accordion type="single" collapsible className="w-full">
                             <AccordionItem value="item-1">
                                 <AccordionTrigger>Customization options</AccordionTrigger>
                                     <AccordionContent>
@@ -329,6 +347,34 @@ export const ProductPage = () => {
                                                         {/* })} */}
                                                     </RadioGroup>}
                                                 </div>}
+                                                {(productData?.isPendantFixed == false) && <div className="flex flex-col gap-4">
+                                                <p className="flex justify-around items-center gap-2">
+                                                    Get a chain with the pendant: <Checkbox onCheckedChange={(value) => {
+                                                        console.log(typeof value);
+                                                        addChainRef.current = value ? true : false;
+                                                        if ( productData?.containsGemstone ) setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }))
+                                                        else setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                    }} />
+                                                </p>
+                                                {(addChainRef.current == true) && <RadioGroup className="w-full" id="karat-input" onValueChange={(value) => {
+                                                        chainKaratRef.current = Number(value);
+                                                        setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                        // karatRef.current = Number(value);
+                                                    }} defaultValue={ "14" }>
+                                                    {/* {productData?.totalKarats?.map(karat => { */}
+                                                        {/* return ( */}
+                                                    <Label className={cn("items-center flex justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
+                                                        <Label className="captalize" htmlFor="pc-14karat">{14}k</Label>
+                                                        <RadioGroupItem value={"14"} id="pc-14karat" className="" />
+                                                    </Label>
+                                                    <Label className={cn("flex items-center justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
+                                                        <Label className="captalize" htmlFor="pc-18karat">{18}k</Label>
+                                                        <RadioGroupItem value={"18"} id="pc-18karat" className="" />
+                                                    </Label>
+                                                        {/* ); */}
+                                                    {/* })} */}
+                                                    </RadioGroup>}
+                                                </div>}
                                                 <div className="flex flex-col relative gap-4">
                                                     <p>Quantity :</p>
                                                     <NumberInput quantityRef={quantityRef} />
@@ -338,7 +384,7 @@ export const ProductPage = () => {
                                         </div>
                                     </AccordionContent>
                             </AccordionItem>
-                        </Accordion>
+                        </Accordion> : <Skeleton className="w-full h-10 bg-gray-500/10" />}
                     </div>
                 </div>
             </div>
