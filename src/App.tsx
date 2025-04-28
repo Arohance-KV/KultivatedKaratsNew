@@ -3,7 +3,7 @@ import { HomePageNavBar } from './components/site/home-page/HomePageNavBar';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Footer } from './components/site/Footer';
 // import { ReactLenis, useLenis } from 'lenis/react'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { setCategories, setCollections, setCustomerData, setProductData } from './redux/slices/websiteSlice.ts';
 import { useDispatch } from 'react-redux';
 // import { useDispatch } from "react-redux";
@@ -20,6 +20,19 @@ function ScrollToTop() {
 }
 
 function App() {
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // You can adjust breakpoint if you want
+    };
+
+    handleResize(); // Check immediately
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // const lenis = useLenis(({ scroll }) => {
     // called every scroll
@@ -184,7 +197,7 @@ function App() {
       <ScrollToTop />
         <HomePageNavBar />
           <Outlet />
-          <AnimatedCursor 
+          {!isMobile && <AnimatedCursor 
             innerSize={8}
             outerSize={8}
             // color='#A68A7E'
@@ -212,8 +225,8 @@ function App() {
               'button',
               '.link'
             ]}
-        />
-        <AnimatedCursor
+        />}
+        {/* <AnimatedCursor
           color="#fff"
           innerStyle={{
             backgroundColor: "#A68A7E"
@@ -226,7 +239,7 @@ function App() {
           outerStyle={{
             mixBlendMode: 'exclusion'
           }}
-        />
+        /> */}
         <Footer />
       {/* </ReactLenis> */}
     </div>
