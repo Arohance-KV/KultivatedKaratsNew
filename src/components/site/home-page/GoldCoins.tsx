@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { UIsideBar } from "./Solitare";
+import { goldRate24K } from "@/utils/CalculateTotal";
 
 export const GOLDCOINS = [
     {
@@ -11,7 +12,7 @@ export const GOLDCOINS = [
             url: "/gc-1.png",
             publicId: "",
         }],
-        price: Math.round((9293 + (9293 * (16 / 100)))) 
+        price: Math.round((goldRate24K + (goldRate24K * (16 / 100)))) 
     },
     {
         _id: "2",
@@ -22,7 +23,7 @@ export const GOLDCOINS = [
             url: "/gc-2.png",
             publicId: "",
         }],
-        price: Math.round((9293 + (9293 * (16 / 100))) * 2)
+        price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 2)
     },
     {
         _id: "5",
@@ -33,7 +34,7 @@ export const GOLDCOINS = [
             url: "/gc-3.png",
             publicId: "",
         }],
-        price: Math.round((9293 + (9293 * (16 / 100))) * 5)
+        price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 5)
     },
     {
         _id: "10",
@@ -44,7 +45,40 @@ export const GOLDCOINS = [
             url: "/gc-4.png",
             publicId: "",
         }],
-        price: Math.round((9293 + (9293 * (16 / 100))) * 10)
+        price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 10)
+    },
+    {
+        _id: "20",
+        name: "20g Gold Coin",
+        weight: 20,
+        karats: 24,
+        imageUrl: [{
+            url: "/gc-4.png",
+            publicId: "",
+        }],
+        price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 20)
+    },
+    {
+        _id: "50",
+        name: "50g Gold Coin",
+        weight: 10,
+        karats: 24,
+        imageUrl: [{
+            url: "/gc-4.png",
+            publicId: "",
+        }],
+        price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 50)
+    },
+    {
+        _id: "100",
+        name: "100g Gold Coin",
+        weight: 100,
+        karats: 24,
+        imageUrl: [{
+            url: "/gc-4.png",
+            publicId: "",
+        }],
+        price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 100)
     },
 ]
 

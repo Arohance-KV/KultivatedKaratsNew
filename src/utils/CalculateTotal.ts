@@ -1,6 +1,6 @@
-const goldRate24K = 9898;
-const goldRate18K = goldRate24K * (75 / 100);
-const goldRate14K = goldRate24K * (58.3 / 100); 
+export const goldRate24K = 9898;
+export const goldRate18K = goldRate24K * (75 / 100);
+export const goldRate14K = goldRate24K * (58.3 / 100); 
 
 const GST = 3;
 

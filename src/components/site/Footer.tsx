@@ -76,7 +76,7 @@ export const Footer = () => {
 
                     {/* Description */}
                     <div className="mb-6 px-6 md:px-24">
-                    <p className="w-[80%] self-center justify-self-center leading-relaxed text-center">
+                    <p className="w-[80%] text-xs self-center justify-self-center leading-relaxed text-center">
                         Kultivated Karats is a pioneer in the lab-grown diamond industry, revolutionizing the world of fine jewelry with a profound commitment to innovation, sustainability, and exceptional customer experiences.
                     </p>
                     </div>
@@ -89,6 +89,24 @@ export const Footer = () => {
                     <a href={FACEBOOK} className="hover:opacity-75">
                         <Facebook size={24} />
                     </a>
+                    </div>
+                    <div className="flex mb-8">
+                        <div className="flex-1 flex flex-col gap-2">
+                            <p className="text-lg text-nowrap">Our Policies</p>
+                            <div className="flex h-full gap-4 flex-col">
+                                <Link to={"/privacy-policy"}>Privacy policy</Link>
+                                <Link className="" to={"/terms-and-conditions"}>Terms and conditions</Link>
+                                <Link to={"/shipping-policy"}>Shipping policy</Link>
+                            
+                            </div>
+                        </div>
+                        <div className="flex-1 flex flex-col gap-2">
+                            <p className="text-lg text-nowrap">Customer Care</p>
+                            <div className="flex flex-col gap-4 h-full">
+                                <Link to={"/contact-us"}>Contact us</Link>
+                                <Link to={"/product-care"}>product care & repair</Link>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Address */}

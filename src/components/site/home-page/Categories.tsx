@@ -53,7 +53,7 @@ export const Categories = () => {
                                 <Link to={`/products?category-filter=${category?.name?.toLocaleLowerCase().trim()}`} className="flex h-full gap-2 flex-col">
                                     <img src={category?.products?.[0]?.imageUrl?.[0]?.url} className="bg-white w-full aspect-square flex-1" />
                                     <p className="capitalize">
-                                        {category?.name}
+                                        {category?.name+"s"}
                                     </p>
                                 </Link>
 

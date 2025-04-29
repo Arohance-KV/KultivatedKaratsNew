@@ -13,6 +13,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BLOGDATA, FACEBOOK, INSTAGRAM, WHATSAPP } from "@/utils/constants";
 // import { TestimonialCard } from "./Text";
 import Marquee from "react-fast-marquee";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const Reel = ({ reel, navigate } : { navigate: any, reel: {title: string, url: string, product: {
     imageUrl: {
@@ -533,7 +534,7 @@ export const HomePage = () => {
                         </div>
                     </div>
                 </section>
-                <section className="w-full flex gap-4 justify-evenly flex-col items-center">
+                {/* <section className="w-full flex gap-4 justify-evenly flex-col items-center">
                     <p className="blog-section-fade text-3xl text-[#BFA6A1]">Read the blog</p>    
                     <div className="flex flex-col gap-4 justify-evenly w-full items-center">
                         {BLOGDATA?.map((blog) => (
@@ -542,7 +543,8 @@ export const HomePage = () => {
                             </div>
                         ))}
                     </div>
-                </section>
+                </section> */}
+                <BlogSection />
             </div>
             <div id="home-page-main-container" className="min-h-[100vh] sm:flex hidden flex-col gap-10 items-center sm:mb-14">
                 <section id="hero-section" className="sm:h-[100vh] h-[50vh] w-full opacity-0 relative sm:snap-start">
@@ -877,58 +879,125 @@ const BlogSection = () => {
     }, []);
 
     return (
-        <section id="blog-section" className="w-[100%] py-4 relative playfair-display transition-all snap-start text-[#BFA6A1] min-h-screen items-center gap-4 flex flex-col">
-            <p className="sm:text-5xl text-center w-full relative">Our blog</p>
-            <p className="sm:text-lg">Discover the Brilliance Behind Every Gem Where Every Karat Tells a Story.</p>
-            <div className="p-[5%] justify-evenly gap-[5%] flex w-full flex-1">
-                <div className="flex flex-col rounded-md flex-1">
-                    <img src={BLOGDATA[0]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
-                    <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
-                        <p className="font-bold">
-                            {BLOGDATA[0]?.title}
-                        </p>
-                        <p className="text-wrap">
-                            .env{BLOGDATA[0]?.blogContent?.description}
-                        </p>
-                        <div className="flex-1 flex items-end">
-                            <Link to={`/blogs/${BLOGDATA[0]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+        <>
+            <section id="blog-section-mobile" className="w-[100] flex flex-col text-[#BFA6A1] playfair-display">
+                <p className="text-xl text-center w-full relative">Our blog</p>
+                {/* <p className="">Discover the Brilliance Behind Every Gem Where Every Karat Tells a Story.</p> */}
+                <div className="p-[5%] justify-evenly gap-[5%] flex flex-col w-full flex-1">
+                    <Carousel className="relative w-[80%] self-center">
+                        <CarouselContent>
+                            <CarouselItem>
+                                <div className="flex flex-col rounded-md flex-1">
+                                    <img src={BLOGDATA[0]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
+                                    <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
+                                        <p className="font-bold">
+                                            {BLOGDATA[0]?.title}
+                                        </p>
+                                        <p className="text-wrap">
+                                            {BLOGDATA[0]?.blogContent?.description}
+                                        </p>
+                                        <div className="flex-1 flex items-end">
+                                            <Link to={`/blogs/${BLOGDATA[0]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CarouselItem>
+                            <CarouselItem>
+                                <div className="flex flex-col rounded-md flex-1">
+                                    <img src={BLOGDATA[1]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
+                                    <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
+                                        <p className="font-bold">
+                                            {BLOGDATA[1]?.title}
+                                        </p>
+                                        <p className="text-wrap">
+                                            {BLOGDATA[1]?.blogContent?.description}
+                                        </p>
+                                        <div className="flex-1 flex items-end">
+                                            <Link to={`/blogs/${BLOGDATA[1]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CarouselItem>
+                            <CarouselItem>
+                                <div className="flex-col flex rounded-md flex-1">
+                                    <img src={BLOGDATA[2]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
+                                    <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
+                                        <p className="font-bold">
+                                            {BLOGDATA[2]?.title}
+                                        </p>
+                                        <p className="text-wrap">
+                                            {BLOGDATA[2]?.blogContent?.description}
+                                        </p>
+                                        <div className="flex-1 flex items-end">
+                                            <Link to={`/blogs/${BLOGDATA[2]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CarouselItem>
+                        </CarouselContent>
+                        <CarouselPrevious className=""/>
+                        <CarouselNext className=""/>
+                    </Carousel>
+                    {/* }} className="absolute right-0 text-xl hover:text-[#A68A7E] top-1/2 m-0 -translate-1/2" variant={"ghost"}>See more</Button> */}
+                </div>
+                <Button onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/blogs");
+                }} className="text-xl text-[#A68A7E] m-0" variant={"ghost"}>See more</Button>
+            </section>
+            <section id="blog-section" className="w-[100%] py-4 sm:flex hidden relative playfair-display transition-all snap-start text-[#BFA6A1] min-h-screen items-center gap-4 flex-col">
+                <p className="sm:text-5xl text-center w-full relative">Our blog</p>
+                <p className="sm:text-lg">Discover the Brilliance Behind Every Gem Where Every Karat Tells a Story.</p>
+                <div className="p-[5%] justify-evenly gap-[5%] flex w-full flex-1">
+                    <div className="flex flex-col rounded-md flex-1">
+                        <img src={BLOGDATA[0]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
+                        <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
+                            <p className="font-bold">
+                                {BLOGDATA[0]?.title}
+                            </p>
+                            <p className="text-wrap">
+                                .env{BLOGDATA[0]?.blogContent?.description}
+                            </p>
+                            <div className="flex-1 flex items-end">
+                                <Link to={`/blogs/${BLOGDATA[0]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="flex flex-col rounded-md flex-1">
-                    <img src={BLOGDATA[1]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
-                    <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
-                        <p className="font-bold">
-                            {BLOGDATA[1]?.title}
-                        </p>
-                        <p className="text-wrap">
-                            {BLOGDATA[1]?.blogContent?.description}
-                        </p>
-                        <div className="flex-1 flex items-end">
-                            <Link to={`/blogs/${BLOGDATA[1]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+                    <div className="flex flex-col rounded-md flex-1">
+                        <img src={BLOGDATA[1]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
+                        <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
+                            <p className="font-bold">
+                                {BLOGDATA[1]?.title}
+                            </p>
+                            <p className="text-wrap">
+                                {BLOGDATA[1]?.blogContent?.description}
+                            </p>
+                            <div className="flex-1 flex items-end">
+                                <Link to={`/blogs/${BLOGDATA[1]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="flex-col flex rounded-md flex-1">
-                    <img src={BLOGDATA[2]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
-                    <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
-                        <p className="font-bold">
-                            {BLOGDATA[2]?.title}
-                        </p>
-                        <p className="text-wrap">
-                            {BLOGDATA[2]?.blogContent?.description}
-                        </p>
-                        <div className="flex-1 flex items-end">
-                            <Link to={`/blogs/${BLOGDATA[2]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+                    <div className="flex-col flex rounded-md flex-1">
+                        <img src={BLOGDATA[2]?.blogImageUrl?.url} className="w-full rounded-t-[inherit] flex-1" />
+                        <div className="flex flex-col p-6 gap-4 flex-1 rounded-b-[inherit] bg-red-500/5 w-full">
+                            <p className="font-bold">
+                                {BLOGDATA[2]?.title}
+                            </p>
+                            <p className="text-wrap">
+                                {BLOGDATA[2]?.blogContent?.description}
+                            </p>
+                            <div className="flex-1 flex items-end">
+                                <Link to={`/blogs/${BLOGDATA[2]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
+                            </div>
                         </div>
                     </div>
+                    {/* }} className="absolute right-0 text-xl hover:text-[#A68A7E] top-1/2 m-0 -translate-1/2" variant={"ghost"}>See more</Button> */}
                 </div>
-                {/* }} className="absolute right-0 text-xl hover:text-[#A68A7E] top-1/2 m-0 -translate-1/2" variant={"ghost"}>See more</Button> */}
-            </div>
-            <Button onClick={(e) => {
-                e.preventDefault();
-                navigate("/blogs");
-            }} className="text-xl hover:text-[#A68A7E]m-0" variant={"ghost"}>See more</Button>
-        </section>
+                <Button onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/blogs");
+                }} className="text-xl hover:text-[#A68A7E]m-0" variant={"ghost"}>See more</Button>
+            </section>
+        </>
     );
 };

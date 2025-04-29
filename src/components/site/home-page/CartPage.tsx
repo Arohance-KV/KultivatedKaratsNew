@@ -116,16 +116,16 @@ export const CartPage = () => {
                                 <p>Total items : {cartItems?.reduce((total, item) => {
                                     return total + item?.quantity;
                                 }, 0)}</p>
-                                <p>Price : {Math.round(cartTotal + couponDiscountRef?.current)}</p>
+                                <p>Price : ₹{Math.round(cartTotal + couponDiscountRef?.current)}</p>
                             </div>
                             {couponDiscountRef?.current > 0 && <p className="uppercase w-[90%] mb-4 justify-self-center self-center flex justify-between">({couponRef?.current}) <span>- {couponDiscountRef?.current}</span></p>}
                             <div className="w-[90%] mb-4 flex justify-between justify-self-center self-center">
                                 <p className="">+ 3% GST</p>
-                                <p>{(Math.round((cartTotal) * (3 / 100)))}</p>
+                                <p>₹{(Math.round((cartTotal) * (3 / 100)))}</p>
                             </div>
                             <div className="w-[90%] mb-4 self-center flex justify-between">
                                 <p>Cart total</p>
-                                <p>{Math.round(cartTotal + (cartTotal * (3 / 100)))}</p>
+                                <p>₹{Math.round(cartTotal + (cartTotal * (3 / 100)))}</p>
                             </div>
                             <div className="flex flex-col gap-4 justify-center items-center">
                                 <div className="relative w-[80%]">
@@ -276,7 +276,7 @@ export const CartPage = () => {
                                                     const orderData = await orderResponse.json();
 
                                                     const emailToCusomter = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ customerData?.email ], subject : "", html:"" });
-                                                    const emailToOwner = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ "info@kultivatedkarats.com", "sampathraj@ketandiamonds.com", "manishkumar@ketandiamonds.com", "deepaksagar@ketandiamonds.com", "deepaksagar@ketandiamonds", "mehek@kultivatedkarats.com", "rohraaaryan.ryp@gmail.com" ], subject : "Order received from kultivatedkarats.com!", html: getOrderEmailHtml() });
+                                                    const emailToOwner = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ "info@kultivatedkarats.com", "sampathraj@ketandiamonds.com", "manishkumar@ketandiamonds.com", "deepaksagar@ketandiamonds.com", "mehek@kultivatedkarats.com", "rohraaaryan.ryp@gmail.com", "kultivatedkaratsarohance@gmail.com" ], subject : "Order received from kultivatedkarats.com!", html: getOrderEmailHtml() });
 
                                                     console.log(orderData, orderResponse, emailToCusomter, emailToOwner);
                                                     dispatch(setCustomerData(orderData?.data));

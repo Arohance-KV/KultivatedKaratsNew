@@ -588,7 +588,7 @@ export const ProductPage = () => {
                                 </AccordionContent>
                             </AccordionItem>
                         </Accordion>}
-                        <p className="text-xs font-bold"><span className="capitalize">{productData?.category?.name}</span> selected in {karatRef.current}karat gold</p>
+                        <p className="text-xs font-bold"><span className="capitalize">{productData?.category?.name}</span> selected in {karatRef.current}karat gold {productData?.category?._id == `67fe5da50254f62d3e5fe917` && `with ring size: ${ringSize}`}{productData?.containsGemstone && `, coloured stone selection: ${gemstoneRef?.current}`}{addChainRef?.current && `, chain added with pendant with ${chainKaratRef.current}k gold.`}</p>
                         {productData?._id ? productData?.gemStoneColour!= "" && <div className="w-full items-center flex">
                             <p className="flex items-center gap-4">Gemstone colour: <span className="px-4 py-2 border border-[#A68A7E] rounded-md">{productData?.gemStoneColour}</span></p>
                         </div> : <Skeleton className="w-1/3 h-4 rounded-md bg-gray-500/10" />}
