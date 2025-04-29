@@ -76,7 +76,7 @@ export const Footer = () => {
 
                     {/* Description */}
                     <div className="mb-6 px-6 md:px-24">
-                    <p className="w-[80%] leading-relaxed text-center">
+                    <p className="w-[80%] self-center justify-self-center leading-relaxed text-center">
                         Kultivated Karats is a pioneer in the lab-grown diamond industry, revolutionizing the world of fine jewelry with a profound commitment to innovation, sustainability, and exceptional customer experiences.
                     </p>
                     </div>

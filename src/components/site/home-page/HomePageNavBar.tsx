@@ -131,16 +131,16 @@ export const HomePageNavBar = () => {
                     <img src="/logo.svg" alt="" className="" />
                 </Link>
                 <Link to={"/store-locator"}>
-                    <Store className="fill-[#E1C6B3] w-4 h-4 stroke-[#E1C6B3]"/>
+                    <Store className="w-4 h-4 stroke-[#E1C6B3]"/>
                 </Link>
                 <Link to={"/wishlist"}>
-                    <Heart className="fill-[#E1C6B3] w-4 h-4 stroke-[#E1C6B3]" />
+                    <Heart className="w-4 h-4 stroke-[#E1C6B3]" />
                 </Link>
                 <Link to={"/cart"}>
-                    <ShoppingCart className="fill-[#E1C6B3] w-4 h-4 stroke-[#E1C6B3]" />
+                    <ShoppingCart className="w-4 h-4 stroke-[#E1C6B3]" />
                 </Link>
                 <Link to={"/auth"}>
-                    <CircleUser className="fill-[#E1C6B3] w-4 h-4 stroke-[#E1C6B3]" />
+                    <CircleUser className="w-4 h-4 stroke-[#E1C6B3]" />
                 </Link>
                 {/* <Hamburger color="#E1C6B3" toggled={isHamburgerMenuOpen} onToggle={() => {
                     setIsHamburgerMenuOpen(!isHamburgerMenuOpen);

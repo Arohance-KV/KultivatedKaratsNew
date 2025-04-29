@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { smallRandomBanners } from "@/utils/constants";
 
 export const Products = () => {
 
@@ -41,6 +42,19 @@ export const Products = () => {
 
     const [ isLoading, setIsLoading ] = useState(true);
 
+    const [ randomBanner, setRandomBanner ]= useState({
+        name: "",
+		imageUrl: {
+			url: "",
+			publicId: "",
+		},
+		link: ""
+    });
+
+    useEffect(() => {
+        setRandomBanner(smallRandomBanners[Math.floor(Math.random() * 4)]);
+    }, []);
+
     useEffect(() => {
         setProducts(productDataFromStore);
     }, [ productDataFromStore ])
@@ -61,6 +75,7 @@ export const Products = () => {
 
     const [ showFilter, setShowFilter ] = useState<Boolean>(false);
     const [ showSortOptions, setShowSortOptions ] = useState<Boolean>(false);
+
 
     return (
         <div className="w-full relative playfair-display text-white pb-14">
@@ -191,9 +206,9 @@ export const Products = () => {
                 </div>
                 {<div id="sub-collection-section" className="gap-8 w-full">
                     <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
-                        {/* <div className="col-span-1 w-full h-full row-span-1 row-start-[-2] col-start-1 bg-red-500"> */}
-                            
-                        {/* </div> */}
+                        {randomBanner?.name != "" && <a href={randomBanner?.link} className="col-span-1 w-full h-full row-span-1 row-start-[-2] col-start-1">
+                            <img src={randomBanner?.imageUrl!?.url} className="w-full h-full object-cover" alt="" />
+                        </a>}
                         {isLoading ? <Loader2 className="sm:stroke-white stroke-[#E1C6B3] self-center justify-self-center" /> : products
                         ?.filter((item: IProduct) => {
                         const withinPriceRange =

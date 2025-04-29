@@ -14,65 +14,34 @@ export const smallRandomBanners = [
 	{
 		name: "ring banner",
 		imageUrl: {
-			url: "",
+			url: "/1.png",
 			publicId: "",
-		}
+		},
+		link: "?category-filter=ring"
 	},
 	{
 		name: "pendant banner",
 		imageUrl: {
-			url: "",
+			url: "/3.png",
 			publicId: "",
-		}
+		},
+		link: "?category-filter=pendant"
 	},
 	{
 		name: "braclet banner",
 		imageUrl: {
-			url: "",
+			url: "/4.png",
 			publicId: "",
-		}
+		},
+		link: "?category-filter=bracelet"
 	},
 	{
-		name: "bangle banner",
+		name: "earring banner",
 		imageUrl: {
-			url: "",
+			url: "/2.png",
 			publicId: "",
-		}
-	},
-	{
-		name: "Earring banner",
-		imageUrl: {
-			url: "",
-			publicId: "",
-		}
-	},
-	{
-		name: "new banner",
-		imageUrl: {
-			url: "",
-			publicId: "",
-		}
-	},
-	{
-		name: "random banner",
-		imageUrl: {
-			url: "",
-			publicId: "",
-		}
-	},
-	{
-		name: "collection banner",
-		imageUrl: {
-			url: "",
-			publicId: "",
-		}
-	},
-	{
-		name: "new random banner",
-		imageUrl: {
-			url: "",
-			publicId: "",
-		}
+		},
+		link: "?category-filter=earring"
 	},
 ]
 
