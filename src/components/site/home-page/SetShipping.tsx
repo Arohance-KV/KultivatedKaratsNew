@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { setUser } from "@/redux/slices/userSlice";
+import { IUser } from "@/utils/interfaces";
 // import { IUser } from "@/utils/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch
+import { useDispatch, useSelector
     // , useSelector
  } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -24,15 +25,23 @@ const shippingFormSchema = z.object({
 
 export const SetShipping = () => {
 
-const [ isShippingAddressButtonLoading, setIsShippingAddressButtonLoading ] = useState(false);
+    const customerData: IUser = useSelector((state: any) => state.website.customerData);
+    
+    useEffect(() => {
+        if ( customerData?.address?.city == null ) {
+            navigate("/cart");
+        }
+    }, [ customerData ]);
 
-const dispatch = useDispatch();
+    const [ isShippingAddressButtonLoading, setIsShippingAddressButtonLoading ] = useState(false);
 
-// const customerData: IUser = useSelector((state: any) => state.website.customerData);
+    const dispatch = useDispatch();
 
-const navigate = useNavigate();
+    // const customerData: IUser = useSelector((state: any) => state.website.customerData);
 
-const onShippingFormSubmit = async (values: z.infer<typeof shippingFormSchema>) => {
+    const navigate = useNavigate();
+
+    const onShippingFormSubmit = async (values: z.infer<typeof shippingFormSchema>) => {
         console.log(values);
         console.log("Form submited");
         setIsShippingAddressButtonLoading(true);
@@ -65,7 +74,8 @@ const onShippingFormSubmit = async (values: z.infer<typeof shippingFormSchema>) 
             // }
             console.log(data?.data)
             dispatch(setUser(data.data));
-            navigate("/cart");
+            window.location.reload();
+            // navigate("/cart");
             console.log(data);
         } catch (error) {
             console.error("Error: ", error);
@@ -215,5 +225,5 @@ const onShippingFormSubmit = async (values: z.infer<typeof shippingFormSchema>) 
                 </form>
             </Form>
         </section>
-    )
+    );
 }
