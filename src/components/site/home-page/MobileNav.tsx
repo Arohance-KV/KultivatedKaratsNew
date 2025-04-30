@@ -1,5 +1,6 @@
 import { MenuIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 // import { MenuIcon, XIcon } from '@heroicons/react/solid'; // Or any other icon library
 
 export const MobileNav = () => {
@@ -61,13 +62,13 @@ export const MobileNav = () => {
           <ul className="space-y-2 flex flex-col justify-center items-center !text-white inria-serif-regular text-3xl">
             {menuItems.map((item) => (
               <li key={item.name}>
-                <a
-                  href={item.href}
+                <Link
+                  to={item.href}
                   className="block py-2 px-4 z-0 hover:bg-gray-100 rounded-md"
                   onClick={toggleMenu} // Close menu on item click (optional)
                 >
                   {item.name}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

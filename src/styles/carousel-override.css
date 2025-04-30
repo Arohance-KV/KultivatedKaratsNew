@@ -1,0 +1,8 @@
+.home-page-carousel .control-dots .dot {
+    background-color: #a68a7e !important;   /* Normal dot */
+    box-shadow: none !important;
+  }
+  
+.home-page-carousel .control-dots .dot.selected {
+    background-color: #7b5d4e !important;   /* Selected (active) dot */
+}

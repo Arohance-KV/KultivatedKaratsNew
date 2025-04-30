@@ -1,4 +1,6 @@
 import { 
+    ArrowLeft,
+    ArrowRight,
     // ArrowRight, 
     Facebook, Gem, Instagram, Mouse, Stamp, Truck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,7 +15,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BLOGDATA, FACEBOOK, INSTAGRAM, WHATSAPP } from "@/utils/constants";
 // import { TestimonialCard } from "./Text";
 import Marquee from "react-fast-marquee";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel as BlogCarousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import Carousel, { ArrowProps, DotProps }  from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import '../../../styles/carousel-override.css';
 
 const Reel = ({ reel, navigate } : { navigate: any, reel: {title: string, url: string, product: {
     imageUrl: {
@@ -399,6 +404,43 @@ export const HomePage = () => {
         return () => clearInterval(interval); // good cleanup
     }, []);
 
+    const CustomLeftArrow = ({ onClick, ...rest }: ArrowProps) => {
+        const {
+            // carouselState: { currentSlide },
+        } = rest;
+        return (
+            <Button variant={"ghost"}
+                onClick={onClick}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-[#a68a7e] text-white hover:text-[#BFA6A1] px=4 py-2 p-4 w-0 h-0 flex justify-center items-center rounded-full shadow-md"
+                aria-label="Next"
+            >
+                <ArrowLeft className="" />
+            </Button>
+        );
+    };
+
+    const CustomRightArrow = ({ onClick, ...rest }: ArrowProps) => {
+        const {
+            // carouselState: { currentSlide },
+        } = rest;
+        return (
+            <Button variant={"ghost"}
+                onClick={onClick}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-[#a68a7e] text-white hover:text-[#BFA6A1] px=4 py-2 p-4 w-0 h-0 flex justify-center items-center rounded-full shadow-md"
+                aria-label="Next"
+            >
+                <ArrowRight className="" />
+            </Button>
+        );
+    };
+
+    const CustomDot = ({ onClick, active }: DotProps) => (
+        <button
+          onClick={onClick}
+          className={`w-3 h-3 rounded-full mx-1 border-2 border-[#a68a7e] ${active ? 'bg-[#BFA6A1]' : 'bg-transparent'}`}
+        />
+    );
+
     return (
         <>
             <div className="sm:hidden w-full gap-14 min-h-screen flex-col flex">
@@ -546,10 +588,66 @@ export const HomePage = () => {
                 </section> */}
                 <BlogSection />
             </div>
-            <div id="home-page-main-container" className="min-h-[100vh] sm:flex hidden flex-col gap-10 items-center sm:mb-14">
+            <div id="home-page-main-container" className="home-page-carousel-container min-h-[100vh] sm:flex hidden flex-col gap-10 items-center sm:mb-14">
                 <section id="hero-section" className="sm:h-[100vh] h-[50vh] w-full opacity-0 relative sm:snap-start">
                     <div id="hero-section-banner" className="sm:h-[90vh] h-[50vh] bg-[#E1C6B3] sm:w-full w-[90%] self-center justify-self-center relative">
-                        <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" />
+                        <Carousel
+                            customDot={<CustomDot />}
+                            customRightArrow={<CustomRightArrow onClick={() => {}} />}
+                            customLeftArrow={<CustomLeftArrow onClick={() => {}} />}
+                            additionalTransfrom={0}
+                            arrows
+                            autoPlaySpeed={3000}
+                            centerMode={false}
+                            className="home-page-carousel absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full"
+                            containerClass="home-page-carousel-container"
+                            dotListClass="absolute! bottom-8!"
+                            draggable
+                            focusOnSelect={false}
+                            infinite
+                            itemClass=""
+                            keyBoardControl
+                            minimumTouchDrag={80}
+                            pauseOnHover
+                            renderArrowsWhenDisabled={false}
+                            renderButtonGroupOutside={false}
+                            renderDotsOutside={false}
+                            responsive={{
+                                desktop: {
+                                breakpoint: {
+                                    max: 3000,
+                                    min: 1024
+                                },
+                                items: 1
+                                },
+                                mobile: {
+                                breakpoint: {
+                                    max: 464,
+                                    min: 0
+                                },
+                                items: 1
+                                },
+                                tablet: {
+                                breakpoint: {
+                                    max: 1024,
+                                    min: 464
+                                },
+                                items: 1
+                                }
+                            }}
+                            rewind={false}
+                            rewindWithAnimation={false}
+                            rtl={false}
+                            shouldResetAutoplay
+                            showDots
+                            sliderClass=""
+                            slidesToSlide={1}
+                            swipeable
+                        >
+                            {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
+                            <img src="/home-page-banner-2.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="/banner.png" className="w-full h-full m-auto object-cover" alt="" />
+                        </Carousel>
                         <div id="social-links" className="flex text-white flex-col gap-4 w-auto absolute right-[5%] bottom-[15%]">
                             <Link to={INSTAGRAM}>
                                 <Instagram />
@@ -880,11 +978,11 @@ const BlogSection = () => {
 
     return (
         <>
-            <section id="blog-section-mobile" className="w-[100] flex flex-col text-[#BFA6A1] playfair-display">
+            <section id="blog-section-mobile" className="w-[100] sm:hidden flex flex-col text-[#BFA6A1] playfair-display">
                 <p className="text-xl text-center w-full relative">Our blog</p>
                 {/* <p className="">Discover the Brilliance Behind Every Gem Where Every Karat Tells a Story.</p> */}
                 <div className="p-[5%] justify-evenly gap-[5%] flex flex-col w-full flex-1">
-                    <Carousel className="relative w-[80%] self-center">
+                    <BlogCarousel className="relative w-[80%] self-center">
                         <CarouselContent>
                             <CarouselItem>
                                 <div className="flex flex-col rounded-md flex-1">
@@ -937,7 +1035,7 @@ const BlogSection = () => {
                         </CarouselContent>
                         <CarouselPrevious className=""/>
                         <CarouselNext className=""/>
-                    </Carousel>
+                    </BlogCarousel>
                     {/* }} className="absolute right-0 text-xl hover:text-[#A68A7E] top-1/2 m-0 -translate-1/2" variant={"ghost"}>See more</Button> */}
                 </div>
                 <Button onClick={(e) => {

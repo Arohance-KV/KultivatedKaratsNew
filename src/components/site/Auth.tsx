@@ -23,6 +23,7 @@ import { ToastSuccess } from "@/utils/UtilityComponents";
 // import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 // import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
+
 export const otpFormSchema = z.object({
     phoneNumber: z.coerce.number(({ invalid_type_error: "Please enter a valid number." })).min( 10, { message: "Phone no should be 10 digits!"}),
 })
@@ -56,7 +57,8 @@ export const Auth = () => {
     const customerData: IUser = useSelector((state: any) => state.website.customerData);
 
     useEffect(() => {
-        if ( customerData?._id != null) navigate("/account-details"); 
+        // if ( customerData?._id != null) navigate("/account-details"); 
+        if ( customerData?._id != null) navigate("/"); 
     }, [ customerData ]);
     
     const dispatch = useDispatch();
