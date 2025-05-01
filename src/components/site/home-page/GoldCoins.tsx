@@ -31,7 +31,7 @@ export const GOLDCOINS = [
         netWeight: 5,
         karats: 24,
         imageUrl: [{
-            url: "/gc-3.png",
+            url: "/gc-5.png",
             publicId: "",
         }],
         price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 5)
@@ -42,7 +42,7 @@ export const GOLDCOINS = [
         weight: 10,
         karats: 24,
         imageUrl: [{
-            url: "/gc-4.png",
+            url: "/gc-10.png",
             publicId: "",
         }],
         price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 10)
@@ -53,7 +53,7 @@ export const GOLDCOINS = [
         weight: 20,
         karats: 24,
         imageUrl: [{
-            url: "/gc-4.png",
+            url: "/gc-20.png",
             publicId: "",
         }],
         price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 20)
@@ -64,7 +64,7 @@ export const GOLDCOINS = [
         weight: 10,
         karats: 24,
         imageUrl: [{
-            url: "/gc-4.png",
+            url: "/gc-50.png",
             publicId: "",
         }],
         price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 50)
@@ -75,12 +75,12 @@ export const GOLDCOINS = [
         weight: 100,
         karats: 24,
         imageUrl: [{
-            url: "/gc-4.png",
+            url: "/gc-100.png",
             publicId: "",
         }],
         price: Math.round((goldRate24K + (goldRate24K * (16 / 100))) * 100)
     },
-]
+];
 
 export const GoldCoins = () => {
 
@@ -122,4 +122,4 @@ export const GoldCoins = () => {
             </div>
         </section>
     );
-}
+};
