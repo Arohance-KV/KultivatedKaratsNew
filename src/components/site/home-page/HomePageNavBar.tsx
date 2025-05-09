@@ -44,12 +44,12 @@ export const HomePageNavBar = () => {
 
     const [query, setQuery] = useState("");
 
-    // const filteredProducts = products.filter((product) =>
-    //   product.name.toLowerCase().trim().includes(query.toLowerCase()) || product?.category?.name?.trim()?.toLowerCase()?.includes(query?.toLowerCase())
-    // );
+    const filteredProducts = products.filter((product) =>
+      product.name.toLowerCase().trim().includes(query.toLowerCase()) || product?.category?.name?.trim()?.toLowerCase()?.includes(query?.toLowerCase())
+    );
 
 
-    const [ isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+    // const [ isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
     return (
         <>
