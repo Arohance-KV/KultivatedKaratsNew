@@ -13,11 +13,11 @@ const Collection = ({ data, navigate } : { data : ICollection, navigate: Navigat
 
     return (
         <div>
-            <div id={`${data?.name?.trim()?.toLowerCase()}`} className="w-full my-8 h-auto text-white">
+            <div id={`${data?.name?.trim()?.toLowerCase()}`} className="w-full my-8 h-auto text-white capitalize">
                 <p className="capitalize font-bold textxl sm:text-white text-[#E1C6B3]">{data.name}</p>
             </div>
             <div id="sub-collection-section" className="gap-8 w-full">
-                <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
+                <div className="grid sm:grid-cols-4 grid-cols-2 capitalize gap-4 items-center justify-center">
                     {data?.products?.map((item: IProduct) => (
                         <button
                             key={item._id}
@@ -135,7 +135,7 @@ export const Collections = () => {
                 <div className="w-full flex-wrap flex gap-2">
                     {collections?.map((collection: ICollection) => {
                         return (
-                            <a className="border sm:border-white border-[#E1C6B3] text-[#E1C6B3] sm:text-white px-4 py-2 rounded-md" href={`#${collection?.name?.trim()?.toLowerCase()}`}>{collection?.name}</a>
+                            <a className="border capitalize sm:border-white border-[#E1C6B3] text-[#E1C6B3] sm:text-white px-4 py-2 rounded-md" href={`#${collection?.name?.trim()?.toLowerCase()}`}>{collection?.name}</a>
                         );
                     })}
                 </div>

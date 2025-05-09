@@ -2,7 +2,7 @@ import parse from "html-react-parser";
 
 export const PrivacyPolicy = () => {
     return (
-        <div className="sm:mt-56 inria-serif-regular text-[#E1C6B3] sm:p-4 mt-14 p-4">
+        <div className="sm:mt-56 inria-serif-regular sm:p-4 mt-14 p-4">
             {parse(`<p>Privacy And Policy</p>
 <p><br></p>
 <p>We value the trust you place in kultivatedkarats.com. That's why we insist upon the highest standards for secure transactions and customer information privacy.</p>

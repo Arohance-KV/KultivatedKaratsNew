@@ -2,7 +2,7 @@ import parse from "html-react-parser";
 
 export const TC = () => {
     return (
-        <div className="sm:mt-56 inria-serif-regular text-[#E1C6B3] sm:p-4 mt-14 p-4">
+        <div className="sm:mt-56 inria-serif-regular sm:p-4 mt-14 p-4">
             {parse(`<h1>Term And Conditions</h1>
 <h3>Use of the Website</h3>
 <p>By accessing the website, you warrant and represent to the website owner that you are legally entitled to do so and to make use of information made available via the website.</p>

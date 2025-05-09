@@ -2,7 +2,7 @@ import parse from "html-react-parser";
 
 export const ProductCare = () => {
     return (
-        <div className="sm:mt-56 inria-serif-regular text-[#E1C6B3] sm:p-4 mt-14 p-4">
+        <div className="sm:mt-56 inria-serif-regular sm:p-4 mt-14 p-4">
             {parse(`<h1>Product Care & Repair</h1>
 <h3>Lab Grown Diamond Jewellery Cleaning And Maintenance Manual</h3>
 <p>To maintain the dazzling appearance of your lab grown diamond jewellery, it is essential to provide proper care and attention, just like any other precious gemstone or metal. Regular upkeep allows you to keep your lab grown diamonds shining and brilliant for years. Whether you wear them daily or only on special occasions, a consistent cleaning routine is recommended to ensure longevity.</p>
