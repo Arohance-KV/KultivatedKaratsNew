@@ -36,11 +36,11 @@ import { ProductCare } from './components/site/home-page/ProductCare.tsx';
 import { ShippingPolicy } from './components/site/home-page/ShippingPolicy.tsx';
 import { Toaster } from './components/ui/sonner.tsx';
 import { Test } from './components/site/home-page/Text.tsx';
-import { DashboardProductsPage } from './components/adminPanel/DashboardProductsPage.tsx';
-import { DashboardCouponsPage } from './components/adminPanel/DashboardCouponsPage.tsx';
-import { DashboardVouchersPage } from './components/adminPanel/DashboardVouchersPage.tsx';
-import { DashboardOrdersPage } from './components/adminPanel/DashboardOrdersPage.tsx';
-import { DashboardBlogsPage } from './components/adminPanel/DashboardBlogsPage.tsx';
+// import { DashboardProductsPage } from './components/adminPanel/DashboardProductsPage.tsx';
+// import { DashboardCouponsPage } from './components/adminPanel/DashboardCouponsPage.tsx';
+// import { DashboardVouchersPage } from './components/adminPanel/DashboardVouchersPage.tsx';
+// import { DashboardOrdersPage } from './components/adminPanel/DashboardOrdersPage.tsx';
+// import { DashboardBlogsPage } from './components/adminPanel/DashboardBlogsPage.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -79,14 +79,14 @@ const router = createBrowserRouter(
               <Route path="/shipping-policy" element={<ShippingPolicy />} />
               <Route path="/contact-us" element={<ContactUs />} />
               <Route path="/product-care" element={<ProductCare />} />
-              <Route path="admin" element={<DashboardMain />}>
+              {/* <Route path="admin" element={<DashboardMain />}>
                 <Route path="home" element={<DashboardHomePage />}></Route>
                 <Route path="products" element={<DashboardProductsPage />}></Route>
                 <Route path="coupons" element={<DashboardCouponsPage />}></Route>
                 <Route path="vouchers" element={<DashboardVouchersPage />}></Route>
                 <Route path="orders" element={<DashboardOrdersPage />}></Route>
                 <Route path="blogs" element={<DashboardBlogsPage />}></Route>
-            </Route>
+              </Route> */}
           </Route>
       </Route>
   )
