@@ -55,38 +55,49 @@ export const CartPage = () => {
 
     const getOrderEmailHtml = () => {
         return (
-            `<div style="width: 90%; margin: 1rem; padding: 1rem; border: 1px solid #A68A7E; border-radius: 8px; color: #A68A7E;">
+            `<div style="width: 90%; height: auto; margin: 1rem; padding: 1rem; border: 1px solid #A68A7E; border-radius: 8px; color: #A68A7E;">
+                <img src="/logo.svg">
                 <p>Email: ${customerData?.email}</p>
                 <p>Phone number: ${customerData?.phoneNumber}</p>
                 <p>Name: ${customerData?.firstName} ${customerData?.lastName}</p>
-                <p>Cart: </p>
-                ${cartItems?.map((cartItem: ICartItem) => {
+                <p>Cart: [Total items : ${cartItems?.length + 1}]</p>
+                <div style="display: flex; flex-direction: column;">
+                ${cartItems?.map((cartItem: ICartItem, index) => {
                     return (
-                        `<div style="display: flex; flex-direction: column;">
+                        `<div style="display: flex; flex-direction: column; gap: 16px">
+                            <h1>Item no ${index + 1}:</h1>
                             <p>
                                 Name: ${cartItem?.product?.name}
                             </p>
+                            <br>
                             <p>
                                 Quantity: ${cartItem?.quantity}
                             </p>
+                            <br>
                             <p>
-                                ${cartItem?.containsGemstone && <>Gem stone option: {cartItem?.isGemStone ? "Gemstone" : "Labgrown diamond"}</>}
+                                ${cartItem?.containsGemstone && `Gem stone option: ${cartItem?.isGemStone ? "Gemstone" : "Labgrown diamond"}`}
                             </p>
+                            <br>
                             <p>
-                                ${cartItem?.addChain && <>Add pendant chain: {cartItem?.addChain ? "Yes" : "No"}</>}
+                                ${cartItem?.addChain && `Add pendant chain: ${cartItem?.addChain ? "Yes" : "No"}`}
                             </p>
+                            <br>
                             <p>
-                                ${cartItem?.addChain && <>Chain gold karat: {cartItem?.chainGoldCarat}</>}
+                                ${cartItem?.addChain && `Chain gold karat: {cartItem?.chainGoldCarat}`}
                             </p>
+                            <br>
                             <p>
-                                ${cartItem?.ringSize! > 0 && <>Ring size: {cartItem?.ringSize}</>}
+                                ${cartItem?.ringSize! > 0 && `Ring size: {cartItem?.ringSize}`}
                             </p>
+                            <br>
                             <p>
                                 Gold colour: ${cartItem?.color}
                             </p>
+                            <br>
                             <p>
                                 Gold karat: ${cartItem?.karat}
                             </p>
+                            <br>
                             <p>
                                 Total: ${cartItem?.totalPrice}
                             </p>
@@ -95,7 +106,7 @@ export const CartPage = () => {
                 })}
             </div>`
         );
-    }
+    };
 
     return (
         <div className='w-full playfair-display! relative pb-14'>
@@ -186,6 +197,9 @@ export const CartPage = () => {
                                 </div>
                                 <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
                                     if ( customerData?._id == null ) return navigate("/auth");
+                                    if ( customerData?.phoneNumber == undefined || customerData?.phoneNumber == null) {
+
+                                    }
                                     e.preventDefault();
                                     setIsPlaceOrderButtonLoading(true);
                                     if ( customerData?.address?.city == null )
@@ -275,8 +289,10 @@ export const CartPage = () => {
                                                     
                                                     const orderData = await orderResponse.json();
 
-                                                    const emailToCusomter = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ customerData?.email ], subject : "", html:"" });
-                                                    const emailToOwner = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ "info@kultivatedkarats.com", "sampathraj@ketandiamonds.com", "manishkumar@ketandiamonds.com", "deepaksagar@ketandiamonds.com", "mehek@kultivatedkarats.com", "rohraaaryan.ryp@gmail.com", "kultivatedkaratsarohance@gmail.com" ], subject : "Order received from kultivatedkarats.com!", html: getOrderEmailHtml() });
+
+
+                                                    const emailToCusomter = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ customerData?.email, "rohraaaryan@gmail.com" ], subject : "Order placed at kultivated karats!", html:"Thank you for placing order at kultivated karats." });
+                                                    const emailToOwner = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ "info@kultivatedkarats.com", "sampathraj@ketandiamonds.com", "manishkumar@ketandiamonds.com", "deepaksagar@ketandiamonds.com", "mehek@kultivatedkarats.com", "rohraaaryan@gmail.com", "kultivatedkaratsarohance@gmail.com" ], subject : "Order received from kultivatedkarats.com!", html: getOrderEmailHtml() });
 
                                                     console.log(orderData, orderResponse, emailToCusomter, emailToOwner);
                                                     dispatch(setCustomerData(orderData?.data));

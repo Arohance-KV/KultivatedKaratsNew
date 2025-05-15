@@ -77,7 +77,7 @@ export const VideoCartPage = () => {
                     </div> : videoCallCartData?.map((videoCartItem: ICartItem) => {
                         return (
                             // <div className="">
-                                <CartItem item={ { name: videoCartItem?.product?.name, code: videoCartItem?.product?.code, price: (videoCartItem?.product?.price * videoCartItem?.quantity), product: videoCartItem?.product, cart: cart, wishList: wishList, customerData: customerData, dispatch: dispatch, currentVideoCallCart: videoCallCartData } }/>
+                                <CartItem item={ { name: videoCartItem?.product?.name, code: videoCartItem?.product?.productId, price: (videoCartItem?.product?.price * videoCartItem?.quantity), product: videoCartItem?.product, cart: cart, wishList: wishList, customerData: customerData, dispatch: dispatch, currentVideoCallCart: videoCallCartData } }/>
                             // </div>
                         );
                     })}
@@ -135,7 +135,7 @@ export const CartItem = ({item} : { item : {name: string, code: string, price: n
             <div className="flex-[0.75] h-full text-[#A68A7E] p-4 rounded-md bg-white gap-4 border flex border-[#A68A7E] ">
                 <div className="flex justify-evenly flex-col flex-1 gap-4">
                     <p>Name: {item?.name}</p>
-                    <p>Code: {item?.product?.code}</p>
+                    <p>Code: {item?.code}</p>
                 </div> 
                 <div className="flex-col flex justify-evenly flex-1 gap-4">
                     <p>Price: {Math.round(item?.product?.price)}</p>

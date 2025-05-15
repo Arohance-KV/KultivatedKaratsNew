@@ -179,7 +179,7 @@ export const ProductPage = () => {
                 {productData?._id ? <div className="w-[100%] gap-2 my-4 justify-self-center flex-col flex">
                     <div className="flex my4 w-full gap-2">
                         <Button 
-                            className={cn("flex hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
+                            className={cn("flex text-white hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
                             onClick={async (e) => {
                             if ( (productData?.category?._id == "67fe5da50254f62d3e5fe917" && ringSize == (0)) ) return;
                             setIsCartAddedButtonLoading(true);
@@ -198,7 +198,7 @@ export const ProductPage = () => {
                             setIsInCart(true);
                             return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                         }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button>
-                        <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
+                        <Button className="flex-1 text-white hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
                             if ( (productData?.category?._id == "67fe5da50254f62d3e5fe917" && ringSize == (0)) ) return;
                             setIsWishListAddedButtonLoading(true);
                             e.preventDefault();
@@ -264,7 +264,7 @@ export const ProductPage = () => {
                     </div>}
                         {productData?._id ? <Accordion type="single" collapsible className="w-full">
                             <AccordionItem value="item-1">
-                                <AccordionTrigger>Customization options</AccordionTrigger>
+                                <AccordionTrigger className="">Customization options</AccordionTrigger>
                                     <AccordionContent>
                                         <div className="flex-1">
                                             <div className="flex-1 flex w flex-col gap-4">
@@ -289,15 +289,6 @@ export const ProductPage = () => {
                                                     </Label>
                                                 </RadioGroup>
                                             </div>
-                                            {productData?.category?._id == "67fe5da50254f62d3e5fe917" &&
-                                            <div className="w-full my-4">
-                                                Select a ring size:
-                                                <CustomSelect options={ringSizes} placeholder="Ring size" onValueChange={(value) => {
-                                                    console.log(value);
-                                                    // ringSizeRef.current = Number(value);
-                                                    setRingSize(Number(value));
-                                                }} />
-                                            </div>}
                                             <div className="flex-1 flex w-full h-full flex-col gap-4">
                                                 <p className="">
                                                     Gold karats: 
@@ -432,9 +423,8 @@ export const ProductPage = () => {
                         </p>
                         {<Accordion type="single" collapsible className="w-full">
                             <AccordionItem value="item-1">
-                                <AccordionTrigger>Customization options</AccordionTrigger>
+                                <AccordionTrigger className="sm:max-w-1/2 w-full border px-4 border-[#A68A7E]">Customization options</AccordionTrigger>
                                 <AccordionContent>
-
                                     {productData._id ? <div className="flex">
                                         <div className="flex-1 flex w flex-col gap-4">
                                             <p className="">
@@ -529,15 +519,15 @@ export const ProductPage = () => {
                                             </RadioGroup> */}
                                         </div>
                                         <div className="flex-1">
-                                            {productData?.category?._id == "67fe5da50254f62d3e5fe917" &&
+                                            {/* Desktop view */}
+                                            {/* {productData?.category?._id == "67fe5da50254f62d3e5fe917" &&
                                             <div className="w-full flex flex-col gap-2 my-4">
-                                                {/* Desktop view */}
                                                 Select a ring size:
                                                 <CustomSelect options={ringSizes} placeholder="Ring size" onValueChange={(value) => {
                                                     console.log(value);
                                                     setRingSize(Number(value));
                                                 }} />
-                                            </div>}
+                                            </div>} */}
                                             <div className="flex-1 flex w-full h-full flex-col gap-4">
                                                 <p className="">
                                                     Gold karats:
@@ -588,6 +578,15 @@ export const ProductPage = () => {
                                 </AccordionContent>
                             </AccordionItem>
                         </Accordion>}
+                        {productData?.category?._id == "67fe5da50254f62d3e5fe917" &&
+                            <div className="w-1/2 my-4">
+                                Select a ring size:
+                                <CustomSelect options={ringSizes} placeholder="Ring size" onValueChange={(value) => {
+                                    console.log(value);
+                                    // ringSizeRef.current = Number(value);
+                                    setRingSize(Number(value));
+                                }} />
+                            </div>}
                         <p className="text-xs font-bold"><span className="capitalize">{productData?.category?.name}</span> selected in {karatRef.current}karat gold {productData?.category?._id == `67fe5da50254f62d3e5fe917` && `with ring size: ${ringSize}`}{productData?.containsGemstone && `, coloured stone selection: ${gemstoneRef?.current}`}{addChainRef?.current && `, chain added with pendant with ${chainKaratRef.current}k gold.`}</p>
                         {productData?._id ? productData?.gemStoneColour!= "" && <div className="w-full items-center flex">
                             <p className="flex items-center gap-4">Gemstone colour: <span className="px-4 py-2 border border-[#A68A7E] rounded-md">{productData?.gemStoneColour}</span></p>
@@ -595,7 +594,7 @@ export const ProductPage = () => {
                         <div className="w-[80%] gap-2 justify-self-center flex-col flex">
                             <div className="flex w-full gap-2">
                                 {productData?._id ? <Button 
-                                    className={cn("flex hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
+                                    className={cn("flex text-white hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
                                     onClick={async (e) => {
                                     if ( (productData?.category?._id == "67fe5da50254f62d3e5fe917" && ringSize == (0)) ) return;
                                     setIsCartAddedButtonLoading(true);
@@ -614,7 +613,7 @@ export const ProductPage = () => {
                                     setIsInCart(true);
                                     return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                                 }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button> : <Skeleton className="flex-1 h-10 rounded-md bg-gray-500/10" />}
-                                {productData?._id ? <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
+                                {productData?._id ? <Button className="flex-1 text-white hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
                                     if ( (productData?.category?._id == "67fe5da50254f62d3e5fe917" && ringSize == (0)) ) return;
                                     setIsWishListAddedButtonLoading(true);
                                     e.preventDefault();
@@ -953,7 +952,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   return (
     <div ref={selectRef} className={`relative ${className}`}>
       <button
-        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+        className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
         onClick={() => handleOpenChange(!isOpen)}
         aria-expanded={isOpen}
         aria-controls="radix-select-content-9rkhw0" // Replace with a dynamically generated ID for better uniqueness
@@ -965,7 +964,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 
       {isOpen && (
         <div
-          className="absolute z-50 mt-1 w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
+          className="absolute z-50 mt-1 w-full bg-white overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
           data-state={isOpen ? 'open' : 'closed'}
           id="radix-select-content-9rkhw0" // Ensure this matches aria-controls
         >

@@ -4,7 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Footer } from './components/site/Footer';
 // import { ReactLenis, useLenis } from 'lenis/react'
 import { useEffect, useState } from 'react';
-import { setCategories, setCollections, setCustomerData, setProductData } from './redux/slices/websiteSlice.ts';
+import { setCategories, setCollections, setCustomerData } from './redux/slices/websiteSlice.ts';
 import { useDispatch } from 'react-redux';
 // import { useDispatch } from "react-redux";
 import AnimatedCursor from "react-animated-cursor";
@@ -42,28 +42,28 @@ function App() {
 
   useEffect(() => {
     // console.log(recentlyViewed);
-      (async function() {
-        try {
-            // @ts-ignore
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}products/get-all-products`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include"
-            });
-            // console.log(response);
+    //   (async function() {
+    //     try {
+    //         // @ts-ignore
+    //         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}products/get-all-products`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             credentials: "include"
+    //         });
+    //         // console.log(response);
 
-            if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+    //         if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
             
-            const data = await response.json();
-            dispatch(setProductData(data.data));
-            console.log(data.data);
+    //         const data = await response.json();
+    //         dispatch(setProductData(data.data));
+    //         console.log(data.data);
             
-        } catch (error) {
-            console.log(error);
-        }
-    })();
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // })();
     (async function verify() {
       try {
         console.log(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}`);

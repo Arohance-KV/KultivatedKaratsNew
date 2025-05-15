@@ -34,10 +34,10 @@ export const StoreLocator = () => {
                 </div>
                 <div className="flex flex-col sm:hidden mt-8 w-[90%] self-center justify-self-center min-h-[calc(100vh-300px)]">
                     <Tabs defaultValue={CITIES[0]?.name} className="h-full flex justify-between flex-col">
-                        <TabsList className="flex justify-between w-full">
+                        <TabsList className="flex gap-4 justify-between w-full">
                             {CITIES?.map(City => {
                                 return (
-                                    <TabsTrigger value={City?.name} className="capitalize">
+                                    <TabsTrigger value={City?.name} className="capitalize  playfair-display">
                                         {City?.name}
                                     </TabsTrigger>
                                 )

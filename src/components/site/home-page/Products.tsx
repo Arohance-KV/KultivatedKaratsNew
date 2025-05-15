@@ -4,12 +4,20 @@ import { UIsideBar } from "./Solitare"
 import { Button } from "../../ui/button";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { ICategory, IProduct } from "../../../utils/interfaces";
+import { ICategory, ICollection, IProduct } from "../../../utils/interfaces";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { smallRandomBanners } from "@/utils/constants";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+// import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+// import { Input } from "@/components/ui/input";
+// import { Select, SelectContent, SelectGroup, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { SelectItem, Value } from "@radix-ui/react-select";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
+// import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const Products = () => {
 
@@ -18,23 +26,44 @@ export const Products = () => {
     const categoryFilter = queryParams.get("category-filter");
 
     const [ filters, setFilters ] = useState<{
-        gender: string[];
+        gender: {
+            male: boolean,
+            female: boolean
+        };
         price: { max: number; min: number };
-        gemStone: boolean;
-        gemStoneColour: string[];
+        // gemStone: boolean;
+        // gemStoneColour: string[];
+        categories: string[],
+        collections: string[],
+        meta: {
+            total: number,
+            page: number,
+            totalPages: number
+        }
       }>({
-        gender: [],
+        gender: {
+            male: false,
+            female: false,
+        },
         price: {
             max: 100000000,
             min: 0
         },
-        gemStone: false,
-        gemStoneColour: []
+        // gemStone: false,
+        // gemStoneColour: [],
+        categories: [],
+        collections: [],
+        meta: {
+            total: 0,
+            page: 1,
+            totalPages: 1
+        }
     });
 
     const categoryDataFromStore: ICategory[] = useSelector((state: any) => state.website.categories);
+    const collectionDataFromStore: ICollection[] = useSelector((state: any) => state.website.collections);
 
-    const productDataFromStore = useSelector((state: any) => state.website.productData)
+    // const productDataFromStore = useSelector((state: any) => state.website.productData)
 
     const [ products, setProducts ] = useState<IProduct[]>([]);
 
@@ -51,37 +80,114 @@ export const Products = () => {
 		link: ""
     });
 
+    const visibleProductsCount = 39;
+
+    const [ currentPage, setCurrentPage ] = useState(1);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [ currentPage ]);
+
+    const getProducts = async () => {
+        try {
+            // @ts-ignore
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}products/get-products?page=${currentPage}?limit=${visibleProductsCount}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+                body: JSON.stringify({ filters: filters })
+            });
+            // console.log(response);
+
+            if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+            
+            const data = await response.json();
+            // dispatch(setProductData(data.data));
+            console.log(data.data);
+            setFilters({ ...filters, meta: data.data.meta });
+            // filters.meta = data.data.meta;
+            return (data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // useEffect(() => {
+    //     (async function () {
+    //         await getProducts();
+    //     })();
+    // }, [ visibleProductsCount ]);
+
     useEffect(() => {
         setRandomBanner(smallRandomBanners[Math.floor(Math.random() * 4)]);
+        ( async function () {
+            if ( categoryFilter ) {
+                const category = categoryDataFromStore?.filter(category => {
+                    console.log(category?.name?.trim()?.toLowerCase(), categoryFilter.trim()?.toLowerCase())
+                    return (category?.name?.trim()?.toLowerCase() == categoryFilter.trim()?.toLowerCase());
+                })?.[0];
+                if ( !( filters.categories.includes(category?._id!) ) )
+                    filters.categories.push(category?._id!);
+                // if ( category?.products )
+                // setIsLoading(false);
+            }
+            const productResponse = await getProducts(); 
+            setProducts(productResponse?.data);
+            setIsLoading(false);
+            return console.log(categoryDataFromStore, categoryFilter, products, productResponse);
+        })();
     }, []);
 
     useEffect(() => {
-        setProducts(productDataFromStore);
-    }, [ productDataFromStore ])
-
-    useEffect(() => {
-        if ( categoryFilter ) {
-            const category = categoryDataFromStore?.filter(category => {
-                console.log(category?.name?.trim()?.toLowerCase(), categoryFilter.trim()?.toLowerCase())
-                return (category?.name?.trim()?.toLowerCase() == categoryFilter.trim()?.toLowerCase());
-            })?.[0];
-            if ( category?.products )
-                setProducts(category?.products);
+        setRandomBanner(smallRandomBanners[Math.floor(Math.random() * 4)]);
+        ( async function () {
+            if ( categoryFilter ) {
+                const category = categoryDataFromStore?.filter(category => {
+                    console.log(category?.name?.trim()?.toLowerCase(), categoryFilter.trim()?.toLowerCase())
+                    return (category?.name?.trim()?.toLowerCase() == categoryFilter.trim()?.toLowerCase());
+                })?.[0];
+                if ( !( filters.categories.includes(category?._id!) ) )
+                    filters.categories.push(category?._id!);
+                // if ( category?.products )
+                // setIsLoading(false);
+            }
+            const productResponse = await getProducts(); 
+            setProducts(productResponse?.data);
             setIsLoading(false);
-            return console.log(categoryDataFromStore, categoryFilter, category, products);
-        };
-        setIsLoading(false);
-    }, [ products ]);
+            return console.log(categoryDataFromStore, categoryFilter, products, productResponse);
+        })();
+    }, [ currentPage ]);
 
-    const [ showFilter, setShowFilter ] = useState<Boolean>(false);
+    // useEffect(() => {
+    //     ( async function () {
+    //         if ( categoryFilter ) {
+    //             const category = categoryDataFromStore?.filter(category => {
+    //                 console.log(category?.name?.trim()?.toLowerCase(), categoryFilter.trim()?.toLowerCase())
+    //                 return (category?.name?.trim()?.toLowerCase() == categoryFilter.trim()?.toLowerCase());
+    //             })?.[0];
+    //             if ( !( filters.categories.includes(category?._id!) ) )
+    //                 filters.categories.push(category?._id!);
+    //             // if ( category?.products )
+    //             // setIsLoading(false);
+    //         }
+    //         const productResponse = await getProducts(); 
+    //         setProducts(productResponse?.data);
+    //         setIsLoading(false);
+    //         return console.log(categoryDataFromStore, categoryFilter, products, productResponse);
+    //     })();
+    // }, [ products ]);
+
+    // const [ showFilter, setShowFilter ] = useState<Boolean>(false);
     const [ showSortOptions, setShowSortOptions ] = useState<Boolean>(false);
-
+    const [ dialogOpen, setDialogOpen ] = useState(false);
 
     return (
         <div className="w-full relative playfair-display text-white pb-14">
             <UIsideBar side="left"/>
             <UIsideBar side="right"/>
-            <div className="sm:bg-[#E1C6B3] sm:mt-56 mt-14 gap-4 flex flex-col sm:p-14 px-4 items-center sm:w-[80%] w-full justify-self-center rounded-t-[50px] aspect-video">
+            <div className="sm:bg-[#E1C6B3] relative sm:mt-56 mt-14 gap-4 flex flex-col sm:p-14 px-4 items-center sm:w-[80%] w-full justify-self-center rounded-t-[50px] aspect-video">
                 <div id="top-bar" className="items-center flex w-full text-white text-3xl">
                     <p className="flex items-center flex-1">
                         <p className="sm:text-white sm:block hidden sm:text-lg text-sm text-[#E1C6B3]">
@@ -93,7 +199,7 @@ export const Products = () => {
                     </p>    
                     <div className="flex items-center gap-4 justify-self-end">
                         <div className="relative">
-                            <Button className="rounded-full m-0 px-3 py-4" variant={"ghost"} onClick={() => {
+                        <Button className="rounded-full m-0 px-3 py-4" variant={"ghost"} onClick={() => {
                                 setShowSortOptions(!showSortOptions);
                             }}>
                                 <ArrowUpDown className="fill-[#A68A7E] stroke-[#A68A7E] w-10 h-10"/>
@@ -112,14 +218,310 @@ export const Products = () => {
                                     }}>Price: low to high</Button>
                                 </div>
                             )}
-                        </div>
-                        <div className="relative">
-                            <Button className="rounded-full m-0 px-3 py-4" variant={"ghost"} onClick={() => {
-                                setShowFilter(!showFilter);
-                            }}>
+                            <Button className="rounded-full m-0 px-3 py-4" variant={"ghost"} onClick={() => setDialogOpen(!dialogOpen)}>
                                 <Filter className="fill-[#A68A7E] stroke-[#A68A7E] w-10 h-10"/>
                             </Button>
-                            {showFilter && (
+                            <div className={cn("w-screen h-screen z-50 fixed top-0 bottom-0 right-0 left-0 bg-gray-500/50", dialogOpen ? "visible" : "hidden")}>
+                                <div>
+                                </div>
+                                <div className="fixed rounded-md border-[#A68A7E] border p-8  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[550px] inria-serif-regular text-[#A68A7E] bg-white">
+                                    <div>
+                                        <div>Filters</div>
+                                        {/* <DialogDescription> */}
+                                        {/* </DialogDescription> */}
+                                    </div>
+                                    <div className="grid gap-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="name" className="text-right">
+                                                Gender
+                                            </Label>
+                                            <div className="flex items-center text-sm gap-2">
+                                                Male
+                                                <Checkbox defaultChecked={filters.gender.male} onCheckedChange={(value) => {
+                                                    // console.log(value, typeof value);
+                                                    setFilters({ ...filters, gender: { ...filters.gender, male: (value as boolean) } })
+                                                    // filters.gender.male = (value as boolean);
+                                                }} className=""/>
+                                            </div>
+                                            <div className="flex text-sm items-center gap-2">
+                                                Female
+                                                <Checkbox defaultChecked={filters.gender.female} onCheckedChange={(value) => {
+                                                    // console.log(value, typeof value);
+                                                    setFilters({ ...filters, gender: { ...filters.gender, female: (value as boolean) } })
+                                                    // filters.gender.female = (value as boolean);
+                                                }} className=""/>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="username" className="text-right">
+                                                Category
+                                            </Label>
+                                            <Accordion type="single" collapsible className=" col-span-3 w-full">
+                                                <AccordionItem value="item-1 col-span-3 w-full">
+                                                    <AccordionTrigger>Select categories</AccordionTrigger>
+                                                    <AccordionContent className="flex flex-wrap gap-4 w-full">
+                                                        {categoryDataFromStore?.map(category => {
+                                                            return (
+                                                                <div className="flex justify-center items-center gap-2">
+                                                                    <Label>{category?.name}</Label>
+                                                                    <Checkbox defaultChecked={filters.categories.includes(category?._id!)} className="capitalize" onCheckedChange={(value) => {
+                                                                        if ( value )
+                                                                            return filters.categories.push(category?._id!);
+                                                                        setFilters({ ...filters, categories: filters.categories.filter(
+                                                                            (id) => id !== category?._id
+                                                                        ) });
+                                                                    }} value={category?._id!}>{category?.name}</Checkbox>
+                                                                </div>
+                                                            )
+                                                        })}
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="username" className="text-right">
+                                                Collections
+                                            </Label>
+                                            <Accordion type="single" collapsible className="col-span-3 w-full">
+                                                <AccordionItem value="item-1">
+                                                    <AccordionTrigger>Select Collections</AccordionTrigger>
+                                                    <AccordionContent className="flex gap-4 flex-wrap">
+                                                        {collectionDataFromStore?.map(collection => {
+                                                            return (
+                                                                <div className="gap-2 flex justify-center items-center">
+                                                                    <Label>{collection?.name}</Label>
+                                                                    <Checkbox defaultChecked={filters.collections.includes(collection?._id!)} className="capitalize" onCheckedChange={(value) => {
+                                                                        if ( value )
+                                                                            return setFilters({ ...filters, collections: [ ...filters.collections, collection?._id! ] }) 
+                                                                        setFilters({ ...filters, collections: filters.collections.filter(
+                                                                            (id) => id !== collection?._id
+                                                                        ) });
+                                                                    }} value={collection?._id!}>{collection?.name}</Checkbox>
+                                                                </div>
+                                                            )
+                                                        })}
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>                                    
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="username" className="text-right">
+                                                Price
+                                            </Label>
+                                            <RadioGroup defaultValue={filters?.price?.max == 20000 ? "<20k" : filters?.price?.max == 40000 ? "<40k" : filters?.price?.max == 60000 ? "<60k" : filters?.price?.max == 80000 ? "<80k" : filters?.price?.max == 100000 ? "<100k" : filters?.price?.min == 100000 ? ">100k" : ""}
+                                                className="flex sm:flex-row flex-wrap flex-col w-full col-span-3 gap-4" onValueChange={(value) => {
+                                                    switch (value) {
+                                                        case "<20k":
+                                                            setFilters({ ...filters, price: { min: 0, max: 20000 } });
+                                                        break;
+                                                        case "<40k":
+                                                            setFilters({ ...filters, price: {min: 0, max: 40000 } });
+                                                        break;
+                                                        case "<60k":
+                                                            setFilters({ ...filters, price: { min: 0, max: 60000 } });
+                                                        break;
+                                                        case "<80k":
+                                                            setFilters({ ...filters, price: { min: 0, max: 80000 } });
+                                                        break;
+                                                        case "<100k":
+                                                            setFilters({ ...filters, price: { min: 0, max: 100000 } });
+                                                        break;
+                                                        case ">100k":
+                                                            setFilters({ ...filters, price: { min: 80000, max: 10000000 } });
+                                                        break;
+                                                    }
+                                                }}
+                                            >
+                                                <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="<20k" id="<20k" />
+                                                <Label className="text-nowrap" htmlFor="<20k">0 - 20k</Label>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="<40k" id="<40k" />
+                                                <Label className="text-nowrap" htmlFor="<40k">{"<"} 40k</Label>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="<60k" id="<60k" />
+                                                <Label className="text-nowrap" htmlFor="<60k">{"<"} 60k</Label>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="<80k" id="<80k" />
+                                                <Label className="text-nowrap" htmlFor="<80k">{"<"} 80k</Label>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="<100k" id="<100k" />
+                                                <Label className="text-nowrap" htmlFor="<100k">{"<"} 100k</Label>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value=">100k" id=">100k" />
+                                                <Label className="text-nowrap" htmlFor=">100k">{">"} 100k</Label>
+                                                </div>
+                                            </RadioGroup>
+                                        </div>
+                                        </div>
+                                        <div className="flex justify-end">
+                                            <Button variant={"ghost"} className="bg-white border border-[#A68A7E] self-center justify-self-center" onClick={ async () => {
+                                                const data = await getProducts();
+                                                setProducts(data.data);
+                                                setDialogOpen(false);
+                                            }}>Apply filter</Button>
+                                        </div>
+                                    </div>
+                            </div>
+                            {/* <Dialog open={dialogOpen} onOpenChange={() => setDialogOpen(!dialogOpen)}>
+                                <DialogTrigger asChild>
+                                    <Button className="rounded-full m-0 px-3 py-4" variant={"ghost"}>
+                                        <Filter className="fill-[#A68A7E] stroke-[#A68A7E] w-10 h-10"/>
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[550px] inria-serif-regular text-[#A68A7E] bg-white">
+                                    <DialogHeader>
+                                        <DialogTitle>Filters</DialogTitle>
+                                        <DialogDescription>
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid  gap-4 py-4">
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="name" className="text-right">
+                                            Gender
+                                        </Label>
+                                        <div className="flex items-center gap-2">
+                                            Male
+                                            <Checkbox defaultChecked={filters.gender.male} onCheckedChange={(value) => {
+                                                // console.log(value, typeof value);
+                                                setFilters({ ...filters, gender: { ...filters.gender, male: (value as boolean) } })
+                                                // filters.gender.male = (value as boolean);
+                                            }} className=""/>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            Female
+                                            <Checkbox defaultChecked={filters.gender.female} onCheckedChange={(value) => {
+                                                // console.log(value, typeof value);
+                                                setFilters({ ...filters, gender: { ...filters.gender, female: (value as boolean) } })
+                                                // filters.gender.female = (value as boolean);
+                                            }} className=""/>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="username" className="text-right">
+                                            Category
+                                        </Label>
+                                        <Accordion type="single" collapsible className=" col-span-3 w-full">
+                                            <AccordionItem value="item-1 col-span-3 w-full">
+                                                <AccordionTrigger>Select categories</AccordionTrigger>
+                                                <AccordionContent className="flex flex-wrap gap-4 w-full">
+                                                    {categoryDataFromStore?.map(category => {
+                                                        return (
+                                                            <div className="flex justify-center items-center gap-2">
+                                                                <Label>{category?.name}</Label>
+                                                                <Checkbox defaultChecked={filters.categories.includes(category?._id!)} className="capitalize" onCheckedChange={(value) => {
+                                                                    if ( value )
+                                                                        return filters.categories.push(category?._id!);
+                                                                    setFilters({ ...filters, categories: filters.collections.filter(
+                                                                        (id) => id !== category?._id
+                                                                    ) });
+                                                                }} value={category?._id!}>{category?.name}</Checkbox>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="username" className="text-right">
+                                            Collections
+                                        </Label>
+                                        <Accordion type="single" collapsible className="col-span-3 w-full">
+                                            <AccordionItem value="item-1">
+                                                <AccordionTrigger>Select Collections</AccordionTrigger>
+                                                <AccordionContent className="flex gap-4 flex-wrap">
+                                                    {collectionDataFromStore?.map(collection => {
+                                                        return (
+                                                            <div className="gap-2 flex justify-center items-center">
+                                                                <Label>{collection?.name}</Label>
+                                                                <Checkbox defaultChecked={filters.collections.includes(collection?._id!)} className="capitalize" onCheckedChange={(value) => {
+                                                                    if ( value )
+                                                                        return setFilters({ ...filters, collections: [ ...filters.collections, collection?._id! ] }) 
+                                                                    setFilters({ ...filters, collections: filters.collections.filter(
+                                                                        (id) => id !== collection?._id
+                                                                    ) });
+                                                                }} value={collection?._id!}>{collection?.name}</Checkbox>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>                                    
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="username" className="text-right">
+                                            Price
+                                        </Label>
+                                        <RadioGroup defaultValue={filters?.price?.max == 20000 ? "<20k" : filters?.price?.max == 40000 ? "<40k" : filters?.price?.max == 60000 ? "<60k" : filters?.price?.max == 80000 ? "<80k" : filters?.price?.max == 100000 ? "<100k" : filters?.price?.min == 100000 ? ">100k" : ""}
+                                            className="flex sm:flex-row flex-wrap flex-col w-full col-span-3 gap-4" onValueChange={(value) => {
+                                                switch (value) {
+                                                    case "<20k":
+                                                        setFilters({ ...filters, price: { min: 0, max: 20000 } });
+                                                    break;
+                                                    case "<40k":
+                                                        setFilters({ ...filters, price: {min: 0, max: 40000 } });
+                                                    break;
+                                                    case "<60k":
+                                                        setFilters({ ...filters, price: { min: 0, max: 60000 } });
+                                                    break;
+                                                    case "<80k":
+                                                        setFilters({ ...filters, price: { min: 0, max: 80000 } });
+                                                    break;
+                                                    case "<100k":
+                                                        setFilters({ ...filters, price: { min: 0, max: 100000 } });
+                                                    break;
+                                                    case ">100k":
+                                                        setFilters({ ...filters, price: { min: 80000, max: 10000000 } });
+                                                    break;
+                                                }
+                                            }}
+                                        >
+                                            <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="<20k" id="<20k" />
+                                            <Label className="text-nowrap" htmlFor="<20k">0 - 20k</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="<40k" id="<40k" />
+                                            <Label className="text-nowrap" htmlFor="<40k">{"<"} 40k</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="<60k" id="<60k" />
+                                            <Label className="text-nowrap" htmlFor="<60k">{"<"} 60k</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="<80k" id="<80k" />
+                                            <Label className="text-nowrap" htmlFor="<80k">{"<"} 80k</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value="<100k" id="<100k" />
+                                            <Label className="text-nowrap" htmlFor="<100k">{"<"} 100k</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                            <RadioGroupItem value=">100k" id=">100k" />
+                                            <Label className="text-nowrap" htmlFor=">100k">{">"} 100k</Label>
+                                            </div>
+                                        </RadioGroup>
+                                    </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <Button variant={"ghost"} className="" onClick={ async () => {
+                                            const data = await getProducts();
+                                            setProducts(data.data);
+                                            setDialogOpen(false);
+                                        }}>Apply filter</Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog> */}
+                        </div>
+                        <div className="">
+                            
+                            {/* {showFilter && (
                                 <div className="sm:min-w-14 z-50 absolute flex flex-col border border-[#A68A7E] p-6 sm:bottom-[150%] top-[150%]  right-0 rounded-lg bg-white text-[#A68A7E]">
                                     <div className="flex text-lg items-center gap-2">
                                         Gender:
@@ -200,7 +602,7 @@ export const Products = () => {
                                         </RadioGroup>
                                     </div>
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </div>
@@ -210,7 +612,7 @@ export const Products = () => {
                             <img src={randomBanner?.imageUrl!?.url} className="w-full h-full object-cover" alt="" />
                         </a>}
                         {isLoading ? <Loader2 className="sm:stroke-white stroke-[#E1C6B3] self-center justify-self-center" /> : products
-                        ?.filter((item: IProduct) => {
+                        /*?.filter((item: IProduct) => {
                         const withinPriceRange =
                             item.price >= filters.price.min && item.price <= filters.price.max;
 
@@ -219,7 +621,7 @@ export const Products = () => {
                             filters.gender.includes(item.gender?.toLowerCase());
 
                         return withinPriceRange && matchesGender;
-                        })?.map((item : IProduct) => {
+                        })*/?.map((item : IProduct) => {
                             // return ((item?.price > filters?.price?.min && item?.price < filters?.price?.max) && (filters?.gemStoneColour?.filter((colour:string)  => colour?.toLowerCase()?.trim() == item?.gemStoneColour).length > 0) ) ? (
                             // return ((item?.price > filters?.price?.min && item?.price < filters?.price?.max)) ? (
                                 // return (<button className="flex w-full h-full bg-green-500 flex-col col-span-1 hover:cursor-pointer hover:scale-105 transition-all gap-4" onClick={(e) => {
@@ -235,9 +637,48 @@ export const Products = () => {
                                 </button>
                             );
                         })}
+                        <Pagination className="absolute bottom-4">
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                        className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                                    />
+                                </PaginationItem>
+                                {/* {[...Array(9)].map((_, index) => (
+                                    <PaginationItem key={index}>
+                                        <PaginationLink
+                                            href="#"
+                                            isActive={currentPage === index + 1}
+                                            onClick={() => setCurrentPage(index + 1)}
+                                        >
+                                        {index + 1}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))} */}
+
+                                {[...Array(filters.meta.totalPages)].map((_, index) => (
+                                    <PaginationItem key={index}>
+                                        <PaginationLink
+                                        isActive={currentPage === index + 1}
+                                        onClick={() => setCurrentPage(index + 1)}
+                                        >
+                                        {index + 1}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+
+                                <PaginationItem>
+                                    <PaginationNext
+                                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, filters.meta.totalPages))}
+                                        className={currentPage === filters.meta.total ? "pointer-events-none opacity-50" : ""}
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
                     </div>
                 </div>}
             </div>
         </div>
     );
-}
+};

@@ -489,7 +489,7 @@ export const HomePage = () => {
                     </p>
                     <Button onClick={(e) => {
                         e.preventDefault();
-                        navigate("/collections");
+                        navigate("/products");
                     }} className="bg-[#E9D6C8] px-10 text-white rounded-none transition-all border-2 hover:text-[#BFA6A1] hover:bg-white border-[#BFA6A1]">See more</Button>
                     <div id="carousel" className="bg-pink-300/30 aspect-video h-[80%]">
                         <img src="/KultivatedKaratsAssets/collections-banner.png" className="w-full h-full object-cover" alt="" />
@@ -645,8 +645,8 @@ export const HomePage = () => {
                             swipeable
                         >
                             {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
-                            <img src="/home-page-banner-2.png" className="w-full h-full m-auto object-cover" alt="" />
                             <img src="/banner.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="/home-page-banner-2.png" className="w-full h-full m-auto object-cover" alt="" />
                         </Carousel>
                         <div id="social-links" className="flex text-white flex-col gap-4 w-auto absolute right-[5%] bottom-[15%]">
                             <Link to={INSTAGRAM}>
@@ -677,7 +677,7 @@ export const HomePage = () => {
                     <div className="italic sm:hidden p-4 sm:text-2xl text-sm  text-[#BFA6A1] flex justify-center items-center">
                         At Kultivated Karats, trust is our foundation. From pure diamonds to honest service, we ensure jewelry you can cherish with confidence
                     </div>
-                    <Button onClick={() => navigate("/about")} className="bg-[#BFA6A1] mb-8 text-white px-4 rounded-none sm:hidden block">About us</Button>
+                    <Button onClick={() => navigate("/about")} className="bg-[#BFA6A1] mb-8 text-white! px-4 rounded-none sm:hidden block">About us</Button>
                     <div className="flex gap-4 scale-50 sm:scale-100">
                         <div id="card" className="rounded-[25%] overflow-hidden shadow-[0px_0px_20px_0px_rgba(119,96,23,0.25)] flex p-4 items-center justify-center border-[#C5B2A1] border-2 text-[#C5B2A1] flex-col max-w-[150px] aspect-square">
                             {aboutUsEmblem == 0 ? <>
@@ -694,9 +694,9 @@ export const HomePage = () => {
                     </div>
                     <div className="sm:flex hidden items-center h-full flex-1 w-[400px] sm:visible">
                         <Link to={"/about"}>
-                            <Button className="uppercase text-sm rounded-none px-10 bg-[#BFA6A1]">About us</Button>
+                            <Button className="uppercase text-sm rounded-none text-white px-10 bg-[#BFA6A1]">About us</Button>
                         </Link>
-                        <div className="flex-[0.5] border-1 h-[5px] w-full bg-[#BFA6A1]"></div>
+                        <div className="flex-[0.5] border-1 h-[5px] w-full border-[#BFA6A1] bg-[#BFA6A1]"></div>
                         <div className="relative h-[150px] w-full flex-1">
                             <div className="border-[#BFA6A1] text-[#BFA6A1] italic p-10 border-4 flex justify-center items-center w-[97%] text-wrap h-[90%] bottom-0 left-0 absolute">
                                 At Kultivated Karats, trust is our foundation. From pure diamonds to honest service, we ensure jewelry you can cherish with confidence
@@ -871,7 +871,7 @@ export const HomePage = () => {
                                 <div className="flex-1">
                                     <Button onClick={(e) => {
                                         e.preventDefault();
-                                        navigate("/collections");
+                                        navigate("/products");
                                     }} className="bg-[#E9D6C8] px-10 text-white rounded-none transition-all border-2 hover:text-[#BFA6A1] hover:bg-white border-[#BFA6A1]">See more</Button>
                                 </div>
                             </div>

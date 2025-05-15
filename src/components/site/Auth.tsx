@@ -15,10 +15,11 @@ import { useDispatch, useSelector } from "react-redux";
 // import { setCustomerData } from "@/redux/slices/websiteSlice";
 // import { GoogleLogin } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
-import { IUser } from "@/utils/interfaces";
+import { ICartItem, IUser } from "@/utils/interfaces";
 import { setCustomerData } from "@/redux/slices/websiteSlice";
 import { toast } from "sonner";
 import { ToastSuccess } from "@/utils/UtilityComponents";
+import { updateCart } from "@/utils/utilityFunctions";
 // import { updateCart, updateVideoCallCart, updateWishList } from "@/utils/utilityFunctions";
 // import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 // import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
@@ -239,13 +240,10 @@ export const Auth = () => {
 
                         console.log(guestCart, guestCart?.length);
 
-                        // guestCart.forEach((item : ICartItem) => {
-                        //     console.log(item, data?.data?.user?.cart);
-                        //     if ( guestCart?.filter((cartItem : ICartItem) => cartItem?.product?._id == item?.product?._id)?.length > 0 ) {
-                        //         return updateCart(item, true, true, data?.data?.user?.cart, dispatch, true, data?.data?.user?.wishList, data?.data?.user?.videoCallCart);
-                        //     }
-                        //     updateCart(item, true, false, data?.data?.user?.cart, dispatch, true, data?.data?.user?.wishList, data?.data?.user?.videoCallCart);
-                        // });
+                        guestCart.forEach( async (item : ICartItem) => {
+                            console.log(item, data?.data?.user?.cart);
+                            return guestCart?.filter((cartItem : ICartItem) => cartItem?.product?._id == item?.product?._id)?.length > 0 ? updateCart(item, true, true, data?.data?.user?.cart, dispatch, true, data?.data?.user?.wishList, data?.data?.user?.videoCallCart) : updateCart(item, true, false, data?.data?.user?.cart, dispatch, true, data?.data?.user?.wishList, data?.data?.user?.videoCallCart);
+                        });
 
                         // guestWishList.forEach((item : IWishListItem) => {
                         //     if ( guestWishList?.filter((wishListItem : IWishListItem) => wishListItem?.product?._id == item?.product?._id)?.length > 0 )
