@@ -978,11 +978,11 @@ const BlogSection = () => {
 
     return (
         <>
-            <section id="blog-section-mobile" className="w-[100] sm:hidden flex flex-col text-[#BFA6A1] playfair-display">
+            <section id="blog-section-mobile" className="w-[100%] sm:hidden flex flex-col text-[#BFA6A1] playfair-display">
                 <p className="text-xl text-center w-full relative">Our blog</p>
                 {/* <p className="">Discover the Brilliance Behind Every Gem Where Every Karat Tells a Story.</p> */}
                 <div className="p-[5%] justify-evenly gap-[5%] flex flex-col w-full flex-1">
-                    <BlogCarousel className="relative bg-red-900 w-[80%] self-center">
+                    <BlogCarousel className="relative w-[80%] self-center">
                         <CarouselContent>
                             <CarouselItem>
                                 <div className="flex flex-col rounded-md flex-1">
