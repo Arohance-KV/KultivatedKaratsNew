@@ -417,7 +417,7 @@ export const Products = () => {
                                                 setProducts(data.data);
                                                 setDialogOpen(false);
                                                 setIsApplyFilterLoading(false);
-                                            }}>{isApplyFilterLoading ? <Loader2 className="w-4 aspect-square"/> : "Apply filters"}</Button>
+                                            }}>{isApplyFilterLoading ? <Loader2 className="w-4 animate-spin aspect-square"/> : "Apply filters"}</Button>
                                         </div>
                                     </div>
                             </div>
@@ -449,7 +449,7 @@ export const Products = () => {
                                     e.preventDefault();
                                     navigate(`/product/${item?._id}`);
                                 }}>
-                                    {item?.imageUrl ? <img src={item?.imageUrl[0]?.url} alt="" className="bg-white sm:min-w-56 object-cover aspect-square"/> : <div className="stroke-[#A68A7E] bg-white sm:min-w-56 object-cover aspect-square" ><Loader2 className="w-4 aspect-square" /></div>}
+                                    {item?.imageUrl ? <img src={item?.imageUrl[0]?.url} alt="" className="bg-white sm:min-w-56 object-cover aspect-square"/> : <div className="stroke-[#A68A7E] bg-white sm:min-w-56 object-cover aspect-square" ><Loader2 className="w-4 aspect-square animate-spin" /></div>}
                                         <div className="sm:text-white text-[#E1C6B3] text-[4px] flex justify-between">
                                     </div>
                                 </button>
