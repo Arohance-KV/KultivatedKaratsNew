@@ -13,7 +13,7 @@ export const MobileNav = () => {
   const menuItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Collection', href: '/collections' },
+    // { name: 'Collection', href: '/collections' },
     { name: 'Products', href: '/products' },
     { name: 'Store locator', href: '/store-locator' },
     { name: 'Giftcard', href: '/giftcards' },
