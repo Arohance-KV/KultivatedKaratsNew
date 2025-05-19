@@ -506,7 +506,7 @@ export const HomePage = () => {
                     </div>
                     <div onClick={(e) => {
                         e.preventDefault();
-                        navigate("/products?category-filter=earrings");
+                        navigate("/products?category-filter=earring");
                     }} className="border text-white inria-serif-regular flex-col justify-center items-center border-[#BFA6A1] w-[80%] flex bg-[#BFA6A1]">
                         <img src="/mobile-earings.png" className="w-full bg-white aspect-square" alt="" />
                         <p className="py-4">Earings</p>
