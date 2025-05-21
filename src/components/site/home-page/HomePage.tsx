@@ -445,7 +445,64 @@ export const HomePage = () => {
         <>
             <div className="sm:hidden w-full gap-14 min-h-screen flex-col flex">
                 <section className="w-[80%] aspect-square bg-white self-center mt-14">
-                    <img src="/mobile-banner.png" className="w-full h-full object-cover" alt="" />
+                    <Carousel
+                            customDot={<CustomDot />}
+                            customRightArrow={<CustomRightArrow onClick={() => {}} />}
+                            customLeftArrow={<CustomLeftArrow onClick={() => {}} />}
+                            additionalTransfrom={0}
+                            arrows
+                            autoPlaySpeed={3000}
+                            centerMode={false}
+                            className="home-page-carousel absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full"
+                            containerClass="home-page-carousel-container"
+                            dotListClass="absolute! bottom-8!"
+                            draggable
+                            focusOnSelect={false}
+                            infinite
+                            itemClass=""
+                            keyBoardControl
+                            minimumTouchDrag={80}
+                            pauseOnHover
+                            renderArrowsWhenDisabled={false}
+                            renderButtonGroupOutside={false}
+                            renderDotsOutside={false}
+                            responsive={{
+                                desktop: {
+                                breakpoint: {
+                                    max: 3000,
+                                    min: 1024
+                                },
+                                items: 1
+                                },
+                                mobile: {
+                                breakpoint: {
+                                    max: 464,
+                                    min: 0
+                                },
+                                items: 1
+                                },
+                                tablet: {
+                                breakpoint: {
+                                    max: 1024,
+                                    min: 464
+                                },
+                                items: 1
+                                }
+                            }}
+                            rewind={false}
+                            rewindWithAnimation={false}
+                            rtl={false}
+                            shouldResetAutoplay
+                            showDots
+                            sliderClass=""
+                            slidesToSlide={1}
+                            swipeable
+                        >
+                            {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
+                            <img src="/mobile-banner.png" className="w-full h-full object-cover" alt="" />
+                            <img src="/mobile-banner-2.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="/mobile-banner-3.png" className="w-full h-full m-auto object-cover" alt="" />
+                        </Carousel>
                 </section>
                 <section className="inria-serif-regular text-[#BFA6A1] flex flex-col justify-center items-center gap-4">
                     <p className="text-center px-4">

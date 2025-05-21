@@ -239,7 +239,7 @@ export const ProductPage = () => {
                     </p>}
                 </div> : <Skeleton className="w-full h-full bg-red-500" />}
                     <p className="text-xs font-bold"><span className="capitalize">{productData?.category?.name}</span> selected in {karatRef.current}karat gold</p>
-                    <div className="flex my-4">
+                    <div className="flex flex-col my-4">
                     {productData?.containsGemstone && <div className="flex flex-col gap-4">
                         <p className="">
                             Coloured stone type: 
