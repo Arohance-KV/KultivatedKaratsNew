@@ -4,14 +4,70 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { clearCart, sendEmail, updateCart } from "@/utils/utilityFunctions";
-import { Loader2, Minus, Trash2 } from "lucide-react";
+import { Loader2, LucidePhone, Minus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Dispatch } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { setCustomerData } from "@/redux/slices/websiteSlice";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ToastSuccess, ToastWarning } from "@/utils/UtilityComponents";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+const phoneSchema = z.object({
+    phone: z
+        .string()
+        .min(10, { message: "Phone number must be at least 10 digits" })
+        .max(15, { message: "Phone number can't exceed 15 digits" })
+        .regex(/^[0-9]+$/, { message: "Phone number must contain only digits" }),
+});
 
 export const CartPage = () => {
+
+    const form = useForm<z.infer<typeof phoneSchema>>({
+        resolver: zodResolver(phoneSchema),
+        defaultValues: {
+        phone: "",
+        },
+    });
+
+    const [ isSubmitLoading, setIsSubmitLoading ] = useState(false);
+    const [ phoneDialogOpen, setPhoneDialogOpen ] = useState(false);
+
+    const onSubmit = async (data: z.infer<typeof phoneSchema>) => {
+        setIsSubmitLoading(true);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}users/update-user-phone`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ phoneNumber: data?.phone })
+            });
+
+            const responseJson = await response.json();
+
+            console.log(responseJson);
+
+            if ( !response )
+                throw Error("Phone updation failed");
+
+            dispatch(setCustomerData({ ...responseJson?.data }!));
+            toast.success("Phone number updated successfully!", { icon: <ToastSuccess />, className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white" });
+            
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to update phone number!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastWarning /> });
+        } finally { 
+            setIsSubmitLoading(false);
+            setPhoneDialogOpen(false);
+        }
+        // Add your phone submission logic here
+    };
 
     const navigate = useNavigate();
 
@@ -112,13 +168,46 @@ export const CartPage = () => {
         <div className='w-full playfair-display! relative pb-14'>
             <UIsideBar side="left"/>
             <UIsideBar side="right"/>
-            <div id='solitare-main' className="sm:bg-[#E1C6B3] opacity-0 sm:mt-56 gap-4 flex flex-col items-center sm:w-[80%] w-full justify-self-center rounded-tr-[100px]  overflow-y-scroll no-scrollbar h-screen">
-                <div className="w-full mt-14 text-center  flex flex-col gap-8 h-full text-white ">
+            <Dialog open={phoneDialogOpen} onOpenChange={() => setPhoneDialogOpen(!phoneDialogOpen)}>
+                {/* <DialogTrigger asChild> */}
+                    {/* <Button variant="outline">Edit Profile</Button> */}
+                {/* </DialogTrigger> */}
+                <DialogContent className="sm:max-w-[425px] border border-[#A68A7E] text-[#A68A7E] bg-white">
+                    <DialogHeader>
+                        <DialogTitle>Enter your phone number</DialogTitle>
+                        <DialogDescription>
+                            Enter your phone number below to continue!
+                        </DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form className="flex flex-col gap-y-4 inria-serif-regular" onSubmit={form.handleSubmit(onSubmit)}>
+                            <FormField
+                                control={form.control}
+                                name="phone"
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Phone Number</FormLabel>
+                                    <FormControl>
+                                        <Input type="tel" placeholder="e.g. 9876543210" {...field} />
+                                    </FormControl>
+                                    <FormMessage className="text-red-800/40 font-bold"/>
+                                    </FormItem>
+                                )}
+                            />
+                            <Button disabled={isSubmitLoading} variant={"ghost"} className="border-[#A68A7E] hover:text-white hover:bg-[#A68A7E] border bg-white text-[#A68A7E] w-auto" type="submit">{isSubmitLoading ? <Loader2 className="animate-spin w-4 aspect-square"/> : "Save phone number"} <LucidePhone /></Button>
+                        </form>
+                    </Form>
+                    <DialogFooter>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <div id='solitare-main' className="sm:bg-[#E1C6B3] opacity-0 sm:mt-56 gap-4 flex flex-col items-center sm:w-[80%] w-full justify-self-center sm:rounded-tr-[100px] overflow-y-scroll no-scrollbar h-screen">
+                <div className="w-full mt-14 text-center  flex flex-col gap-8 h-full text-[#A68A7E] sm:text-white ">
                     <p className="inria-serif-regular text-6xl">
                         Cart                    
                     </p>
                     <div className="w-[90%] max-h-full gap-4 h-full mx-[5%] pb-8 flex sm:flex-row flex-col">
-                        <div className="flex-[0.6]  flex gap-4 overflow-y-scroll no-scrollbar flex-col">
+                        <div className="flex-[0.6] sm:h-auto min-h-[50vh] py-4 flex gap-4 overflow-y-scroll no-scrollbar flex-col">
                             {cartItems?.map((cartItem: ICartItem) => (<CartItem customerData={customerData} dispatch={dispatch} cartItem={cartItem} cartItems={cartItems} setCartItems={setCartItems} />))}
                         </div>
                         <div className="text inria-serif-regular text-[#A68A7E] flex flex-col border-2 bg-white border-[#BFA6A1] rounded-md h-full flex-[0.4]">
@@ -196,12 +285,14 @@ export const CartPage = () => {
                                     }} variant={"ghost"}>Apply</Button>
                                 </div>
                                 <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
-                                    if ( customerData?._id == null ) return navigate("/auth");
-                                    if ( customerData?.phoneNumber == undefined || customerData?.phoneNumber == null) {
-
-                                    }
+                                    if ( customerData?._id == null )
+                                         return navigate("/auth");
+                                    if ( !customerData?.phoneNumber || customerData?.phoneNumber == undefined || customerData?.phoneNumber == null || Number.isNaN(customerData?.phoneNumber))
+                                        return setPhoneDialogOpen(true);
                                     e.preventDefault();
                                     setIsPlaceOrderButtonLoading(true);
+                                    if ( customerData?.address?.city == null )
+                                        return navigate("/set-shipping");
                                     if ( customerData?.address?.city == null )
                                         return navigate("/set-shipping");
                                     try {
@@ -349,20 +440,10 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
     if (typeof cartItem == "object")
 
     return (    
-        <div className="w-full relative flex gap-4">
-            <img src={cartItem?.product?.imageUrl[0]?.url} className="sm:h-32 h-20 border-2 border-[#BFA6A1] aspect-square object-cover rounded-md" alt="" />
-            <div className=" flex-1 bg-white border-2 border-[#BFA6A1] px-8 flex rounded-md text-[#A68A7E] inria-serif-regular">
-                <div className="flex-1 flex flex-col justify-around items-start">
-                    <p>{cartItem?.product?.name}</p>
-                    {cartItem?.ringSize && <p>Ring size: {cartItem?.ringSize}</p>}
-                    {/* {cartItem?.product?.productId! && <p>code: {cartItem?.product?.productId}</p>} */}
-
-                </div>
-                <div className="flex-1 flex flex-col justify-around items-end">
-                    <p>{Math.round(cartItem?.totalPrice)}</p>
-                    <p>Quantity: {cartItem?.quantity}</p>
-                </div>
-                <Button disabled={isRemoveItemLoadingButton} variant={"ghost"} className="rounded-full py-3 px-1 w-0 h-0 ml-4 mt-4 bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={async (e) => {
+        <div className="sm:text-base text-sm w-full relative overflow-y-visible! flex gap-4">
+            <div className="relative sm:h-32 h-20 border-2 border-[#BFA6A1] aspect-square rounded-md">
+                <img src={cartItem?.product?.imageUrl[0]?.url} className="object-cover rounded-[inherit] h-full w-full" alt="" />
+                <Button disabled={isRemoveItemLoadingButton} variant={"ghost"} className="absolute z-30 rounded-full py-3 px-1 w-0 h-0 -translate-y-1/2 translate-x-1/2 right-0 top-0 bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={async (e) => {
                     e.preventDefault();
                     setIsRemoveItemLoadingButton(true);
                     const response = await updateCart({ containsGemstone: cartItem?.product?.containsGemstone , product: cartItem.product!, quantity: 1, color: "white", karat: 14, totalPrice: 0 }, false, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
@@ -372,6 +453,18 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
                     // setIsInVideoCallCart(false);
                     return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });            
                 }}>{isRemoveItemLoadingButton ? <Loader2 className="w-2 h-2 animate-spin" /> : <Minus className="w-2 h-2" />}</Button>
+            </div>
+            <div className="flex-1 sm:bg-white border-2 border-[#BFA6A1] px-8 overflow-visible flex rounded-md text-[#A68A7E] inria-serif-regular">
+                <div className="flex-1 sm:text-base text-sm flex flex-col justify-between items-start">
+                    <p>{cartItem?.product?.name}</p>
+                    {cartItem?.ringSize !==0 && <p>Ring size: {cartItem?.ringSize}</p>}
+                    {/* {cartItem?.product?.productId! && <p>code: {cartItem?.product?.productId}</p>} */}
+
+                </div>
+                <div className="flex-1 flex flex-col justify-around items-end">
+                    <p>₹{Math.round(cartItem?.totalPrice)}</p>
+                    <p>Quantity: {cartItem?.quantity}</p>
+                </div>
             </div>
         </div>
     );

@@ -81,7 +81,7 @@ export const ProductPage = () => {
         })();
     }, []);    
 
-    const [ diamondCalculation, setDiamondCalculation ] = useState<{ subTotal: number, total: number, grossWeight: number, goldRate: number, solitareRate: number, multiDiaRate: number, pointersRate: number, diamondRate: number, makingCharges: number, pendantChainPrice: number, gemstonePointerRate: number, gemstoneSolRate: number }>();
+    const [ diamondCalculation, setDiamondCalculation ] = useState<{ subTotal: number, total: number, grossWeight: number, goldRate: number, solitareRate: number, multiDiaRate: number, pointersRate: number, diamondRate: number, makingCharges: number, pendantChainPrice: number, gemstonePointerRate: number, gemstoneSolRate: number, CERTIFICATION_CHARGES: number }>();
 
     useEffect(() => {
         setIsInWishList(currentWishlist?.find((item: IWishListItem) => item?.product?._id === productData?._id) == undefined ? false : true);
@@ -140,9 +140,10 @@ export const ProductPage = () => {
                 <div className="text-[#A68A7E] flex flex-col #A68A7E  justify-evenly  p-8 inria-serif-regular text-[] w-full flex-1/2" id="price-calculation">
                     <p className="text-[#A68A7E] mb-8 text-xl inria-serif-regular">Detailed price breakdown:</p>
                     {/* <p className="flex border-b py-4 w-full justify-between items-center"> Approx Gold weight { productData?.goldWeight }</p> */}
-                    {<p className="flex border-b py-4 w-full justify-between items-center"> Diamond rate: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.diamondRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
-                    {<p className="flex border-b py-4 w-full justify-between items-center"> Gold rate: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.goldRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
+                    {<p className="flex border-b py-4 w-full justify-between items-center"> Gold amount: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.goldRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
+                    {<p className="flex border-b py-4 w-full justify-between items-center"> Diamond amount: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.diamondRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
                     <p className="flex border-b py-4 w-full justify-between items-center"> Making charges : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.makingCharges!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
+                    {<p className="flex border-b py-4 w-full justify-between items-center"> Certification charges: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.CERTIFICATION_CHARGES!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
                     <p className="flex border-b py-4 w-full justify-between items-center"> Sub total : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.subTotal!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
                     <p className="flex border-b py-4 w-full justify-between items-center"> + GST : {productData?._id ? <span>{ `3%` }</span> : <Skeleton className="bg-red-500/10 w-6 h-4 rounded-md" />}</p>
                     <p className="flex border-b py-4 w-full justify-between items-center"> Total : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.total!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
@@ -696,6 +697,7 @@ export const ProductPage = () => {
                     {<p className="flex border-b py-4 w-full justify-between items-center"> Diamond rate: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.diamondRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
                     {<p className="flex border-b py-4 w-full justify-between items-center"> Gold rate: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.goldRate!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
                     <p className="flex border-b py-4 w-full justify-between items-center"> Making charges : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.makingCharges!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
+                    {<p className="flex border-b py-4 w-full justify-between items-center"> Certification charges: {productData?._id ? <span>₹{ Math.round(diamondCalculation?.CERTIFICATION_CHARGES!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>}
                     <p className="flex border-b py-4 w-full justify-between items-center"> Sub total : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.subTotal!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>
                     <p className="flex border-b py-4 w-full justify-between items-center"> + GST : {productData?._id ? <span>{ `3%` }</span> : <Skeleton className="bg-red-500/10 w-6 h-4 rounded-md" />}</p>
                     <p className="flex border-b py-4 w-full justify-between items-center"> Total : {productData?._id ? <span>₹{ Math.round(diamondCalculation?.total!) }</span> : <Skeleton className="bg-red-500/10 w-10 h-4 rounded-md" />}</p>

@@ -38,6 +38,7 @@ export const Products = () => {
         // gemStoneColour: string[];
         categories: string[],
         collections: string[],
+        sort: string,
         meta: {
             total: number,
             page: number,
@@ -49,13 +50,14 @@ export const Products = () => {
             female: false,
         },
         price: {
-            max: 100000000,
+            max: 10000000000000,
             min: 0
         },
         // gemStone: false,
         // gemStoneColour: [],
         categories: [],
         collections: [],
+        sort: "high",
         meta: {
             total: 0,
             page: 1,
@@ -112,7 +114,7 @@ export const Products = () => {
             const data = await response.json();
             // dispatch(setProductData(data.data));
             console.log(data.data);
-            setFilters({ ...filters, meta: data.data.meta });
+            // setFilters({ ...filters, meta: data.data.meta });
             // filters.meta = data.data.meta;
             return (data.data);
         } catch (error) {
@@ -160,6 +162,7 @@ export const Products = () => {
                 console.log(filters)
             }
             const productResponse = await getProducts(); 
+            setFilters({ ...filters, meta: productResponse?.meta})
             setProducts(productResponse?.data);
             // setIsLoading(false);
             return console.log(categoryDataFromStore, categoryFilter, products, productResponse);
@@ -415,6 +418,7 @@ export const Products = () => {
                                                 setIsApplyFilterLoading(true);
                                                 const data = await getProducts();
                                                 setProducts(data.data);
+                                                setFilters({ ...filters, meta: data?.meta })
                                                 setDialogOpen(false);
                                                 setIsApplyFilterLoading(false);
                                             }}>{isApplyFilterLoading ? <Loader2 className="w-4 animate-spin aspect-square"/> : "Apply filters"}</Button>
@@ -427,7 +431,7 @@ export const Products = () => {
                 {<div id="products-section" className="gap-8 relative w-full">
                     <div className="grid min-h-full sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
                         {randomBanner?.name != "" && <a onClick={() => {
-                            setCategoryFilter(queryParams.get("category-filter"));
+                            // setCategoryFilter(queryParams.get("category-filter"));
                         }} href={randomBanner?.link} className="col-span-1 w-full h-full row-span-1 row-start-[-2] col-start-1">
                             <img src={randomBanner?.imageUrl!?.url} className="w-full h-full object-cover" alt="" />
                         </a>}
@@ -457,35 +461,35 @@ export const Products = () => {
                         })}
                     </div>
                 </div>}
-            </div>
-            <Pagination className="absolute m-auto left-1/2 -translate-x-1/2 sm:w-auto w-[95vw] text-[#A68A7E] -bottom-4 sm:bottom-4">
-                <PaginationContent className="max-w-[95vw] sm:text-base text-xs flex flex-wrap justify-center">
-                    <PaginationItem>
-                        <PaginationPrevious
-                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                        />
-                    </PaginationItem>
-
-                    {[...Array(filters.meta.totalPages)].map((_, index) => (
-                        <PaginationItem key={index}>
-                            <PaginationLink
-                            isActive={currentPage === index + 1}
-                            onClick={() => setCurrentPage(index + 1)}
-                            >
-                            {index + 1}
-                            </PaginationLink>
+                <Pagination className="m-auto sm:w-auto w-[95vw] sm:text-white text-[#A68A7E] -bottom-4 sm:bottom-4">
+                    <PaginationContent className="max-w-[95vw] sm:text-base text-xs flex flex-wrap justify-center">
+                        <PaginationItem>
+                            <PaginationPrevious
+                                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                            />
                         </PaginationItem>
-                    ))}
 
-                    <PaginationItem>
-                        <PaginationNext
-                            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, filters.meta.totalPages))}
-                            className={currentPage === filters.meta.total ? "pointer-events-none opacity-50" : ""}
-                        />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+                        {[...Array(filters.meta.totalPages)].map((_, index) => (
+                            <PaginationItem key={index}>
+                                <PaginationLink
+                                isActive={currentPage === index + 1}
+                                onClick={() => setCurrentPage(index + 1)}
+                                >
+                                {index + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        ))}
+
+                        <PaginationItem>
+                            <PaginationNext
+                                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, filters.meta.totalPages))}
+                                className={currentPage === filters.meta.total ? "pointer-events-none opacity-50" : ""}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            </div>
         </div>
     );
 };

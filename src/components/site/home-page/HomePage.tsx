@@ -774,7 +774,7 @@ export const HomePage = () => {
                         }} className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all">See more <ArrowRight /></Button> */}
                     <div id="links" className="gap-4 absolute top-0 flex left-[10%] right-[10%] items-center bottom-0">
                         <Link to={`/products?category-filter=ring`} className="h-[80%] flex-1"></Link>
-                        <Link to={`/products?category-filter=earrings`} className="h-[80%] flex-1"></Link>
+                        <Link to={`/products?category-filter=earring`} className="h-[80%] flex-1"></Link>
                         <Link to={`/products?category-filter=pendant`} className="h-[80%] flex-1"></Link>
                     </div>
                     <img src={"/category-section-animation.gif"} className="object-cover h-screen w-[80%] self-center justify-self-center" />

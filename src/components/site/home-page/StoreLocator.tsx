@@ -26,10 +26,10 @@ export const StoreLocator = () => {
     const [ selectedCity, setSelectedCity ] = useState<String>(CITIES[0]?.name);
 
     return (
-        <div className="min-h-screen relative -mb-56">
+        <div className="min-h-screen relative sm:pb-14 sm:mb-0 mb-56">
                 <UIsideBar side="left"/>
                 <UIsideBar side="right"/>
-                <div className="bg-[#E1C6B3] sm:mt-56 mt-14  justify-self-center w-[80%] sm:h-56 h-auto rounded-lg">
+                <div className="bg-[#E1C6B3] sm:mt-56 mt-14 justify-self-center w-[80%]  sm:min-h-56 h-auto rounded-lg">
                     <img src="/KultivatedKaratsAssets/storeLocatorBanner.png" className="h-full w-full object-cover rounded-[inherit]" alt="" />
                 </div>
                 <div className="flex flex-col sm:hidden mt-8 w-[90%] self-center justify-self-center min-h-[calc(100vh-300px)]">

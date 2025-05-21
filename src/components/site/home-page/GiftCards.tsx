@@ -321,7 +321,7 @@ export const GiftCards = () => {
                                         id="colour"
                                         className="grid grid-cols-4 w-full  gap-4"
                                     >
-                                        <p className='col-span-1 flex items-center'>Name :</p>
+                                        <p className='col-span-1 flex items-center'>Name</p>
                                         <Input {...field} placeholder="" className='col-span-3 border-white' type="text" />
                                     </div>
                                     </FormControl>
@@ -340,7 +340,7 @@ export const GiftCards = () => {
                                         id="amount"
                                         className="grid grid-cols-4 w-full  gap-4"
                                     >
-                                        <p className='col-span-1 flex items-center'>Amount :</p>
+                                        <p className='col-span-1 flex items-center'>Amount</p>
                                         <Input {...field} placeholder="" className='col-span-3 border-white' type="number" />
                                     </div>
                                     </FormControl>
@@ -359,7 +359,7 @@ export const GiftCards = () => {
                                         id="colour"
                                         className="grid grid-cols-4 w-full  gap-4"
                                     >
-                                        <p className='col-span-1 flex items-center'>Phone no :</p>
+                                        <p className='col-span-1 flex items-center'>Phone no</p>
                                         <Input {...field} placeholder="" className='col-span-3 border-white' type="number" />
                                     </div>
                                     </FormControl>

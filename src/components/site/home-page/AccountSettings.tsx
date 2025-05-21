@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { UIsideBar } from "./Solitare";
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,11 @@ const formSchema = z.object({
     addressLine1: z.string().min(1, "Field is required!"),
     addressLine2: z.string().optional(),
     company: z.string().optional(),
+    phoneNumber: z
+        .string()
+        .min(10, { message: "Phone number must be at least 10 digits" })
+        .max(15, { message: "Phone number can't exceed 15 digits" })
+        .regex(/^[0-9]+$/, { message: "Phone number must contain only digits" }).optional(),
 });
 
 export const AccountSettings = () => {
@@ -251,7 +256,7 @@ export const AccountSettings = () => {
                                             />
                                             <FormField
                                                 control={shippingAddressFrom.control}
-                                                name="addressLine2"
+                                                name="company"
                                                 render={({ field }) => (
                                                     <FormItem className='w-full h-1/2 flex flex-col'>
                                                         <FormControl className='w-full h-full'>
@@ -261,6 +266,19 @@ export const AccountSettings = () => {
                                                             </div>
                                                         </FormControl>
                                                         <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={shippingAddressFrom.control}
+                                                name="phoneNumber"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                    <FormLabel>Phone Number</FormLabel>
+                                                    <FormControl>
+                                                        <Input type="tel" placeholder="e.g. 9876543210" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage className="text-red-800/40 font-bold"/>
                                                     </FormItem>
                                                 )}
                                             />
@@ -355,7 +373,22 @@ export const AccountSettings = () => {
                             {OPTIONS[currentOption] == "Personal details" && <div className="h-full">
                                 <Form {...shippingAddressFrom}>
                                     <form className="inria-serif-regular justify-between h-full text-white w-full p-[5%]" onSubmit={() => {}}>
-                                        <div className="flex flex-col justify-evenly h-full overflow-y-scroll">
+                                        <div className="flex flex-col justify-evenly h-full overflow-y-visible">
+                                            <FormField
+                                                control={shippingAddressFrom.control}
+                                                name="phoneNumber"
+                                                render={({ field }) => (
+                                                    <FormItem className='w-full flex flex-col'>
+                                                        <FormControl className='w-full h-full'>
+                                                            <div className='grid grid-cols-4 gap-4 items-center'>
+                                                                <p className='col-span-1'>Phone number</p>
+                                                                <Input {...field} className='col-span-3' defaultValue={customerData?.phoneNumber} placeholder="" />
+                                                            </div>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
                                             <FormField
                                                 control={shippingAddressFrom.control}
                                                 name="city"

@@ -270,7 +270,7 @@ export const Solitare = () => {
                                     <FormItem className='w-full h-1/2 flex flex-col'>
                                         <FormControl className='w-full h-full'>
                                             <div className='grid grid-cols-4 sm:text-white text-[#E1C6B3]  gap-4 items-center'>
-                                                <p className='col-span-1 sm:text-white text-[#E1C6B3]'>Email Address</p>
+                                                <p className='col-span-1 sm:text-white text-[#E1C6B3]'>Email address</p>
                                                 <Input {...field} className='col-span-3 border-white' placeholder="" type="email" />
                                             </div>
                                         </FormControl>
@@ -283,7 +283,7 @@ export const Solitare = () => {
                                 name="additionalRequirements"
                                 render={({ field }) => (
                                     <FormItem className="gap-4 space-y-0 items-center grid h-1/2 w-full grid-cols-4">
-                                    <FormLabel className="col-span-1">Any Additional requests?</FormLabel>
+                                    <FormLabel className="col-span-1">Any additional requests?</FormLabel>
                                     <FormControl className='col-span-3'>
                                         <Textarea
                                             className="min-h-[73px] resize-none border-white"
@@ -334,7 +334,7 @@ export const Solitare = () => {
                                         id="colour"
                                         className="grid grid-cols-4 w-full  gap-4"
                                     >
-                                        <p className='col-span-1 flex items-center'>colour :</p>
+                                        <p className='col-span-1 flex items-center'>Colour :</p>
                                         <RadioGroup
                                             // value={field.value}
                                             onValueChange={(value) => field.onChange(value)} // Correctly updates form value
@@ -427,13 +427,12 @@ export const Solitare = () => {
                                     </FormItem>
                                 )}
                             />
-                            {(
+                            {showNoOfDiamonds && (
                                 <FormField
                                 control={form.control}
                                 name="noOfDiamonds"
                                 render={({ field }) => (
                                     <FormItem className="flex justify-center items-center flex-col w-full">
-                                    {/* <FormLabel /> */}
                                     <FormControl>
                                         <div
                                             id="gold-weight"
