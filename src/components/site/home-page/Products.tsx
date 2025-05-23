@@ -26,7 +26,8 @@ export const Products = () => {
     const [ isApplyFilterLoading, setIsApplyFilterLoading ] = useState(false);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const [ categoryFilter, setCategoryFilter ] = useState(queryParams.get("category-filter"));
+    // const [ categoryFilter, setCategoryFilter ] = useState(queryParams.get("category-filter"));
+    const categoryFilter = queryParams.get("category-filter");
 
     const [ filters, setFilters ] = useState<{
         gender: {

@@ -237,7 +237,7 @@ export const ProductPage = () => {
                     {(productData?.category?._id == "67fe5da50254f62d3e5fe917" && ringSize == (0)) && <p className="text-red-500 text-xs">
                         Please select a ring size!
                     </p>}
-                </div> : <Skeleton className="w-full h-full bg-red-500" />}
+                </div> : <Skeleton className="w-full h-full bg-gray-500/10" />}
                     <p className="text-xs font-bold"><span className="capitalize">{productData?.category?.name}</span> selected in {karatRef.current}karat gold</p>
                     <div className="flex flex-col my-4">
                     {productData?.containsGemstone && <div className="flex flex-col gap-4">
