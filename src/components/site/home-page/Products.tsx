@@ -88,12 +88,12 @@ export const Products = () => {
 		link: ""
     });
 
-    const visibleProductsCount = 39;
+    const visibleProductsCount = 15;
 
     const [ currentPage, setCurrentPage ] = useState(1);
 
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window?.scrollTo({ top: 0, behavior: "smooth" });
     }, [ currentPage ]);
 
     const getProducts = async () => {
@@ -485,7 +485,7 @@ export const Products = () => {
                         <PaginationItem>
                             <PaginationNext
                                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, filters?.meta?.totalPages))}
-                                className={currentPage === filters.meta.total ? "pointer-events-none opacity-50" : ""}
+                                className={currentPage === filters?.meta?.total ? "pointer-events-none opacity-50" : ""}
                             />
                         </PaginationItem>
                     </PaginationContent>

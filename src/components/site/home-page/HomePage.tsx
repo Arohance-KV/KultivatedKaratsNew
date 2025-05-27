@@ -61,35 +61,35 @@ const REELS_DATA = [
         title: 'reel 1',
         url: '/KultivatedKaratsAssets/reel-1.mp4',
         product: {
-            _id: "67de6a20eab64aa971fae0c8",
+            _id: "67fe5db118a0ffb695357a6e",
             imageUrl: {
-                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1742293610/daadis.in/ldjehkhrq8itxckesytw.jpg",
+                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1744261782/daadis.in/pdnb7kmxorfjiptf7asx.jpg",
                 publicId: "",
             },
-            name: "The Adhira Ring",
+            name: "The Kriti Ring",
         }
     },
     {
-        title: 'reel 1',
+        title: 'reel 2',
         // url: 'https:',
         url: '/KultivatedKaratsAssets/reel-2.mp4',
         product: { 
-            _id: "67de6a20eab64aa971fae0c9", 
+            _id: "67fe5da918a0ffb695357a62", 
             imageUrl: {
-                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1742293615/daadis.in/qtxsyfnvnyobfp6c0nmk.webp",
+                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1744261751/daadis.in/zj6mql9ty5ffblk0rmt2.jpg",
                 publicId: "",
             },
-            name: "The Charvi Ring"
+            name: "The Leya Ring"
         }
     },
     {
         title: 'reel 1',
         url: '/KultivatedKaratsAssets/reel-3.mp4',
         product: {
-            _id: "67de6a20eab64aa971fae0ca",
-            name: "The Ishani Ring",
+            _id: "67fe5da718a0ffb695357a5f",
+            name: "The Charvi Ring",
             imageUrl: {
-                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1742293618/daadis.in/eqjdi9qnooesvlkqn99c.jpg",
+                url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1744261742/daadis.in/rfwdgwbcn2a8u6e42hts.webp",
                 publidId: ""
             }
         }
