@@ -471,7 +471,7 @@ export const Products = () => {
                             />
                         </PaginationItem>
 
-                        {[...Array(filters.meta.totalPages)].map((_, index) => (
+                        {[...Array(filters?.meta?.totalPages)].map((_, index) => (
                             <PaginationItem key={index}>
                                 <PaginationLink
                                 isActive={currentPage === index + 1}
@@ -484,7 +484,7 @@ export const Products = () => {
 
                         <PaginationItem>
                             <PaginationNext
-                                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, filters.meta.totalPages))}
+                                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, filters?.meta?.totalPages))}
                                 className={currentPage === filters.meta.total ? "pointer-events-none opacity-50" : ""}
                             />
                         </PaginationItem>
