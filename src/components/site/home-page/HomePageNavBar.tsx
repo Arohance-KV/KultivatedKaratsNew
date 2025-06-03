@@ -1,19 +1,20 @@
-import { CircleUser, Heart, MapPinned, Search, ShoppingCart, Store, Video } from "lucide-react";
+import { CircleUser, Heart, Loader2, MapPinned, Search, ShoppingCart, Store, Video } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../../ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IProduct, IUser } from "@/utils/interfaces";
 import { useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { MobileNav } from "./MobileNav";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { debounce } from "lodash";
 
 export const HomePageNavBar = () => {
 
     const customerData: IUser = useSelector((state: any) => state.website.customerData);
     const products: IProduct[] = useSelector((state: any) => state.website.productData);
-    
+    // const [query, setQuery] = useState<string>("");
     const [ wishListLength, setWishListLength ] = useState(0);
     const [ cartLength, setCartLength ] = useState(0);
     const [ videoCartLength, setVideoCartLength ] = useState(0);
@@ -33,6 +34,35 @@ export const HomePageNavBar = () => {
 
     const [ isDashboard, setIsDashboard ] = useState(false);
 
+    const [ filteredProducts, setFilteredProducts ] = useState<IProduct[]>([]);
+
+    const [ isSearchLoading, setIsSearchLoading ] = useState(false);
+
+    const fetchResults = useCallback(
+        debounce(async (searchTerm: string) => {
+        if (!searchTerm) return setFilteredProducts([]);
+        console.log(`search term ${searchTerm}`)
+        setIsSearchLoading(true);
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}products/search?query=${searchTerm}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+            const data = await res.json();
+            setFilteredProducts(data.data);
+            console.log(data);
+        } catch (err) {
+            console.error("Search error:", err);
+        } finally {
+            setIsSearchLoading(false);
+        }
+        }, 500),
+        []
+    );
+
     useEffect(() => {
 
         if (location.pathname.includes('admin')) {
@@ -51,15 +81,6 @@ export const HomePageNavBar = () => {
         };
     }, []);
 
-    const [query, setQuery] = useState("");
-
-    const filteredProducts = products.filter((product) =>
-      product.name.toLowerCase().trim().includes(query.toLowerCase()) || product?.category?.name?.trim()?.toLowerCase()?.includes(query?.toLowerCase())
-    );
-
-
-    // const [ isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
-
     return (
         <>
             {!isDashboard && <>
@@ -77,12 +98,17 @@ export const HomePageNavBar = () => {
                                 <Input type="text" onClick={(e) => {
                                     e.preventDefault();
                                     setIsSearchBarOpen(true);
-                                }} placeholder="Search" value={query}
-                                onChange={(e) => setQuery(e.target.value)} className="pl-6 h-8 border-[#A68A7E] border-2 bg-transparent text-[#A68A7E] placeholder:text-[#A68A7E]" />
+                                }} placeholder="Search"
+                                onChange={(e) => {
+                                    e.preventDefault();
+                                    // setQuery(e.target.value);
+                                    console.log(e.target.value);
+                                    fetchResults(e.target.value);
+                                }} className="pl-6 h-8 border-[#A68A7E] border-2 bg-transparent text-[#A68A7E] placeholder:text-[#A68A7E]" />
                                 <Search className="absolute top-1/2 left-2 -translate-y-1/2 w-3 h-3 stroke-[#A68A7E] stroke-2"/>
-                                {isSearchBarOpen && <div className="absolute h-56 w-full top-[150%] rounded-lg py-4 rounded-br-lg flex flex-col gap-4 bg-white  text-[#A68A7E]">
+                                {isSearchBarOpen && <div className="absolute max-h-56 min-h-14 w-full top-[150%] rounded-lg py-4 rounded-br-lg flex flex-col gap-4 bg-white  text-[#A68A7E]">
                                     <div className="flex flex-col gap-4 overflow-y-scroll">
-                                        {filteredProducts?.map(product => {
+                                        {isSearchLoading ? <Loader2 className="animate-spin w-4 aspect-square self-center justify-self-center stroke-[#A68A7E]" /> : filteredProducts.length > 0 ? filteredProducts?.map(product => {
                                             return (
                                                 <a onClick={() => {
                                                     setIsSearchBarOpen(false)
@@ -90,7 +116,7 @@ export const HomePageNavBar = () => {
                                                     {product?.name}
                                                 </a>
                                             )
-                                        })}
+                                        }) : <p className="inria-serif-regular text-[#A68A7E] self-center text-center justify-self-center text-xs">No products matching the search query!</p>}
                                     </div>
                                 </div>}
                             </div>

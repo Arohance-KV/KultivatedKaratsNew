@@ -234,7 +234,7 @@ export const Solitare = () => {
                                                 <Label
                                                     key={shape.value}
                                                     // className=""
-                                                    className={`flex text-[#E1C6B3] h-full bg-white inria-serif-regular items-center sm:space-x-2 group relative cursor-pointer rounded-lg pl-5 shadow-md transition focus:outline-none data-[checked]:ring-1 data-[checked]:ring-[#E1C6B3] my-2 sm:max-w-sm text-[6px] sm:text-[16px]`}
+                                                    className={`flex text-[#E1C6B3] border-[#A68A7E] border sm:border-none h-full bg-white inria-serif-regular items-center sm:space-x-2 group relative cursor-pointer rounded-lg pl-5 shadow-md transition focus:outline-none data-[checked]:ring-1 data-[checked]:ring-[#E1C6B3] my-2 sm:max-w-sm text-[6px] sm:text-[16px]`}
                                                 >
                                                     <RadioGroupItem
                                                         value={shape.value}
@@ -271,7 +271,7 @@ export const Solitare = () => {
                                         <FormControl className='w-full h-full'>
                                             <div className='grid grid-cols-4 sm:text-white text-[#E1C6B3]  gap-4 items-center'>
                                                 <p className='col-span-1 sm:text-white text-[#E1C6B3]'>Email address</p>
-                                                <Input {...field} className='col-span-3 border-white' placeholder="" type="email" />
+                                                <Input {...field} className='col-span-3 border border-[#A68A7E] sm:border-white' placeholder="" type="email" />
                                             </div>
                                         </FormControl>
                                         <FormMessage />
@@ -286,7 +286,7 @@ export const Solitare = () => {
                                     <FormLabel className="col-span-1">Any additional requests?</FormLabel>
                                     <FormControl className='col-span-3'>
                                         <Textarea
-                                            className="min-h-[73px] resize-none border-white"
+                                            className="min-h-[73px] resize-none sm:border-white border border-[#A68A7E]"
                                             placeholder="Type any additional details here."
                                         {...field}
                                         />
@@ -310,7 +310,7 @@ export const Solitare = () => {
                                                 className="grid grid-cols-4 w-full gap-4 justify-center items-center"
                                             >
                                             <p className='col-span-1 flex justify-center items-center'>Phone number :</p>
-                                            <Input {...field} type="number" className="no-spinner col-span-3 border-white" />
+                                            <Input {...field} type="number" className="no-spinner col-span-3 sm:border-white border border-[#A68A7E]" />
                                             </div>
                                         </FormControl>
                                         <FormMessage className='flex justify-center items-center self-center justify-self-center' />
@@ -321,7 +321,7 @@ export const Solitare = () => {
                             <div className='h-1/2 hidden sm:block w-full relative'>
                                 <Button disabled={isSubmitButtonLoading} className='bg-transparent absolute hover:text-[#E1C6B3] px-[20%] sm:hover:bg-white hover:bg-[#E1C6B3] right-0 bottom-0 border-white text-white border'>{ isSubmitButtonLoading ? <Loader2 className='w-4 h-4 animate-spin' /> :  `Request a quote`}</Button>
                             </div>
-                            <Button disabled={isSubmitButtonLoading} className='bg-transparent block sm:hidden absolute hover:text-[#E1C6B3] px-[20%] sm:hover:bg-white hover:bg-[#E1C6B3] right-5 bottom-5 border-white text-white border'>{ isSubmitButtonLoading ? <Loader2 className='w-4 h-4 animate-spin' /> :  `Request a quote`}</Button>
+                            <Button disabled={isSubmitButtonLoading} className='bg-transparent block sm:hidden absolute hover:text-[#E1C6B3] px-[20%] sm:hover:bg-white hover:bg-[#E1C6B3] right-5 bottom-5 border-[#A68A7E] text-[#A68A7E] border'>{ isSubmitButtonLoading ? <Loader2 className='w-4 h-4 animate-spin' /> :  `Request a quote`}</Button>
                         </div>
                         <div className="col-start-3 grid grid-rows-5 row-start-1 col-span-1 row-span-2">
                             <FormField
@@ -341,15 +341,15 @@ export const Solitare = () => {
                                             {...field}
                                             className="col-span-3 text-[#E1C6B3] flex justify-between items-center"
                                         >
-                                        <Label className="flex rounded-md hover:cursor-pointer h-full py-4 px-2 bg-white justify-center items-center gap-2">
+                                        <Label className="flex sm:border-none border border-[#A68A7E] rounded-md hover:cursor-pointer h-full py-4 px-2 bg-white justify-center items-center gap-2">
                                             <RadioGroupItem value={Colour.D} id="r1" />
                                             <Label htmlFor="r1">D</Label>
                                         </Label>
-                                        <Label className="flex justify-center hover:cursor-pointer items-center gap-2 rounded-md h-full py-4 px-2 bg-white">
+                                        <Label className="flex sm:border-none border border-[#A68A7E] justify-center hover:cursor-pointer items-center gap-2 rounded-md h-full py-4 px-2 bg-white">
                                             <RadioGroupItem value={Colour.E} id="r2" />
                                             <Label htmlFor="r2">E</Label>
                                         </Label>
-                                        <Label className="flex justify-center hover:cursor-pointer items-center gap-2 rounded-md h-full py-4 px-2 bg-white">
+                                        <Label className="flex sm:border-none border border-[#A68A7E] justify-center hover:cursor-pointer items-center gap-2 rounded-md h-full py-4 px-2 bg-white">
                                             <RadioGroupItem value={Colour.F} id="r3" />
                                             <Label htmlFor="r3">F</Label>
                                         </Label>
@@ -372,7 +372,7 @@ export const Solitare = () => {
                                         className="grid gap-4 grid-cols-4 w-full"
                                     >
                                         <p className='col-span-1 flex items-center'>Carat :</p>
-                                        <Input {...field} placeholder="" className='col-span-3 border-white' type="number" />
+                                        <Input {...field} placeholder="" className='col-span-3 border border-[#A68A7E] sm:border-white' type="number" />
                                     </div>
                                     </FormControl>
                                     <FormMessage />
@@ -390,7 +390,7 @@ export const Solitare = () => {
                                             className="grid gap-4 grid-cols-4 w-full"
                                         >
                                             <p className='col-span-1 flex items-center'>Gold weight</p>
-                                            <Input {...field} placeholder="" className='col-span-3 border-white' type="number" />
+                                            <Input {...field} placeholder="" className='col-span-3 border border-[#A68A7E] sm:border-white' type="number" />
                                         </div>
                                         </FormControl>
                                         <FormMessage />
@@ -410,7 +410,7 @@ export const Solitare = () => {
                                                 >
                                                     <p>Requirement of multiple stones :</p>
                                                     <Checkbox
-                                                        className='!data-[state=checked]:bg-[#E1C6B3] data-[state=checked]:text-[#E1C6B3] border-white'
+                                                        className='!data-[state=checked]:bg-white  data-[state=checked]:text-[#E1C6B3] border border-[#A68A7E] sm:border-white'
                                                         // className='border-white'
                                                         checked={field.value}
                                                         onCheckedChange={(checked: boolean) => {
@@ -438,9 +438,9 @@ export const Solitare = () => {
                                             id="gold-weight"
                                             className="grid grid-cols-4 w-full gap-4"
                                         >
-                                        <p className={cn('col-span-1 text-gray-500 flex justify-center items-center gap-4', form.getValues('multiDiamonds') && 'text-white')}>No of stones</p>
+                                        <p className={cn('col-span-1 text-gray-500 flex justify-center items-center gap-4', form.getValues('multiDiamonds') && 'sm:text-white text-[#A68A7E]')}>No of stones</p>
                                         <Input
-                                            className='col-span-3 border-white'
+                                            className='col-span-3 border border-[#A68A7E] sm:border-white'
                                             {...field}
                                             disabled={!showNoOfDiamonds}
                                             type="number"

@@ -34,6 +34,8 @@ export const CartPage = () => {
         },
     });
 
+    const [ isPaytmCode, setIsPaytmcode ]= useState(false);
+
     const [ isSubmitLoading, setIsSubmitLoading ] = useState(false);
     const [ phoneDialogOpen, setPhoneDialogOpen ] = useState(false);
 
@@ -93,6 +95,7 @@ export const CartPage = () => {
 
     // const [ isOrderPlacing, setIsOrderPlacing ] = useState(false);
     const [ applyCouponButtonLoading, setApplyCouponButtonLoading ] = useState(false);
+    const [ applyVoucherCodeLoading, setApplyVoucherCodeLoading ] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -106,8 +109,14 @@ export const CartPage = () => {
 
     const couponRef = useRef<string>("");
     const voucherOrGiftCardRef = useRef(null);
+    const voucherOrGiftCardPinRef = useRef(null);
     const [ couponError, setCouponError ] = useState("");
     const couponDiscountRef = useRef<number>(0);
+
+    // const [ couponApplied, setCouponApplied ] = useState(false);
+    // const [ voucherApplied, setVoucherApplied ]= useState(false);
+
+    const [ voucherError, setVoucherError ] = useState("");
 
     const getOrderEmailHtml = () => {
         return (
@@ -277,13 +286,71 @@ export const CartPage = () => {
                                     } className="border absolute border-dashed top-0 right-0" variant={"ghost"}>{applyCouponButtonLoading ? <Loader2 className="stroke-[#A68A7E] animate-spin" /> : "Apply"}</Button>
                                     {couponError != "" && <p id="coupon-error" className="self-start mt-2 inria-serif-regular text-red-500 text-xs">{couponError}</p>}
                                 </div>
-                                <div className="relative w-[80%]">
-                                    <Input ref={voucherOrGiftCardRef} className="justify-self-center w-full border border-dashed" placeholder="Enter Voucher code/Giftcard code" />
-                                    <Button className="border absolute border-dashed top-0 right-0" onClick={(e) => {
+                                <div className="relative w-[80%] flex sm:gap-4 gap-2 ">
+                                    <Input ref={voucherOrGiftCardRef} onChange={(e) => {
+                                        console.log(e.target.value);
+                                        if ( (e.target.value! + "").toLowerCase().startsWith("paytm") ) {
+                                            // console.log(true);
+                                           return setIsPaytmcode(true);
+                                        }
+                                        setIsPaytmcode(false);
+                                    }} className="justify-self-center w-full border border-dashed" placeholder="Enter Voucher code/Giftcard code" />
+                                    {isPaytmCode && <Input ref={voucherOrGiftCardPinRef} onChange={(e) => {
+                                        console.log(e.target.value);
+                                    }} className="justify-self-center w-full border border-dashed" placeholder="Enter PIN" />}
+                                    <Button className="border absolute border-dashed top-0 right-0" onClick={ async (e) => {
+                                        if ( customerData?._id == null )
+                                            return navigate("/auth");
+                                        if ( !customerData?.phoneNumber || customerData?.phoneNumber == undefined || customerData?.phoneNumber == null || Number.isNaN(customerData?.phoneNumber))
+                                            return setPhoneDialogOpen(true);
                                         e.preventDefault();
-                                        
-                                    }} variant={"ghost"}>Apply</Button>
+                                        setApplyVoucherCodeLoading(true);
+                                        setVoucherError("");
+                                        try {
+                                            if ( isPaytmCode ) {
+                                                setVoucherError("Invalid coupon or PIN!");
+                                        //         const response =  await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/redeem-giftcard`, {
+                                        //             method: "POST",
+                                        //             headers: {
+                                        //                 "Content-Type" : "application/json"
+                                        //             },
+                                        //             credentials: "include",
+                                        //             body: JSON.stringify({ requestBody: {
+                                        //                 "request": {
+                                        //                 "brandMID": "Kultivated Karats",
+                                        //                 "cardNumber": voucherOrGiftCardRef?.current?.value!,
+                                        //                 "cardPIN": voucherOrGiftCardPinRef?.current?.value!,
+                                        //                 // "orderId": "MERCHANT-ORDER-ID-1689584367474",
+                                        //                 "sourceMerchantMid": "Levis1",
+                                        //                 // "amount": 500,
+                                        //                 "redemptionMetaData": {
+                                        //                 "redeemerName": `${customerData?.firstName} ${customerData?.lastName}`,
+                                        //                 "redeemerMobileNumber": `${customerData?.phoneNumber || null}`,
+                                        //                 "redeemerEmailId": `${customerData?.email || ""}`,
+                                        //                 // "redemptionStoreId":"pantaloonstore12345",
+                                        //                 // "redemptionStoreName":"Pantaloon sec 18 Noida",
+                                        //                 // "invoiceNumber":"12345678",
+                                        //                 "invoiceAmount": cartTotal
+                                        //                 }},
+                                        //                 "source": "BRAND"
+                                        //             }, clientId: "3e1a147b-d0fb-4208-8f8b-5fc390b29ac0", secretKey: "dd6f4141-2c56-49c9-9d87-bdfe18deec7f"}),
+                                        //         });
+
+                                        //         const responseJSON = await response.json();
+
+                                        //         console.log(responseJSON);
+                                            }
+                                        } catch (error) {
+                                            console.log(error);
+                                        } finally {
+                                            setTimeout(() => {
+                                                setApplyVoucherCodeLoading(false);
+                                                setVoucherError("Invalid coupon or PIN!");
+                                            }, 1000);
+                                        }
+                                    }} variant={"ghost"}>{applyVoucherCodeLoading ? <Loader2 className="animate-spin w-4 aspect-square" /> : `Apply`}</Button>
                                 </div>
+                                {voucherError != "" && <p id="coupon-error" className="self-start w-[80%] inria-serif-regular text-red-500 text-xs">{voucherError}</p>}
                                 <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
                                     if ( customerData?._id == null )
                                          return navigate("/auth");
