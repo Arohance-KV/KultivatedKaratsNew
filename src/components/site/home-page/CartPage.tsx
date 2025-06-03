@@ -345,8 +345,10 @@ export const CartPage = () => {
                                         } finally {
                                             setTimeout(() => {
                                                 setApplyVoucherCodeLoading(false);
-                                                setVoucherError("Invalid coupon or PIN!");
                                             }, 1000);
+                                            setTimeout(() => {
+                                                setVoucherError("Invalid coupon or PIN!");
+                                            }, 1200);
                                         }
                                     }} variant={"ghost"}>{applyVoucherCodeLoading ? <Loader2 className="animate-spin w-4 aspect-square" /> : `Apply`}</Button>
                                 </div>
