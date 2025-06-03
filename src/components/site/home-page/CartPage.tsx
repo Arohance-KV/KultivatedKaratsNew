@@ -304,8 +304,8 @@ export const CartPage = () => {
                                         if ( !customerData?.phoneNumber || customerData?.phoneNumber == undefined || customerData?.phoneNumber == null || Number.isNaN(customerData?.phoneNumber))
                                             return setPhoneDialogOpen(true);
                                         e.preventDefault();
-                                        setApplyVoucherCodeLoading(true);
                                         setVoucherError("");
+                                        setApplyVoucherCodeLoading(true);
                                         try {
                                             if ( isPaytmCode ) {
                                                 setVoucherError("Invalid coupon or PIN!");
@@ -348,7 +348,7 @@ export const CartPage = () => {
                                             }, 1000);
                                             setTimeout(() => {
                                                 setVoucherError("Invalid coupon or PIN!");
-                                            }, 1200);
+                                            }, 1500);
                                         }
                                     }} variant={"ghost"}>{applyVoucherCodeLoading ? <Loader2 className="animate-spin w-4 aspect-square" /> : `Apply`}</Button>
                                 </div>

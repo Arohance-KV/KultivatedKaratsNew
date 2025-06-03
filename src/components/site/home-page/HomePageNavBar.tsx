@@ -13,7 +13,7 @@ import { debounce } from "lodash";
 export const HomePageNavBar = () => {
 
     const customerData: IUser = useSelector((state: any) => state.website.customerData);
-    const products: IProduct[] = useSelector((state: any) => state.website.productData);
+    // const products: IProduct[] = useSelector((state: any) => state.website.productData);
     // const [query, setQuery] = useState<string>("");
     const [ wishListLength, setWishListLength ] = useState(0);
     const [ cartLength, setCartLength ] = useState(0);
