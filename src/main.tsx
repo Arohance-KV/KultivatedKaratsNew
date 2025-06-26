@@ -36,6 +36,7 @@ import { ProductCare } from './components/site/home-page/ProductCare.tsx';
 import { ShippingPolicy } from './components/site/home-page/ShippingPolicy.tsx';
 import { Toaster } from './components/ui/sonner.tsx';
 import { Test } from './components/site/home-page/Text.tsx';
+import { DashboardProductsPage } from './components/adminPanel/DashboardProductsPage.tsx';
 // import { DashboardProductsPage } from './components/adminPanel/DashboardProductsPage.tsx';
 // import { DashboardCouponsPage } from './components/adminPanel/DashboardCouponsPage.tsx';
 // import { DashboardVouchersPage } from './components/adminPanel/DashboardVouchersPage.tsx';
@@ -54,7 +55,8 @@ const router = createBrowserRouter(
               <Route path='auth' element={<Auth />} />
               <Route path="" element={<HomePage />} />
               <Route path="/about" element={<About />} />
-              <Route path="/solitare" element={<Solitare />} />
+              <Route path="/create-solitare" element={<Solitare />} />
+              <Route path="/solitare-page" element={<Products />} />
               <Route path="/store-locator" element={<StoreLocator />} />
               <Route path="/giftcards" element={<GiftCards />} />
               <Route path="/collections" element={<Collections />} />
@@ -79,14 +81,14 @@ const router = createBrowserRouter(
               <Route path="/shipping-policy" element={<ShippingPolicy />} />
               <Route path="/contact-us" element={<ContactUs />} />
               <Route path="/product-care" element={<ProductCare />} />
-              {/* <Route path="admin" element={<DashboardMain />}>
+              <Route path="admin" element={<DashboardMain />}>
                 <Route path="home" element={<DashboardHomePage />}></Route>
                 <Route path="products" element={<DashboardProductsPage />}></Route>
-                <Route path="coupons" element={<DashboardCouponsPage />}></Route>
-                <Route path="vouchers" element={<DashboardVouchersPage />}></Route>
-                <Route path="orders" element={<DashboardOrdersPage />}></Route>
-                <Route path="blogs" element={<DashboardBlogsPage />}></Route>
-              </Route> */}
+                {/* <Route path="coupons" element={<DashboardCouponsPage />}></Route> */}
+                {/* <Route path="vouchers" element={<DashboardVouchersPage />}></Route> */}
+                {/* <Route path="orders" element={<DashboardOrdersPage />}></Route> */}
+                {/* <Route path="blogs" element={<DashboardBlogsPage />}></Route> */}
+              </Route>
           </Route>
       </Route>
   )

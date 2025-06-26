@@ -3,7 +3,10 @@ import { Copyright, Facebook, Instagram, Linkedin, MapPin, Youtube } from "lucid
 import { Link } from "react-router-dom";
 
 export const Footer = () => {
-    return (
+
+    const inDashboard = window.location.href.includes(`admin`);
+
+    return inDashboard ? <></> : (
         <div className="bg-[#E1C6B3]">
             <div className="sm:flex hidden text-white p-10 inria-serif-regular gap-4 bg-[#E1C6B3] flex-col w-full h-96">
                 <div className="flex gap-4 flex-1">

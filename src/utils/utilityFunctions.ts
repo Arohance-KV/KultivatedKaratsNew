@@ -215,12 +215,13 @@ export const getSolitareHtml = (values: z.infer<typeof formSchema>) => {
       <p>Phone Number: ${values?.phoneNo}</p>
       <p>Shape: ${values?.shape}</p>
       <p>Carat: ${values?.carat}</p>
-      <p>Colour: ${values?.colour}</p>
       <p>Gold Weight: ${values?.goldWeight}</p>
-      ${values?.multiDiamonds ? `<p>Multi Diamonds ✔</p><br><p>No of multidiamonds: ${values?.noOfDiamonds}</p>` : ""}
-      <p>Multi Diamonds: ${values?.multiDiamonds}</p>
       <p>Multi Diamonds: ${values?.noOfDiamonds}</p>
       <p>Additional requirements: ${values?.additionalRequirements ? values?.additionalRequirements! : "none"}</p>
       <p>Date: ${currentDate}</p>
     </div>`
 };
+
+// export const getErrorFromStatusCode : string = ( statusCode: string) => {
+
+// }

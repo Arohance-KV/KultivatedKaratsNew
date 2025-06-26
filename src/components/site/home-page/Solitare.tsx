@@ -8,7 +8,7 @@ import { Label } from '../../ui/label';
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
 import { Button } from '../../ui/button';
-import { Checkbox } from '../../ui/checkbox';
+// import { Checkbox } from '../../ui/checkbox';
 import { cn } from '../../../lib/utils';
 import { gsap } from "gsap";
 import { getSolitareHtml } from '@/utils/utilityFunctions';
@@ -83,11 +83,11 @@ enum Shapes {
     Cushion = 'Cushion',
 };
   
-enum Colour {
-    D = 'D',
-    E = 'E',
-    F = 'F',
-};
+// enum Colour {
+//     D = 'D',
+//     E = 'E',
+//     F = 'F',
+// };
   
 
 export const formSchema = z.object({
@@ -99,9 +99,9 @@ export const formSchema = z.object({
       required_error: 'Carat is required!',
       invalid_type_error: 'Enter a valid number!',
     }),
-    colour: z.nativeEnum(Colour, {
-      required_error: 'Colour is required!',
-    }),
+    // colour: z.nativeEnum(Colour, {
+    //   required_error: 'Colour is required!',
+    // }),
     goldWeight: z.coerce.number({
       required_error: 'Gold weight is required!',
       invalid_type_error: 'Enter a valid number!',
@@ -121,7 +121,7 @@ export const formSchema = z.object({
           message: 'Invalid phone number. It must only contain 10 digits!.',
         }
       ),
-    multiDiamonds: z.boolean().default(false),
+    // multiDiamonds: z.boolean().default(false),
     noOfDiamonds: z.coerce
       .number()
       .min(2, { message: 'No of stones cannot be less than 2!' })
@@ -169,7 +169,7 @@ export const UIsideBar = ({ side } : { side : "left" | "right" }) => {
 
 export const Solitare = () => {
 
-    const [showNoOfDiamonds, setShowNoOfDiamonds] = useState(false);
+    // const [showNoOfDiamonds, setShowNoOfDiamonds] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -210,7 +210,7 @@ export const Solitare = () => {
             <div id='solitare-main' className="sm:bg-[#E1C6B3] opacity-0 sm:mt-56 mt-0 gap-4 flex flex-col items-center sm:w-[80%] w-full justify-self-center rounded-tr-[100px] sm:aspect-video">
                 <div className="w-full mt-14 text-center text-[#E1C6B3] sm:text-white ">
                     <p className="inria-serif-regular text-3xl">
-                        Create your own solitare                    
+                        Customize you own solitare                
                     </p>
                 </div>
                 <Form {...form}>
@@ -283,7 +283,7 @@ export const Solitare = () => {
                                 name="additionalRequirements"
                                 render={({ field }) => (
                                     <FormItem className="gap-4 space-y-0 items-center grid h-1/2 w-full grid-cols-4">
-                                    <FormLabel className="col-span-1">Any additional requests?</FormLabel>
+                                    <FormLabel className="col-span-1">Description</FormLabel>
                                     <FormControl className='col-span-3'>
                                         <Textarea
                                             className="min-h-[73px] resize-none sm:border-white border border-[#A68A7E]"
@@ -324,7 +324,7 @@ export const Solitare = () => {
                             <Button disabled={isSubmitButtonLoading} className='bg-transparent block sm:hidden absolute hover:text-[#E1C6B3] px-[20%] sm:hover:bg-white hover:bg-[#E1C6B3] right-5 bottom-5 border-[#A68A7E] text-[#A68A7E] border'>{ isSubmitButtonLoading ? <Loader2 className='w-4 h-4 animate-spin' /> :  `Request a quote`}</Button>
                         </div>
                         <div className="col-start-3 grid grid-rows-5 row-start-1 col-span-1 row-span-2">
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="colour"
                                 render={({ field }) => (
@@ -360,7 +360,7 @@ export const Solitare = () => {
                                     <FormMessage className='' />
                                 </FormItem>
                                 )}
-                            />
+                            /> */}
                             <FormField
                                 control={form.control}
                                 name="carat"
@@ -397,7 +397,7 @@ export const Solitare = () => {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="multiDiamonds"
                                 render={({ field }) => (
@@ -411,14 +411,12 @@ export const Solitare = () => {
                                                     <p>Requirement of multiple stones :</p>
                                                     <Checkbox
                                                         className='!data-[state=checked]:bg-white  data-[state=checked]:text-[#E1C6B3] border border-[#A68A7E] sm:border-white'
-                                                        // className='border-white'
                                                         checked={field.value}
                                                         onCheckedChange={(checked: boolean) => {
                                                             setShowNoOfDiamonds(checked);
                                                             field.onChange(checked);
                                                         }}
                                                     >
-                                                        {/* <Gem className='bg-red-600 w-4 h-4 stroke-yellow-600' /> */}
                                                     </Checkbox>
                                                 </div>
                                         </FormControl>
@@ -426,8 +424,8 @@ export const Solitare = () => {
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />
-                            {showNoOfDiamonds && (
+                            /> */}
+                            {/* {showNoOfDiamonds && (
                                 <FormField
                                 control={form.control}
                                 name="noOfDiamonds"
@@ -452,7 +450,7 @@ export const Solitare = () => {
                                     </FormItem>
                                 )}
                                 />
-                            )}
+                            )} */}
                         </div>
                     </form>
                 </Form>

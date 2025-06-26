@@ -1,17 +1,29 @@
-import { Counter } from "./custom-components/Counter"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+// import { Counter } from "./custom-components/Counter"
+
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const Test = () => {
   return (
-    <div className="bg-red-500 w-full h-screen flex justify-center items-center">
-      <Counter
-        value={1}
-        places={[100, 10, 1]}
-        fontSize={80}
-        padding={5}
-        gap={10}
-        textColor="white"
-        fontWeight={900}
-      />
-    </div>
+    <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="inria-serif-regular bg-red-300 h-8 w-8 p-0">
+        <span className="sr-only inria-serif-regular">Open menu</span>
+        <MoreHorizontal />
+        </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end" className="inria-serif-regular z-50 bg-red-600">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+        // onClick={() => navigator.clipboard.writeText(payment.id)}
+        >
+        Copy payment ID
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>View customer</DropdownMenuItem>
+        <DropdownMenuItem>View payment details</DropdownMenuItem>
+    </DropdownMenuContent>
+</DropdownMenu>
   );
 };

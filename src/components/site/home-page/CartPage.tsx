@@ -108,8 +108,8 @@ export const CartPage = () => {
     }, []);
 
     const couponRef = useRef<string>("");
-    const voucherOrGiftCardRef = useRef(null);
-    const voucherOrGiftCardPinRef = useRef(null);
+    const voucherOrGiftCardRef = useRef("");
+    const voucherOrGiftCardPinRef = useRef("");
     const [ couponError, setCouponError ] = useState("");
     const couponDiscountRef = useRef<number>(0);
 
@@ -286,73 +286,99 @@ export const CartPage = () => {
                                     } className="border absolute border-dashed top-0 right-0" variant={"ghost"}>{applyCouponButtonLoading ? <Loader2 className="stroke-[#A68A7E] animate-spin" /> : "Apply"}</Button>
                                     {couponError != "" && <p id="coupon-error" className="self-start mt-2 inria-serif-regular text-red-500 text-xs">{couponError}</p>}
                                 </div>
-                                <div className="relative w-[80%] flex sm:gap-4 gap-2 ">
-                                    <Input ref={voucherOrGiftCardRef} onChange={(e) => {
-                                        console.log(e.target.value);
-                                        if ( (e.target.value! + "").toLowerCase().startsWith("paytm") ) {
-                                            // console.log(true);
-                                           return setIsPaytmcode(true);
-                                        }
-                                        setIsPaytmcode(false);
-                                    }} className="justify-self-center w-full border border-dashed" placeholder="Enter Voucher code/Giftcard code" />
-                                    {isPaytmCode && <Input ref={voucherOrGiftCardPinRef} onChange={(e) => {
-                                        console.log(e.target.value);
-                                    }} className="justify-self-center w-full border border-dashed" placeholder="Enter PIN" />}
-                                    <Button className="border absolute border-dashed top-0 right-0" onClick={ async (e) => {
-                                        if ( customerData?._id == null )
-                                            return navigate("/auth");
-                                        if ( !customerData?.phoneNumber || customerData?.phoneNumber == undefined || customerData?.phoneNumber == null || Number.isNaN(customerData?.phoneNumber))
-                                            return setPhoneDialogOpen(true);
-                                        e.preventDefault();
-                                        setVoucherError("");
-                                        setApplyVoucherCodeLoading(true);
-                                        try {
-                                            if ( isPaytmCode ) {
-                                                setVoucherError("Invalid coupon or PIN!");
-                                        //         const response =  await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/redeem-giftcard`, {
-                                        //             method: "POST",
-                                        //             headers: {
-                                        //                 "Content-Type" : "application/json"
-                                        //             },
-                                        //             credentials: "include",
-                                        //             body: JSON.stringify({ requestBody: {
-                                        //                 "request": {
-                                        //                 "brandMID": "Kultivated Karats",
-                                        //                 "cardNumber": voucherOrGiftCardRef?.current?.value!,
-                                        //                 "cardPIN": voucherOrGiftCardPinRef?.current?.value!,
-                                        //                 // "orderId": "MERCHANT-ORDER-ID-1689584367474",
-                                        //                 "sourceMerchantMid": "Levis1",
-                                        //                 // "amount": 500,
-                                        //                 "redemptionMetaData": {
-                                        //                 "redeemerName": `${customerData?.firstName} ${customerData?.lastName}`,
-                                        //                 "redeemerMobileNumber": `${customerData?.phoneNumber || null}`,
-                                        //                 "redeemerEmailId": `${customerData?.email || ""}`,
-                                        //                 // "redemptionStoreId":"pantaloonstore12345",
-                                        //                 // "redemptionStoreName":"Pantaloon sec 18 Noida",
-                                        //                 // "invoiceNumber":"12345678",
-                                        //                 "invoiceAmount": cartTotal
-                                        //                 }},
-                                        //                 "source": "BRAND"
-                                        //             }, clientId: "3e1a147b-d0fb-4208-8f8b-5fc390b29ac0", secretKey: "dd6f4141-2c56-49c9-9d87-bdfe18deec7f"}),
-                                        //         });
-
-                                        //         const responseJSON = await response.json();
-
-                                        //         console.log(responseJSON);
+                                <div className="relative w-[80%] flex flex-col gap-2">
+                                    <div className="flex sm:gap-4 gap-2">
+                                        <Input onChange={(e) => {
+                                            voucherOrGiftCardRef.current = e.target.value;
+                                            console.log(voucherOrGiftCardRef.current);
+                                            if ( (e.target.value! + "").toLowerCase().startsWith("paytm") ) {
+                                                // console.log(true);
+                                            return setIsPaytmcode(true);
                                             }
-                                        } catch (error) {
-                                            console.log(error);
-                                        } finally {
-                                            setTimeout(() => {
+                                            setIsPaytmcode(false);
+                                        }} className="justify-self-center w-full border border-dashed" placeholder="Enter Voucher code/Giftcard code" />
+                                        {isPaytmCode && <Input maxLength={10} onChange={(e) => {
+                                            voucherOrGiftCardPinRef.current = e.target.value;
+                                            console.log(voucherOrGiftCardPinRef.current)
+                                        }} className="justify-self-center w-full border border-dashed" placeholder="Enter PIN" />}
+                                        <Button className="border absolute border-dashed top-0 right-0" onClick={ async (e) => {
+                                            if ( customerData?._id == null )
+                                                return navigate("/auth");
+                                            if ( !customerData?.phoneNumber || customerData?.phoneNumber == undefined || customerData?.phoneNumber == null || Number.isNaN(customerData?.phoneNumber))
+                                                return setPhoneDialogOpen(true);
+                                            e.preventDefault();
+                                            setVoucherError("");
+                                            setApplyVoucherCodeLoading(true);
+                                            try {
+                                                if ( isPaytmCode ) {
+                                                    setVoucherError("");
+                                                    const encryptedPinResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/encrypt-pin`, {
+                                                        method: "POST",
+                                                        headers: {
+                                                            "Content-Type" : "application/json"
+                                                        },
+                                                        credentials: "include",
+                                                        body: JSON.stringify({ pin: voucherOrGiftCardPinRef?.current }),
+                                                    });
+
+                                                    const encryptedPinData = await encryptedPinResponse.json();
+
+                                                    if ( !encryptedPinResponse.ok ) throw Error("Failed to encrypt PIN, please try again")
+
+                                                    const encryptedPin = encryptedPinData.data;
+
+                                                    const response =  await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/redeem-giftcard`, {
+                                                        method: "POST",
+                                                        headers: {
+                                                            "Content-Type" : "application/json"
+                                                        },
+                                                        credentials: "include",
+                                                        body: JSON.stringify({
+                                                            "requestBody": {
+                                                                "request": {
+                                                                    "brandMID": "PaytmGvTestBrand",
+                                                                    "cardNumber": voucherOrGiftCardRef.current,
+                                                                    "cardPIN": encryptedPin,
+                                                                    "orderId": "MERCHANT-ORDER-ID-1689584367474",
+                                                                    "sourceMerchantMid": "PaytmGvTestReseller",
+                                                                    "amount": 100,
+                                                                    "redemptionMetaData": {
+                                                                    "redeemerName": `${customerData?.firstName} ${customerData?.lastName}`,
+                                                                    "redeemerMobileNumber": customerData?.phoneNumber || "",
+                                                                    "redeemerEmailId": customerData?.email || "",
+                                                                    // "redemptionStoreId":"pantaloonstore12345",
+                                                                    // "redemptionStoreName":"Pantaloon sec 18 Noida",
+                                                                    // "invoiceNumber":"12345678",
+                                                                    "invoiceAmount": cartTotal
+                                                                    },
+                                                                    "source": "BRAND"
+                                                                }
+                                                            }
+                                                        }),
+                                                    });
+
+                                                    const responseJSON = await response.json();
+
+                                                    if ( !response.ok ) throw Error("Failed to redeem giftcard, please try again")
+                                                        
+                                                    console.log(responseJSON.data.statusMessage);
+
+                                                    if ( responseJSON.data.status == "FAILURE" ) {
+                                                        setVoucherError(responseJSON.data.statusMessage);
+                                                        return;
+                                                    }
+
+                                                }
+                                            } catch (error) {
+                                                console.log(error);
+                                            } finally {
                                                 setApplyVoucherCodeLoading(false);
-                                            }, 1000);
-                                            setTimeout(() => {
-                                                setVoucherError("Invalid coupon or PIN!");
-                                            }, 1500);
-                                        }
-                                    }} variant={"ghost"}>{applyVoucherCodeLoading ? <Loader2 className="animate-spin w-4 aspect-square" /> : `Apply`}</Button>
+                                                // setVoucherError("");
+                                            }
+                                        }} variant={"ghost"}>{applyVoucherCodeLoading ? <Loader2 className="animate-spin w-4 aspect-square" /> : `Apply`}</Button>
+                                    </div>
+                                    {voucherError != "" && <p id="coupon-error" className="w-full inria-serif-regular text-red-500 text-xs">{voucherError}</p>}
                                 </div>
-                                {voucherError != "" && <p id="coupon-error" className="self-start w-[80%] inria-serif-regular text-red-500 text-xs">{voucherError}</p>}
                                 <Button disabled={ cartItems?.length! <= 0 || isPlaceOrderButtonLoading } className="text-white bg-[#E1C6B3] w-[80%] self-center my-4 hover:bg-[#A68A7E] hover:text-white" onClick={ async (e) => {
                                     if ( customerData?._id == null )
                                          return navigate("/auth");
@@ -362,8 +388,8 @@ export const CartPage = () => {
                                     setIsPlaceOrderButtonLoading(true);
                                     if ( customerData?.address?.city == null )
                                         return navigate("/set-shipping");
-                                    if ( customerData?.address?.city == null )
-                                        return navigate("/set-shipping");
+                                    // if ( customerData?.address?.city == null )
+                                    //     return navigate("/set-shipping");
                                     try {
                                         
                                         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}payment/create-an-order/`, {
@@ -462,6 +488,51 @@ export const CartPage = () => {
                                                     console.log(error);
                                                 }
                                             },
+                                            modal: {
+                                                ondismiss: async function () {
+                                                    console.log("Modal closed by user");
+                                                    const response =  await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/redeem-giftcard`, {
+                                                        method: "POST",
+                                                        headers: {
+                                                            "Content-Type" : "application/json"
+                                                        },
+                                                        credentials: "include",
+                                                        body: JSON.stringify({
+                                                            "requestBody": {
+                                                                "request": {
+                                                                    "brandMID": "PaytmGvTestBrand",
+                                                                    "cardNumber": voucherOrGiftCardRef.current,
+                                                                    // "cardPIN": encryptedPin,
+                                                                    "orderId": "MERCHANT-ORDER-ID-1689584367474",
+                                                                    "sourceMerchantMid": "PaytmGvTestReseller",
+                                                                    "amount": 100,
+                                                                    "redemptionMetaData": {
+                                                                    "redeemerName": `${customerData?.firstName} ${customerData?.lastName}`,
+                                                                    "redeemerMobileNumber": customerData?.phoneNumber || "",
+                                                                    "redeemerEmailId": customerData?.email || "",
+                                                                    // "redemptionStoreId":"pantaloonstore12345",
+                                                                    // "redemptionStoreName":"Pantaloon sec 18 Noida",
+                                                                    // "invoiceNumber":"12345678",
+                                                                    "invoiceAmount": cartTotal
+                                                                    },
+                                                                    "source": "BRAND"
+                                                                }
+                                                            }
+                                                        }),
+                                                    });
+
+                                                    const responseJSON = await response.json();
+
+                                                    if ( !response.ok ) throw Error("Failed to redeem giftcard, please try again")
+                                                        
+                                                    console.log(responseJSON.data.statusMessage);
+
+                                                    if ( responseJSON.data.status == "FAILURE" ) {
+                                                        setVoucherError(responseJSON.data.statusMessage);
+                                                        return;
+                                                    }
+                                                }
+                                            },
                                             "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
                                                 "name": `${customerData?.firstName} ${customerData?.lastName}`, //your customer's name
                                                 "email": `${customerData?.email}`, 
@@ -511,7 +582,7 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
     return (    
         <div className="sm:text-base text-sm w-full relative overflow-y-visible! flex gap-4">
             <div className="relative sm:h-32 h-20 border-2 border-[#BFA6A1] aspect-square rounded-md">
-                <img src={cartItem?.product?.imageUrl[0]?.url} className="object-cover rounded-[inherit] h-full w-full" alt="" />
+                <img src={cartItem?.product?.imageUrl?.[0]?.url} className="object-cover rounded-[inherit] h-full w-full" alt="" />
                 <Button disabled={isRemoveItemLoadingButton} variant={"ghost"} className="absolute z-30 rounded-full py-3 px-1 w-0 h-0 -translate-y-1/2 translate-x-1/2 right-0 top-0 bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={async (e) => {
                     e.preventDefault();
                     setIsRemoveItemLoadingButton(true);

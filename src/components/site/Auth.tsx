@@ -19,7 +19,6 @@ import { ICartItem, IUser } from "@/utils/interfaces";
 import { setCustomerData } from "@/redux/slices/websiteSlice";
 import { toast } from "sonner";
 import { ToastSuccess } from "@/utils/UtilityComponents";
-import { updateCart } from "@/utils/utilityFunctions";
 // import { updateCart, updateVideoCallCart, updateWishList } from "@/utils/utilityFunctions";
 // import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 // import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
@@ -202,6 +201,40 @@ export const Auth = () => {
 
     // const [ isSendOtpLoading, setIsSendOtpLoading ] = useState(false);
 
+    const mergeCart = (guestCart : ICartItem[], mainCart : ICartItem[]) => {
+        
+        console.log(`guestCart`, guestCart, `mainCart`, mainCart);
+
+        const mergedCart : ICartItem[] = [ ...mainCart ];
+
+        if ( mainCart?.length == 0 ) {
+            guestCart.forEach(cartItem => {
+                mergedCart?.push(cartItem);
+            })
+            return mergedCart;
+        }
+
+        const mergedCartLength = mergedCart?.length;
+
+        for (let index = 0; index < guestCart?.length; index++) {
+            const guestCartElement = guestCart[index];
+            for (let j = 0; j < mergedCartLength; j++) {
+                const mergedCartElement = mergedCart[j];
+                if ( guestCartElement?.product?._id == mergedCartElement?.product?._id ) {
+                    mergedCartElement.quantity = ++mergedCartElement.quantity;
+                    continue;
+                } else {
+                    mergedCart.push(guestCartElement);
+                }
+            }
+            
+        }
+
+        console.log(`mergedCart`, mergedCart);
+        return mergedCart;
+    
+    };
+
     return (
         <div className='w-full relative pb-14'>
             <UIsideBar side="left"/>
@@ -240,11 +273,27 @@ export const Auth = () => {
 
                         console.log(guestCart, guestCart?.length);
 
-                        guestCart.forEach( async (item : ICartItem) => {
-                            console.log(item, data?.data?.user?.cart);
-                            return guestCart?.filter((cartItem : ICartItem) => cartItem?.product?._id == item?.product?._id)?.length > 0 ? updateCart(item, true, true, data?.data?.user?.cart, dispatch, true, data?.data?.user?.wishList, data?.data?.user?.videoCallCart) : updateCart(item, true, false, data?.data?.user?.cart, dispatch, true, data?.data?.user?.wishList, data?.data?.user?.videoCallCart);
+                        const mergedCart = mergeCart(guestCart, data?.data?.user?.cart);
+
+                        const updateCartResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}users/update-user-cart`, {
+                            method: "PATCH",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ updatedCart: mergedCart }),
+                            credentials: "include"
                         });
 
+                        console.log(updateCartResponse);
+
+                        if (!updateCartResponse.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+                        
+                        const updateCartData = await updateCartResponse.json();
+
+                        // if (data.data.role !== "Customer") throw new Error(`Error: ${401}, Unauthorised user`);
+                        // dispatch(setCustomerData(updateCartData.data));
+                        console.log(updateCartData);
+                        // return true;
                         // guestWishList.forEach((item : IWishListItem) => {
                         //     if ( guestWishList?.filter((wishListItem : IWishListItem) => wishListItem?.product?._id == item?.product?._id)?.length > 0 )
                         //         return
@@ -279,7 +328,7 @@ export const Auth = () => {
                         // if (data.data.role !== "Customer") throw new Error(`Error: ${401}, Unauthorised user`);
                         // dispatch(setCustomerData(currentUserData.data));
               
-                        dispatch(setCustomerData(data?.data?.user));
+                        dispatch(setCustomerData({ ...data?.data?.user, cart: updateCartData?.data?.cart }));
                         toast.success("Logged In successfully!", { icon: <ToastSuccess />, className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white" });
                         navigate("/");
 

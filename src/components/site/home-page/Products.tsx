@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 
 export const Products = () => {
 
+    const isSolitarePage = window.location.href.includes(`solitare-page`);
     // const [ isClearFilterLoading, setIsClearFilterLoading ] = useState(false);
     const [ isApplyFilterLoading, setIsApplyFilterLoading ] = useState(false);
     const location = useLocation();
@@ -134,6 +135,12 @@ export const Products = () => {
     const dialogRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        if ( isSolitarePage ) {
+            filters.collections.push("67fe5da50254f62d3e5fe91a");
+            filters.collections.push("67fe5dd90254f62d3e5feb68");
+            filters.collections.push("67fe5e090254f62d3e5fed8e");
+            filters.collections.push("67fe5e380254f62d3e5fefb1");
+        }
         setRandomBanner(smallRandomBanners[Math.floor(Math.random() * 4)]);
         function handleClickOutside(event: MouseEvent) {
             if (dialogRef.current && !dialogRef.current.contains(event.target as Node)) {
@@ -431,11 +438,11 @@ export const Products = () => {
                 </div>
                 {<div id="products-section" className="gap-8 relative w-full">
                     <div className="grid min-h-full sm:grid-cols-4 grid-cols-2 gap-4 items-center justify-center">
-                        {randomBanner?.name != "" && <a onClick={() => {
+                        { randomBanner?.name != "" && <a onClick={() => {
                             // setCategoryFilter(queryParams.get("category-filter"));
-                        }} href={randomBanner?.link} className="col-span-1 w-full h-full row-span-1 row-start-[-2] col-start-1">
-                            <img src={randomBanner?.imageUrl!?.url} className="w-full h-full object-cover" alt="" />
-                        </a>}
+                        }} href={ isSolitarePage ? "/create-solitare" : randomBanner?.link } className="col-span-1 w-full h-full row-span-1 row-start-[-2] col-start-1">
+                            <img src={ isSolitarePage ? "/customize-solitare.png" : randomBanner?.imageUrl!?.url } className="w-full h-full object-cover" alt="" />
+                        </a> }
                         {isProductsLoading ? <Loader2 className="sm:stroke-white animate-spin stroke-[#E1C6B3] self-center justify-self-center" /> : products
                         /*?.filter((item: IProduct) => {
                         const withinPriceRange =

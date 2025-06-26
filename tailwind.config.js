@@ -3,8 +3,17 @@ module.exports = {
       "./src/**/*.{html,js,jsx,ts,tsx}",
     ],
     theme: {
-      extend: {},
+      extend: {
+        ringColor: {
+          primaryDark: "#A68A7E"
+        }
+      },
     },
-    plugins: [],
+    plugins: [require("tailwindcss-animate")],
+    variants: {
+    extend: {
+      display: ["group-hover", "hover", "focus", "active", "radix-state-open"], // radix
+    },
+  },
   }
   

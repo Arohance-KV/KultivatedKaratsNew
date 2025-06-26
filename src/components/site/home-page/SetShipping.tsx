@@ -28,7 +28,7 @@ export const SetShipping = () => {
     const customerData: IUser = useSelector((state: any) => state.website.customerData);
     
     useEffect(() => {
-        if ( customerData?.address?.city == null ) {
+        if ( customerData?.address?.city != null ) {
             navigate("/cart");
         }
     }, [ customerData ]);

@@ -125,7 +125,8 @@ export const GoldCoinPage = () => {
                 <div className="w-[100%] gap-2 my-4 justify-self-center flex-col flex">
                     <div className="flex my4 w-full gap-2">
                         <Button 
-                            className={cn("flex hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
+                            className={cn("flex hover:bg-transparent flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
+                            // className={cn("flex hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] !text-white hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
                             onClick={async (e) => {
                             setIsCartAddedButtonLoading(true);
                             e.preventDefault();
@@ -143,7 +144,7 @@ export const GoldCoinPage = () => {
                             setIsInCart(true);
                             return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                         }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button>
-                        <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
+                        <Button className="flex-1 hover:bg-transparent text-white hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
                             setIsWishListAddedButtonLoading(true);
                             e.preventDefault();
                             if( isInWishList )
@@ -313,7 +314,7 @@ export const GoldCoinPage = () => {
                         <div className="w-[80%] gap-2 justify-self-center flex-col flex">
                             <div className="flex w-full gap-2">
                                 <Button 
-                                    className={cn("flex hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
+                                    className={cn("flex hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border text-white col-span-5 bg-[#A68A7E] flex-1 row-span-1 justify-center items-center gap-2", isCartAddedButtonLoading && `bg-gray-100`)}
                                     onClick={async (e) => {
                                     setIsCartAddedButtonLoading(true);
                                     e.preventDefault();
@@ -331,7 +332,7 @@ export const GoldCoinPage = () => {
                                     setIsInCart(true);
                                     return toast.success("Product added to cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                                 }}>{isCartAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInCart ? "Remove from cart -" : "Add to cart +"}</Button>
-                                <Button className="flex-1 hover:bg-transparent hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
+                                <Button className="flex-1 hover:bg-transparent text-white hover:text-[#A68A7E] hover:border-[#A68A7E] hover:border bg-[#A68A7E]" onClick={ async (e) => {
                                     setIsWishListAddedButtonLoading(true);
                                     e.preventDefault();
                                     if( isInWishList )

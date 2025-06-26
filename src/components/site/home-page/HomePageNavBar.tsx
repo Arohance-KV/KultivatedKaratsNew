@@ -154,7 +154,7 @@ export const HomePageNavBar = () => {
                         <Link to={"/about"}>About</Link>
                         {/* <Link to={"/collections"}>Collections</Link> */}
                         <Link to={"/products"}>Products</Link>
-                        <Link to={"/solitare"}>Solitare</Link>
+                        <Link to={"/solitare-page"}>Solitare</Link>
                         <Link to={"/gold-coins"}>Gold coins</Link>
                         {/* <Link to={"/store-locator"}>
                             Store Locator
