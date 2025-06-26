@@ -53,7 +53,7 @@ const COLOURS = {
 export const productFormSchema = z.object({
   productId: z.string(),
   name: z.string().min(1, { message: "Product name should be at least 1 character long!" }).max(30, { message: "Product name cannot be more than 30 characters!"}),
-  // productDescription: z.string(),
+  description: z.string(),
   category: z.string(),
   collections: z.string().array().optional(),
   goldWeight: z.string().optional(),
@@ -73,9 +73,10 @@ export const productFormSchema = z.object({
   isPendantFixed: z.boolean().optional(),    
   containsGemstone: z.boolean().optional(),
   gemStoneWeightSol: z.string().optional(),
-  isMrpProduct: z.string(),
+  isMrpProduct: z.boolean(),
   pointersWeight: z.string().optional(),
   gemStoneWeightPointer: z.string().optional(),
+  // gemStoneColour: z.string().optional(),
   imageUrl: z.array(z.object({
     url: z.string(),
     publicId: z.string(),
@@ -308,7 +309,7 @@ export const columns: ColumnDef<IProduct>[] = [
                 <form onSubmit={productForm.handleSubmit(onProductEditFormSubmit)} className={`grid pb-10 grid-cols-2 gap-8 py-4`}>
                   <div className={`grid grid-cols-4 items-center gap-4`}>
                     <Label htmlFor="name">
-                    Product ID
+                      Product ID
                     </Label>
                     <FormField
                       control={productForm.control}
@@ -369,6 +370,204 @@ export const columns: ColumnDef<IProduct>[] = [
                         <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
                           <FormControl>
                             <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        Gold weight
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="goldWeight"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        Diamond weight
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="diamondWeight"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        Gross weight
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="grossWeight"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        No of solitares
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="noOfSolitares"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        Is mrp product
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="isMrpProduct"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            {/* <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} /> */}
+                            <Checkbox defaultChecked={productData?.isMrpProduct} checked={field.value} onCheckedChange={field.onChange} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        No of multidiamonds
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="noOfMultiDiamonds"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        Shape of solitare
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="shapeOfSolitare"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        Shape of multidiamonds
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="shapeOfMultiDiamonds"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        Shape of pointers
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="shapeOfPointers"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        No of pointers
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="noOfPointers"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.pointersWeight+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
+                            {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
+                      <Label htmlFor="name">
+                        Gemstone colour
+                      </Label>
+                      <FormField
+                      control={productForm.control}
+                      name="gemStoneColour"
+                      render={({ field }) => (
+                        <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
+                          <FormControl>
+                            <Input defaultValue={productData?.gemStoneColour+""} className={`col-span-3 focus-visible:ring-primaryDark`}  {...field} />
                             {/* <Checkbox defaultChecked={productData?.containsGemstone} checked={field.value} onCheckedChange={field.onChange} /> */}
                           </FormControl>
                           <FormMessage />
@@ -484,23 +683,23 @@ export const columns: ColumnDef<IProduct>[] = [
                       )}
                     />
                   </div>
-                  {/* <div className={`grid grid-cols-4 items-center gap-4`}>
+                  <div className={`grid grid-cols-4 items-center gap-4`}>
                       <Label htmlFor="name">
                       Product description
                       </Label>
                       <FormField
                         control={productForm.control}
-                        name="descrioption"
+                        name="description"
                         render={({ field }) => (
                           <FormItem className={`col-span-3 focus-visible:ring-primaryDark`}>
                             <FormControl>
-                              <Input placeholder={productData?.productDescription} className={`col-span-3 focus-visible:ring-primaryDark`} {...field} />
+                              <Input placeholder={productData?.description} className={`col-span-3 focus-visible:ring-primaryDark`} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                  </div> */}
+                  </div>
                   <div className={`grid grid-cols-4 items-center gap-4`}>
                       <Label htmlFor="name">
                       Product Category
