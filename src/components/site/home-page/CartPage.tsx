@@ -315,7 +315,7 @@ export const CartPage = () => {
                                 </div>
                                 <div className="relative w-[80%] flex flex-col gap-2">
                                     <div className="flex sm:gap-4 gap-2 relative">
-                                        <Input value={voucherApplied?.GVorVoucherCode} onChange={(e) => {
+                                        <Input disabled={voucherApplied?.status} value={voucherApplied?.GVorVoucherCode} onChange={(e) => {
                                             setVoucherApplied({ ...voucherApplied, GVorVoucherCode: e.target.value});
                                             console.log(voucherOrGiftCardRef.current);
                                             if ( (e.target.value! + "").toLowerCase().startsWith("paytm") )
@@ -328,11 +328,11 @@ export const CartPage = () => {
                                         }} className="absolute border bg-white -translate-x-1/2 -translate-y-1/2 left-0 top-0 !h-auto !p-1 rounded-full">
                                             <X className="w-[4px] aspect-square" />
                                         </Button>}
-                                        {isPaytmCode && <Input maxLength={10} value={voucherApplied?.GVorVoucherPin} onChange={(e) => {
+                                        {isPaytmCode && <Input maxLength={10} disabled={voucherApplied?.status} value={voucherApplied?.GVorVoucherPin} onChange={(e) => {
                                             setVoucherApplied({ ...voucherApplied, GVorVoucherPin: Number(e.target.value)});
                                             console.log(voucherOrGiftCardPinRef.current);
                                         }} className="justify-self-center w-full border border-dashed" placeholder="Enter PIN" />}
-                                        <Button className="border absolute border-dashed top-0 right-0" onClick={ async (e) => {
+                                        <Button disabled={applyVoucherCodeLoading || voucherApplied?.status} className="border absolute border-dashed top-0 right-0" onClick={ async (e) => {
                                             if ( customerData?._id == null )
                                                 return navigate("/auth");
                                             if ( !customerData?.phoneNumber || customerData?.phoneNumber == undefined || customerData?.phoneNumber == null || Number.isNaN(customerData?.phoneNumber))
