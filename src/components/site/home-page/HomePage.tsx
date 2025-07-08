@@ -578,7 +578,7 @@ export const HomePage = () => {
                 </section>
                 <section className="w-[80%] my-14 justify-self-center self-center justify-center items-center flex flex-col gap-4 text-[#BFA6A1] text-center">
                     <p className="text-3xl">Shop by look</p>
-                    <div className="flex flex-row gap-4">
+                    <div className="flex flex-col gap-4">
                         {REELS_DATA.map(reel => {
                             return (
                                 <>
@@ -824,11 +824,11 @@ export const HomePage = () => {
                         <div id="categories-hover-element" className="absolute bg-[#E9D6C8] z-[20] w-[350px] top-1/2 flex justify-end items-end -translate-y-1/2 left-[10%] aspect-video rotate-[75deg]">
                             <img ref={categoriesImageRef} src="/ring.png" className="absolute right-0 top-0 bottom-0 left-0" alt="" />
                         </div>
-                    </div>
-                        <Button onClick={(e) => {
-                            e.preventDefault();
-                            navigate("/categories");
-                        }} className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all">See more <ArrowRight /></Button> */}
+                    </div> */}
+                    <Button onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/categories");
+                    }} className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all">See more <ArrowRight /></Button>
                     <div id="links" className="gap-4 absolute top-0 flex left-[10%] right-[10%] items-center bottom-0">
                         <Link to={`/products?category-filter=ring`} className="h-[80%] flex-1"></Link>
                         <Link to={`/products?category-filter=earring`} className="h-[80%] flex-1"></Link>

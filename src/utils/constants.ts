@@ -310,9 +310,9 @@ export const BLOGDATA = [
 				<span style="font-family:'Times New Roman'">At </span><strong><span style="font-family:'Times New Roman'; ">Kultivated Karats</span></strong><span style="font-family:'Times New Roman'"> and </span><strong><span style="font-family:'Times New Roman'; ">Adya</span></strong><span style="font-family:'Times New Roman'">, we offer an exquisite collection of both natural and lab-grown diamonds. Our commitment to quality, transparency, and customer satisfaction ensures you find the perfect diamond that suits your needs. Explore our collections today and shine with elegance!</span>
 			</p>
 			<p style="margin-top:0pt; margin-bottom:8pt">
-				&#xa0;
+				
 			</p>
-	<p style="bottom: 10px; right: 10px; position: absolute;"><a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Converted to HTML with WordToHTML.net</a> <span style="font-size:11px; color: #d0d0d0">|</span> <a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Email Signature Generator</a></p>`,
+	`,
             description: "Diamonds have long been cherished as symbols of love, luxury, and commitment. However, with the rise of lab-grown diamonds consumers now have an alternative to traditional natural diamonds."
         },
     },
@@ -404,9 +404,9 @@ export const BLOGDATA = [
 				<strong><span style="font-family:'Times New Roman'; ">Explore our collection today at </span></strong><a href="http://www.kultivatedkarats.com" style="text-decoration:none"><strong><u><span style="font-family:'Times New Roman'; color:#0000ff">www.kultivatedkarats.com</span></u></strong></a><strong><span style="font-family:'Times New Roman'; "> and find the perfect diamond jewelry piece that complements your style!</span></strong>
 			</p>
 			<p style="margin-top:0pt; margin-bottom:8pt">
-				&#xa0;
+				
 			</p>
-	<p style="bottom: 10px; right: 10px; position: absolute;"><a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Converted to HTML with WordToHTML.net</a> <span style="font-size:11px; color: #d0d0d0">|</span> <a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Email Signature Generator</a></p>`,
+	`,
             description: "When it comes to purchasing lab-grown diamond jewelry , finding a trusted source that offers quality, affordability, and elegance is essential. Kultivated Karats stands out as the ultimate destination"
         },
     },
@@ -495,9 +495,9 @@ export const BLOGDATA = [
 				<span style="font-family:'Times New Roman'">Shop the latest </span><strong><span style="font-family:'Times New Roman'; ">lab-grown diamond jewelry</span></strong><span style="font-family:'Times New Roman'"> trends at </span><a href="http://www.kultivatedkarats.com" style="text-decoration:none"><strong><u><span style="font-family:'Times New Roman'; color:#0000ff">www.kultivatedkarats.com</span></u></strong></a><span style="font-family:'Times New Roman'"> and redefine luxury in 2025!</span>
 			</p>
 			<p style="margin-top:0pt; margin-bottom:8pt">
-				&#xa0;
+				
 			</p>
-	<p style="bottom: 10px; right: 10px; position: absolute;"><a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Converted to HTML with WordToHTML.net</a> <span style="font-size:11px; color: #d0d0d0">|</span> <a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Email Signature Generator</a></p>`,
+	`,
             description: "As the jewelry industry evolves, lab-grown diamonds continue to revolutionize the way we perceive luxury and sustainability. More than ever, consumers are choosing lab-grown diamonds"
         },
     },

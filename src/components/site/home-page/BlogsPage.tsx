@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const BlogsPage = () => {
     
     return (
-        <section className="w-full sm:flex-row sm:flex-wrap sm:gap-8 p-6 sm:mt-56 gap-4 mt-14 justify-center grid grid-cols-2 inria-serif-regular text-[#BFA6A1] min-h-screen sm:flex">
+        <section className="w-full sm:grid-cols-3  sm:gap-8 p-6 sm:mt-56 gap-4 mt-14 justify-center grid grid-cols-2 inria-serif-regular text-[#BFA6A1] min-h-screen">
             {BLOGDATA?.map((blog) => {
                 return (
                     <div className="flex-col col-span-1 w-full sm:h-auto h-84 overflow-y-hidden sm:overflow-auto relative flex rounded-md">

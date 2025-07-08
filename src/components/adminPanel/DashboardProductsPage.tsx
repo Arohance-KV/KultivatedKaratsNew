@@ -11,15 +11,13 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
-import { ChevronDown, LoaderCircle, MoreHorizontal, PencilIcon, Trash2 } from "lucide-react";
+import { LoaderCircle, MoreHorizontal, PencilIcon, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -205,6 +203,8 @@ export const columns: ColumnDef<IProduct>[] = [
       const [ isTrashButtonLoading, setIsTrashButtonLoading ] = React.useState(false);
       const [ isButtonLoading, setIsButtonLoading ] = React.useState(false);
       const [ categories, setCategories ] = React.useState<ICategory[]>();
+
+      console.log(isButtonLoading);
 
       React.useEffect(() => {
         setCategories(categoryDataFromStore)
