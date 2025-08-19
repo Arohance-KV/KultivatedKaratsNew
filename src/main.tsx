@@ -11,7 +11,7 @@ import { StoreLocator } from './components/site/home-page/StoreLocator.tsx';
 import { Provider } from "react-redux";
 import { Collections } from './components/site/home-page/Collections.tsx';
 import { DashboardMain } from './components/adminPanel/DashboardMain.tsx';
-import { DashboardHomePage } from './components/adminPanel/DashboardHomePage.tsx';
+//import { DashboardHomePage } from './components/adminPanel/DashboardHomePage.tsx';
 import { VideoCartPage } from './components/site/home-page/VideoCartPage.tsx';
 import { VideoCallBookingPage } from './components/site/home-page/VideoCallBookingPage.tsx';
 import { Auth } from './components/site/Auth.tsx';
@@ -48,7 +48,7 @@ const router = createBrowserRouter(
       <Route path="/">
           {/* <Route path="admin" element={<DashboardMain />}> */}
             <Route path="admin" element={<DashboardMain />}>
-                <Route path="dashboard" element={<DashboardHomePage />} />
+                {/*<Route path="dashboard" element={<DashboardHomePage />} />*/}
             {/* </Route> */}
           </Route>
           <Route path="" element={<App />}>
