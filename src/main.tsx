@@ -81,14 +81,14 @@ const router = createBrowserRouter(
               <Route path="/shipping-policy" element={<ShippingPolicy />} />
               <Route path="/contact-us" element={<ContactUs />} />
               <Route path="/product-care" element={<ProductCare />} />
-              <Route path="admin" element={<DashboardMain />}>
-                <Route path="home" element={<DashboardHomePage />}></Route>
-                <Route path="products" element={<DashboardProductsPage />}></Route>
+             {/*<Route path="admin" element={<DashboardMain />}>*/}
+                {/*<Route path="home" element={<DashboardHomePage />}></Route>*/}
+                {/*<Route path="products" element={<DashboardProductsPage />}></Route>*/}
                 {/* <Route path="coupons" element={<DashboardCouponsPage />}></Route> */}
                 {/* <Route path="vouchers" element={<DashboardVouchersPage />}></Route> */}
                 {/* <Route path="orders" element={<DashboardOrdersPage />}></Route> */}
                 {/* <Route path="blogs" element={<DashboardBlogsPage />}></Route> */}
-              </Route>
+              {/*</Route>}*/}
           </Route>
       </Route>
   )
