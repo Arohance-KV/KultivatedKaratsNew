@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import { DashboardSidebar } from "./DashboardSidebar";
+//import { DashboardSidebar } from "./DashboardSidebar";
 
 export const DashboardMain = () => {
     return (
         <div className='h-screen flex w-full'>
             {/* <ReactLenis root> */}
-            <DashboardSidebar />
+            {/*<DashboardSidebar />*/}
             <Outlet />
             {/* <Footer /> */}
             {/* </ReactLenis> */}
