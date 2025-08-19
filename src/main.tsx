@@ -36,7 +36,7 @@ import { ProductCare } from './components/site/home-page/ProductCare.tsx';
 import { ShippingPolicy } from './components/site/home-page/ShippingPolicy.tsx';
 import { Toaster } from './components/ui/sonner.tsx';
 import { Test } from './components/site/home-page/Text.tsx';
-import { DashboardProductsPage } from './components/adminPanel/DashboardProductsPage.tsx';
+//import { DashboardProductsPage } from './components/adminPanel/DashboardProductsPage.tsx';
 // import { DashboardProductsPage } from './components/adminPanel/DashboardProductsPage.tsx';
 // import { DashboardCouponsPage } from './components/adminPanel/DashboardCouponsPage.tsx';
 // import { DashboardVouchersPage } from './components/adminPanel/DashboardVouchersPage.tsx';
