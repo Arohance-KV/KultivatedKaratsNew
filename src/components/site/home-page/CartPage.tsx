@@ -266,8 +266,6 @@ export const CartPage = () => {
                                     }} className="absolute border bg-white -translate-x-1/2 -translate-y-1/2 left-0 top-0 !h-auto !p-1 rounded-full">
                                         <X className="w-[4px] aspect-square" />
                                     </Button>}
-                                    // In CartPage.tsx, replace the coupon apply button onClick handler with this:
-
                                     <Button disabled={couponDiscountRef?.current > 0 || applyCouponButtonLoading || couponApplied?.status } 
                                         onClick={ async (e) => {
                                             e.preventDefault();
