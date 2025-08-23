@@ -266,51 +266,79 @@ export const CartPage = () => {
                                     }} className="absolute border bg-white -translate-x-1/2 -translate-y-1/2 left-0 top-0 !h-auto !p-1 rounded-full">
                                         <X className="w-[4px] aspect-square" />
                                     </Button>}
-                                    <Button disabled={couponDiscountRef?.current > 0 || applyCouponButtonLoading || couponApplied?.status } onClick={ async (e) => {
-                                        e.preventDefault();
-                                        setApplyCouponButtonLoading(true);
-                                        const code = couponApplied?.couponCode;
-                                        setCouponError("");
-                                        if ( code && code != "" ) {
-                                            try {
-                                                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}coupons/verify-coupon`, {
-                                                    method: "POST",
-                                                    headers: {
-                                                        "Content-Type": "application/json",
-                                                    },
-                                                    credentials: "include",
-                                                    body: JSON.stringify({
-                                                        code: code,
-                                                        cart: customerData?.cart,
-                                                    }),
-                                                });
-                                                // console.log(response);
-                                                const data = await response.json();
-                                    
-                                                if (!response.ok) {
-                                                    console.log(data);
-                                                    setCouponError(data?.errors?.[0] || "");
-                                                    throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+                                    <Button disabled={couponDiscountRef?.current > 0 || applyCouponButtonLoading || couponApplied?.status } 
+                                        onClick={ async (e) => {
+                                            e.preventDefault();
+                                            setApplyCouponButtonLoading(true);
+                                            const code = couponApplied?.couponCode;
+                                            setCouponError("");
+                                            if ( code && code != "" ) {
+                                                try {
+                                                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}coupons/verify-coupon`, {
+                                                        method: "POST",
+                                                        headers: {
+                                                            "Content-Type": "application/json",
+                                                        },
+                                                        credentials: "include",
+                                                        body: JSON.stringify({
+                                                            code: code,
+                                                            cart: customerData?.cart,
+                                                        }),
+                                                    });
+                                                    
+                                                    const data = await response.json();
+                                        
+                                                    if (!response.ok) {
+                                                        console.log(data);
+                                                        setCouponError(data?.errors?.[0] || "");
+                                                        throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+                                                    }
+                                                    
+                                                    let discountAmount = 0;
+                                                    
+                                                    // Handle different coupon types
+                                                    if (data?.data?.type === "fixed") {
+                                                        // Fixed discount amount
+                                                        discountAmount = Number(data?.data?.discount) || 0;
+                                                    } else if (data?.data?.type === "making_waiver") {
+                                                        // Making charges waiver - use the exact discount amount returned
+                                                        discountAmount = Number(data?.data?.discount) || 0;
+                                                    } else if (data?.data?.type === "percentage") {
+                                                        // Percentage discount
+                                                        const percentageDiscount = (Number(data?.data?.discount) / 100) * cartTotal;
+                                                        discountAmount = percentageDiscount > data?.data?.upperLimit 
+                                                            ? data?.data?.upperLimit 
+                                                            : percentageDiscount;
+                                                    }
+                                                    
+                                                    console.log("Coupon type:", data?.data?.type, "Discount amount:", discountAmount);
+
+                                                    // Ensure discount doesn't exceed cart total minus voucher amount
+                                                    if ((cartTotal - voucherApplied?.amount) < discountAmount) {
+                                                        discountAmount = cartTotal - voucherApplied?.amount;
+                                                    }
+                                                    
+                                                    console.log(data.data);
+                                                    setCouponApplied({ 
+                                                        ...couponApplied, 
+                                                        status: true, 
+                                                        amount: discountAmount 
+                                                    });
+                                                    
+                                                } catch (error) {
+                                                    console.log(error);
+                                                } finally {
+                                                    setApplyCouponButtonLoading(false);
                                                 }
-                                                
-                                                let discountAmount = (data?.data?.type == "fixed") ? (Number(data?.data?.discount) || 0) : ((Number(data?.data?.discount) * cartTotal) > data?.data?.upperLimit ? data?.data?.upperLimit : (Number(data?.data?.discount) * cartTotal));
-                                                console.log(discountAmount)
-
-
-                                                if ( (cartTotal - voucherApplied?.amount) < discountAmount)
-                                                    discountAmount = cartTotal;
-                                                console.log(data.data);
-                                                setCouponApplied({ ...couponApplied, status: true, amount: discountAmount });
-                                                // setProductData(data.data)
-                                            } catch (error) {
-                                                console.log(error);
-                                            } finally {
+                                            } else {
+                                                console.log("request not sent, coupon code: "+code);
                                                 setApplyCouponButtonLoading(false);
                                             }
-                                        }
-                                            console.log("request not sent, coupon code: "+code)
-                                        }
-                                    } className="border absolute border-dashed top-0 right-0" variant={"ghost"}>{applyCouponButtonLoading ? <Loader2 className="stroke-[#A68A7E] animate-spin" /> : "Apply"}</Button>
+                                        }} 
+                                        className="border absolute border-dashed top-0 right-0" 
+                                        variant={"ghost"}>
+                                        {applyCouponButtonLoading ? <Loader2 className="stroke-[#A68A7E] animate-spin" /> : "Apply"}
+                                    </Button>
                                     {couponError != "" && <p id="coupon-error" className="self-start mt-2 inria-serif-regular text-red-500 text-xs">{couponError}</p>}
                                 </div>
                                 <div className="relative w-[80%] flex flex-col gap-2">
