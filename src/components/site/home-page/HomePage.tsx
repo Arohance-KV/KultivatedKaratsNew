@@ -499,7 +499,7 @@ export const HomePage = () => {
                             swipeable
                         >
                             {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
-                            <img src="/mobile-newbanner.jpg" className="w-full h-full object-cover" alt="" />
+                            {/*<img src="/mobile-newbanner.jpg" className="w-full h-full object-cover" alt="" />*/}
                             <img src="/mobile-banner.png" className="w-full h-full object-cover" alt="" />
                             <img src="/mobile-banner-2.png" className="w-full h-full m-auto object-cover" alt="" />
                             <img src="/mobile-banner-3.png" className="w-full h-full m-auto object-cover" alt="" />
@@ -703,7 +703,7 @@ export const HomePage = () => {
                             swipeable
                         >
                             {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
-                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1755953570/NewBanner_1_raguzv.jpg" className="w-full h-full m-auto object-cover" alt="" />
+                            {/*<img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1755953570/NewBanner_1_raguzv.jpg" className="w-full h-full m-auto object-cover" alt="" />*/}
                             <img src="/banner.png" className="w-full h-full m-auto object-cover" alt="" />
                             <img src="/home-page-banner-2.png" className="w-full h-full m-auto object-cover" alt="" />
                         </Carousel>
