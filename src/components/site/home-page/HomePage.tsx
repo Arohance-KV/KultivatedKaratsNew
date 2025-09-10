@@ -500,9 +500,9 @@ export const HomePage = () => {
                         >
                             {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
                             {/*<img src="/mobile-newbanner.jpg" className="w-full h-full object-cover" alt="" />*/}
-                            <img src="/mobile-banner.png" className="w-full h-full object-cover" alt="" />
-                            <img src="/mobile-banner-2.png" className="w-full h-full m-auto object-cover" alt="" />
-                            <img src="/mobile-banner-3.png" className="w-full h-full m-auto object-cover" alt="" />
+                            {/*<img src="/mobile-banner.png" className="w-full h-full object-cover" alt="" />*/}
+                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1757503912/1_tsrnz5.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1757503912/2_vp3zzc.png" className="w-full h-full m-auto object-cover" alt="" />
                         </Carousel>
                 </section>
                 <section className="inria-serif-regular text-[#BFA6A1] flex flex-col justify-center items-center gap-4">
