@@ -704,8 +704,8 @@ export const HomePage = () => {
                         >
                             {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
                             {/*<img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1755953570/NewBanner_1_raguzv.jpg" className="w-full h-full m-auto object-cover" alt="" />*/}
-                            <img src="/banner.png" className="w-full h-full m-auto object-cover" alt="" />
-                            <img src="/home-page-banner-2.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1757503592/1_btquhe.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1757503602/2_v1z8tm.png" className="w-full h-full m-auto object-cover" alt="" />
                         </Carousel>
                         <div id="social-links" className="flex text-white flex-col gap-4 w-auto absolute right-[5%] bottom-[15%]">
                             <Link to={INSTAGRAM}>
