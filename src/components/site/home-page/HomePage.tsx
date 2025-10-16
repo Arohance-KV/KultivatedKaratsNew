@@ -1,7 +1,7 @@
-import { 
+import {
     ArrowLeft,
     ArrowRight,
-    // ArrowRight, 
+    // ArrowRight,
     Facebook, Gem, Instagram, Mouse, Stamp, Truck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../ui/button";
@@ -16,10 +16,9 @@ import { BLOGDATA, FACEBOOK, INSTAGRAM, WHATSAPP } from "@/utils/constants";
 // import { TestimonialCard } from "./Text";
 import Marquee from "react-fast-marquee";
 import { Carousel as BlogCarousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import Carousel, { ArrowProps, DotProps }  from 'react-multi-carousel';
+import Carousel, { ArrowProps, DotProps } from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import '../../../styles/carousel-override.css';
-
 const Reel = ({ reel, navigate } : { navigate: any, reel: {title: string, url: string, product: {
     imageUrl: {
         url: string,
@@ -28,13 +27,12 @@ const Reel = ({ reel, navigate } : { navigate: any, reel: {title: string, url: s
     name: string,
     _id: string
 } }}) => {
-
     return (
         <div onClick={(e) => {
             e.preventDefault();
             navigate(`/product/${reel?.product?._id}`)
-        }} className="flex flex-col w-auto hover:cursor-pointer sm:width-[calc(300*0.85)] sm:h-[450px] playfair-display rounded-xl">
-            <div className="bg-[#E1C6B3] rounded-t-[inherit] flex-[0.85]">
+        }} className="flex flex-col w-auto hover:cursor-pointer sm:w-[calc(300px*0.85)] sm:h-[450px] playfair-display rounded-xl">
+            <div className="bg-[#E1C6B3] rounded-t-[inherit] flex flex-[0.85]">
                     {/* <video src={reel.url}></video> */}
                 <video src={reel.url} className="rounded-[inherit] sm:h-[calc(0.85*450px)] w-[inherit] sm:min-w-full" muted={true} controls={false} autoPlay={true}></video>
             </div>
@@ -50,12 +48,8 @@ const Reel = ({ reel, navigate } : { navigate: any, reel: {title: string, url: s
         </div>
     );
 };
-
-
 gsap.registerPlugin(ScrollTrigger);
-
 // let elementRotate: number;
-
 const REELS_DATA = [
     {
         title: 'reel 1',
@@ -73,8 +67,8 @@ const REELS_DATA = [
         title: 'reel 2',
         // url: 'https:',
         url: '/KultivatedKaratsAssets/reel-2.mp4',
-        product: { 
-            _id: "67fe5da918a0ffb695357a62", 
+        product: {
+            _id: "67fe5da918a0ffb695357a62",
             imageUrl: {
                 url: "http://res.cloudinary.com/dthrjonaq/image/upload/v1744261751/daadis.in/zj6mql9ty5ffblk0rmt2.jpg",
                 publicId: "",
@@ -95,9 +89,7 @@ const REELS_DATA = [
         }
     },
 ];
-
 // const scrollAnimationTimeline = gsap.timeline();
-
 export const TESTIMONIALS = [
     {
         customerName: "Karandeep",
@@ -126,15 +118,13 @@ export const TESTIMONIALS = [
             publicId: ""
         }
     },
-    
+   
 ];
-
 export const ReviewCard = ({ name, rating, review, imageUrl, className } : { name: string, rating: number, review: string, imageUrl: string, className: string }) => {
-
     const renderStars = () => {
       const filledStars = Math.floor(rating);
       const hasHalfStar = rating % 1 !== 0;
-  
+ 
       let stars = [];
       for (let i = 0; i < 5; i++) {
         if (i < filledStars) {
@@ -147,7 +137,7 @@ export const ReviewCard = ({ name, rating, review, imageUrl, className } : { nam
       }
       return stars;
     };
-  
+ 
     return (
       <div className={"bg-[#E1C6B3] rounded-[15px] p-6 flex items-center sm:h-[222px] w-full sm:w-[350px] "+className}>
         <div className="bg-white rounded-full w-[20%] h-[full] mr-6 flex-shrink-0">
@@ -167,23 +157,19 @@ export const ReviewCard = ({ name, rating, review, imageUrl, className } : { nam
       </div>
     );
 };
-  
+ 
 export const HomePage = () => {
-
     useEffect(() => {
         gsap.to("#hero-section", {
             // width: "100%",
             opacity: "100%"
-            // scrollTrigger: 
+            // scrollTrigger:
         });
-
         // Categories element animation
-
         // gsap.to("#categories-hover-element", {
-        //     translateX: "75%",
-        //     duration: 2
+        // translateX: "75%",
+        // duration: 2
         // });
-
         gsap.to("#categories", {
             opacity: "100%",
             scrollTrigger: {
@@ -196,7 +182,6 @@ export const HomePage = () => {
             },
             duration: 1
         });
-
         gsap.to("#reels-section", {
             opacity: "100%",
             scrollTrigger: {
@@ -209,7 +194,6 @@ export const HomePage = () => {
             },
             duration: 1
         });
-
         gsap.to("#testimonials", {
             opacity: "100%",
             scrollTrigger: {
@@ -222,9 +206,6 @@ export const HomePage = () => {
             },
             duration: 1
         });
-
-
-
         // collections section animation
         gsap.to("#collections-home-element", {
             scrollTrigger: {
@@ -254,11 +235,10 @@ export const HomePage = () => {
             opacity: "100%",
             duration: 1
         })
-        
+       
         gsap.to("#categories-hover-element", {
-            
+           
         });
-
         gsap.to("#shop-by-budget", {
             scrollTrigger: {
                 trigger: "#shop-by-budget",
@@ -273,16 +253,16 @@ export const HomePage = () => {
                     rotate: "-45deg",
                 });
                 // gsap.to("#shop-by-budget-hexagon-2", {
-                //     width: "300px"
+                // width: "300px"
                 // });
                 // gsap.to("#shop-by-budget-hexagon-3", {
-                //     width: "150px"
+                // width: "150px"
                 // });
             },
             opacity: "100%",
             duration: 1
         });
-        
+       
         gsap.to("#about-section-first", {
             scrollTrigger: {
                 trigger: "#about-section",
@@ -350,7 +330,7 @@ export const HomePage = () => {
                                             gsap.to("#about-us-first-image", {
                                                 rotateZ: "45deg"
                                             });
-                                        }                                    
+                                        }
                                     })
                                 }
                             });
@@ -362,48 +342,43 @@ export const HomePage = () => {
             });
             // gsap.timeline({ repeat: -1, yoyo: true }) // repeat forever
             // .to("#categories-hover-element", {
-            //     translateX: "300px",
-            //     duration: 2,
-            //     rotateZ: 80,
-            //     onComplete: () => {
-            //             // @ts-ignore
-            //             // categoriesImageRef.current.src = "/earring.png";
-            //     }
+            // translateX: "300px",
+            // duration: 2,
+            // rotateZ: 80,
+            // onComplete: () => {
+            // // @ts-ignore
+            // // categoriesImageRef.current.src = "/earring.png";
+            // }
             // })
             // .to("#categories-hover-element", {
-            //     translateX: "560px",
-            //     duration: 2,
-            //     rotateZ: 100,
-            //     onComplete: () => {
-            //         // @ts-ignore
-            //         // categoriesImageRef.current.src = "/pendent.png";
-            //     }
+            // translateX: "560px",
+            // duration: 2,
+            // rotateZ: 100,
+            // onComplete: () => {
+            // // @ts-ignore
+            // // categoriesImageRef.current.src = "/pendent.png";
+            // }
             // })
             // .to("#categories-hover-element", {
-            //     translateX: "0",
-            //     duration: 2,
-            //     rotateZ: 75,
-            //     onComplete: () => {
-            //         // @ts-ignore
-            //         // categoriesImageRef.current.src = "/ring.png";
-            //     }
+            // translateX: "0",
+            // duration: 2,
+            // rotateZ: 75,
+            // onComplete: () => {
+            // // @ts-ignore
+            // // categoriesImageRef.current.src = "/ring.png";
+            // }
             // });
     }, []);
-
     const navigate = useNavigate();
-
     // const categoriesImageRef = useRef(null);
-
     const [ aboutUsEmblem, setAboutUsEmblem ] = useState(0);
-
     useEffect(() => {
         const interval = setInterval(() => {
           setAboutUsEmblem(prev => (prev >= 3 ? 0 : prev + 1));
         }, 3000);
-      
+     
         return () => clearInterval(interval); // good cleanup
     }, []);
-
     const CustomLeftArrow = ({ onClick, ...rest }: ArrowProps) => {
         const {
             // carouselState: { currentSlide },
@@ -411,14 +386,13 @@ export const HomePage = () => {
         return (
             <Button variant={"ghost"}
                 onClick={onClick}
-                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-[#a68a7e] text-white hover:text-[#BFA6A1] px=4 py-2 p-4 w-0 h-0 flex justify-center items-center rounded-full shadow-md"
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-[#a68a7e] text-white hover:text-[#BFA6A1] px-4 py-2 p-4 w-0 h-0 flex justify-center items-center rounded-full shadow-md"
                 aria-label="Next"
             >
                 <ArrowLeft className="" />
             </Button>
         );
     };
-
     const CustomRightArrow = ({ onClick, ...rest }: ArrowProps) => {
         const {
             // carouselState: { currentSlide },
@@ -426,21 +400,19 @@ export const HomePage = () => {
         return (
             <Button variant={"ghost"}
                 onClick={onClick}
-                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-[#a68a7e] text-white hover:text-[#BFA6A1] px=4 py-2 p-4 w-0 h-0 flex justify-center items-center rounded-full shadow-md"
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-[#a68a7e] text-white hover:text-[#BFA6A1] px-4 py-2 p-4 w-0 h-0 flex justify-center items-center rounded-full shadow-md"
                 aria-label="Next"
             >
                 <ArrowRight className="" />
             </Button>
         );
     };
-
     const CustomDot = ({ onClick, active }: DotProps) => (
         <button
           onClick={onClick}
           className={`w-3 h-3 rounded-full mx-1 border-2 border-[#a68a7e] ${active ? 'bg-[#BFA6A1]' : 'bg-transparent'}`}
         />
     );
-
     return (
         <>
             <div className="sm:hidden w-full gap-14 min-h-screen flex-col flex">
@@ -509,7 +481,7 @@ export const HomePage = () => {
                     <p className="text-center px-4">
                         At Kultivated Karats, trust is our foundation. From pure diamonds to honest service, we ensure jewelry you can cherish with confidence
                     </p>
-                    <div className="flex gap-4 scale-60  sm:scale-100">
+                    <div className="flex gap-4 scale-60 sm:scale-100">
                         <div id="card" className="rounded-[25%] shadow-[0px_0px_20px_0px_rgba(119,96,23,0.25)] flex p-4 items-center justify-center border-[#C5B2A1] border-2 text-[#C5B2A1] flex-col w-[150px] aspect-square">
                             <Truck className="w-[50%] h-[50%] stroke-2"/>
                             <span className="text-sm font-bold text-center">Free shipping</span>
@@ -526,7 +498,7 @@ export const HomePage = () => {
                 </section>
                 <section className="w-full ">
                     <div className="w-[30%] aspect-[10/16] relative bg justify-self-center rounded-t-full">
-                    <img src="/KultivatedKaratsAssets/collage_3.png" className="absolute top-0 bottom-0 left-0 right-0 h-full object-cover rounded-b-2xl  rounded-[inherit]" alt="" />
+                    <img src="/KultivatedKaratsAssets/collage_3.png" className="absolute top-0 bottom-0 left-0 right-0 h-full object-cover rounded-b-2xl rounded-[inherit]" alt="" />
                         {/* <div className="absolute bg-red-600 top-[-5%] bottom-[-5%] left-[-5%] right-[-5%] z-[-100] bg-transparent rounded-t-[inherit] rounded-b-[inherit] border border-[#BFA6A1] "></div> */}
                         <div id="border-element" className="absolute top-[0] bottom-[0] left-[0] right-[0] z-[-100] bg-transparent rounded-t-[inherit] rounded-b-[inherit] border border-[#BFA6A1] "></div>
                         <img alt="img-1" src="/KultivatedKaratsAssets/collage_1.png" className="bg-[#E1C6B3] object-cover absolute !w-20 aspect-square rotate-45 translate-x-[50%] translate-y-1/3 bottom-0 right-[0%] rounded-lg z-[-10]" />
@@ -635,7 +607,7 @@ export const HomePage = () => {
                     </div>
                 </section>
                 {/* <section className="w-full flex gap-4 justify-evenly flex-col items-center">
-                    <p className="blog-section-fade text-3xl text-[#BFA6A1]">Read the blog</p>    
+                    <p className="blog-section-fade text-3xl text-[#BFA6A1]">Read the blog</p>
                     <div className="flex flex-col gap-4 justify-evenly w-full items-center">
                         {BLOGDATA?.map((blog) => (
                             <div className="">
@@ -733,7 +705,7 @@ export const HomePage = () => {
                     </div>
                 </section>
                 <section id="about-us-section" className="flex sm:mt-14 gap-4 sm:gap-14 items-center h-auto sm:self-end flex-col sm:flex-row mb-10 w-[85%] sm:justify-self-end justify-self-center self-center justify-between">
-                    <div className="italic sm:hidden p-4 sm:text-2xl text-sm  text-[#BFA6A1] flex justify-center items-center">
+                    <div className="italic sm:hidden p-4 sm:text-2xl text-sm text-[#BFA6A1] flex justify-center items-center">
                         At Kultivated Karats, trust is our foundation. From pure diamonds to honest service, we ensure jewelry you can cherish with confidence
                     </div>
                     <Button onClick={() => navigate("/about")} className="bg-[#BFA6A1] mb-8 text-white! px-4 rounded-none sm:hidden block">About us</Button>
@@ -761,7 +733,7 @@ export const HomePage = () => {
                                 At Kultivated Karats, trust is our foundation. From pure diamonds to honest service, we ensure jewelry you can cherish with confidence
                             </div>
                             <div className="border-[#BFA6A1] p-10 border-4 flex justify-center items-center w-[97%] text-wrap h-[90%] top-0 right-0 absolute">
-                                
+                               
                             </div>
                         </div>
                     </div>
@@ -774,10 +746,10 @@ export const HomePage = () => {
                                 // backgroundRepeat: "no-repeat",
                                 // backgroundPosition: "0"
                             }}>
-                                <img src="/KultivatedKaratsAssets/collage_3.png" className="absolute top-0 bottom-0 left-0 right-0 h-full object-cover rounded-b-2xl  rounded-[inherit]" alt="" />
+                                <img src="/KultivatedKaratsAssets/collage_3.png" className="absolute top-0 bottom-0 left-0 right-0 h-full object-cover rounded-b-2xl rounded-[inherit]" alt="" />
                                 {/* <div className="absolute bg-red-600 top-[-5%] bottom-[-5%] left-[-5%] right-[-5%] z-[-100] bg-transparent rounded-t-[inherit] rounded-b-[inherit] border border-[#BFA6A1] "></div> */}
                                 <div id="border-element" className="absolute top-[0] bottom-[0] left-[0] right-[0] z-[-100] bg-transparent rounded-t-[inherit] rounded-b-[inherit] border border-[#BFA6A1] "></div>
-                                <img alt="img-1" src="/KultivatedKaratsAssets/collage_1.png" id="about-us-first-image" className="bg-[#E1C6B3] object-cover absolute  translate-x-[70%] translate-y-1/3 bottom-0 right-[0%] rounded-lg h-[0px] w-[0px] z-[-10]" />
+                                <img alt="img-1" src="/KultivatedKaratsAssets/collage_1.png" id="about-us-first-image" className="bg-[#E1C6B3] object-cover absolute translate-x-[70%] translate-y-1/3 bottom-0 right-[0%] rounded-lg h-[0px] w-[0px] z-[-10]" />
                                 <img alt="img-2" src="/KultivatedKaratsAssets/collage_2.png" id="about-us-second-image" className="bg-[#E1C6B3] object-cover absolute top-[-10px] left-[0%] -translate-x-[70%] rounded-full h-[0] w-[0] z-[-10]" />
                                 <div id="about-us-line-element-1" className="border-[0.5px] opacity-0 border-[#BFA6A1] h-0 absolute bottom-[-15%] right-[100%] left-0">
                                     <div className="w-2 h-2 rounded-full bg-[#BFA6A1] absolute right-[0] top-1/2 translate-x-1/2 -translate-y-1/2"></div>
@@ -792,21 +764,21 @@ export const HomePage = () => {
                         </div>
                     </div>
                 </section>
-                {/* <section id="categories" className="playfair-display hidden opacity-0 relative w-full flex items-center snap-start h-[100vh] flex-col"  */}
-                <section id="categories" className="playfair-display opacity-0 relative w-full items-center snap-start max-h-screen flex-col" 
+                {/* <section id="categories" className="playfair-display hidden opacity-0 relative w-full flex items-center snap-start h-[100vh] flex-col" */}
+                <section id="categories" className="playfair-display opacity-0 relative w-full items-center snap-start max-h-screen flex-col"
                 // onMouseMove={( event ) => {
                     // if ( event.pageX < 465 || event.pageX > 1200 ) return;
                     // if ( event.pageX < 750 )
-                    //     elementRotate = (75 + ((event.pageX-465) / 10)); 
+                    // elementRotate = (75 + ((event.pageX-465) / 10));
                     // else
                     // elementRotate = (75 + ((event.pageX-465) / 10)) - (((event.pageX - 465) * 1) / 30);
                     // console.log(event.pageX, elementRotate);
                     // gsap.to("#categories-hover-element", {
-                    //     // translateX: event.pageX,
-                    //     // x: (event.pageX > 500) && (event.pageX < 1200) ? event.pageX-465 : "",
-                    //     x: event.pageX-465,
-                    //     duration: 0.5,
-                    //     rotateZ: elementRotate,
+                    // // translateX: event.pageX,
+                    // // x: (event.pageX > 500) && (event.pageX < 1200) ? event.pageX-465 : "",
+                    // x: event.pageX-465,
+                    // duration: 0.5,
+                    // rotateZ: elementRotate,
                     // });
                 // }}
                 >
@@ -815,11 +787,11 @@ export const HomePage = () => {
                             e.preventDefault();
                             navigate("/products?category-filter=ring");
                         }}>Rings</div>
-                        <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onClick={(e) => {
+                        <div className="flex-1 h-full cursor-pointer flex justify-center items-center z-10" onClick={(e) => {
                             e.preventDefault();
                             navigate("/products?category-filter=earrings");
                         }}>Earings</div>
-                        <div className="flex-1 h-full cursor-pointer  flex justify-center items-center z-10" onClick={(e) => {
+                        <div className="flex-1 h-full cursor-pointer flex justify-center items-center z-10" onClick={(e) => {
                             e.preventDefault();
                             navigate("/products?category-filter=pendant");
                         }} >Pendants</div>
@@ -829,8 +801,8 @@ export const HomePage = () => {
                     </div> */}
                     <Button onClick={(e) => {
                         e.preventDefault();
-                        navigate("/categories");
-                    }} className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all">See more <ArrowRight /></Button>
+                        navigate("/products?category-filter=bangle");
+                    }} className="hover:bg-transparent text-[#BFA6A1] absolute bottom-[5%] right-[10%] bg-transparent playpen-sans text-2xl hover:scale-110 transition-all z-10">See more <ArrowRight /></Button>
                     <div id="links" className="gap-4 absolute top-0 flex left-[10%] right-[10%] items-center bottom-0">
                         <Link to={`/products?category-filter=ring`} className="h-[80%] flex-1"></Link>
                         <Link to={`/products?category-filter=earring`} className="h-[80%] flex-1"></Link>
@@ -908,7 +880,7 @@ export const HomePage = () => {
                         }} className="flex self-center overflow-x-hidden w-0 justify-center sorts-mill-goudy-regular text-[#E1C6B3] p-0 m-0 z-[100] items-center justify-self-center tracking-wide text-[220px]">
                             Collections
                         </p> */}
-                        <div className="collections-home-heading-text flex  justify-center">
+                        <div className="collections-home-heading-text flex justify-center">
                             <div className="flex-1 flex justify-end overflow-hidden">
                                 <img className="collection-split-svg translate-x-[100%]" src="/collections-text-1.svg"/>
                             </div>
@@ -975,7 +947,7 @@ export const HomePage = () => {
                     </div>
                     <div className="flex flex-[0.55] translate-x-[1500px]" id="about-section-second">
                         <div className="flex-1 flex items-center justify-end">
-                            <div className="border-2 w-[95%] h-[70%] border-r-0 border-[#BFA6A1] flex  justify-center items-center px-[10%] inria-serif-regular text-[#BFA6A1]">
+                            <div className="border-2 w-[95%] h-[70%] border-r-0 border-[#BFA6A1] flex justify-center items-center px-[10%] inria-serif-regular text-[#BFA6A1]">
                                 Kultivated Karats has redefined luxury by blending tradition with innovation, offering exquisite lab-grown diamond jewelry that embodies purity, brilliance, and sustainability. As a leader in the industry, we craft pieces that tell stories—of love, elegance, and conscious choices. Our commitment to excellence ensures every jewel sparkles with emotion, making us a trusted name in fine jewelry.
                             </div>
                         </div>
@@ -1013,11 +985,8 @@ export const HomePage = () => {
         </>
     );
 };
-
 const BlogSection = () => {
-
     const navigate = useNavigate();
-
     useEffect(() => {
         gsap.fromTo(".blog-section-fade", {
             opacity: "0%"
@@ -1031,10 +1000,9 @@ const BlogSection = () => {
                 // scrub: true
             },
             opacity: "100%",
-            duration: 1  
+            duration: 1
         });
     }, []);
-
     return (
         <>
             <section id="blog-section-mobile" className="w-[100%] sm:hidden flex flex-col text-[#BFA6A1] playfair-display">
@@ -1113,7 +1081,7 @@ const BlogSection = () => {
                                 {BLOGDATA[0]?.title}
                             </p>
                             <p className="text-wrap">
-                                .env{BLOGDATA[0]?.blogContent?.description}
+                                {BLOGDATA[0]?.blogContent?.description}
                             </p>
                             <div className="flex-1 flex items-end">
                                 <Link to={`/blogs/${BLOGDATA[0]?._id}`} className="font-extrabold w-20 text-sm bg-transparent text-[#A68A7E] hover:bg-transparent hover:underline shadow-none">Read more</Link>
@@ -1153,7 +1121,7 @@ const BlogSection = () => {
                 <Button onClick={(e) => {
                     e.preventDefault();
                     navigate("/blogs");
-                }} className="text-xl hover:text-[#A68A7E]m-0" variant={"ghost"}>See more</Button>
+                }} className="text-xl hover:text-[#A68A7E] m-0" variant={"ghost"}>See more</Button>
             </section>
         </>
     );
