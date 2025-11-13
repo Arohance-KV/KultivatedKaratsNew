@@ -473,8 +473,8 @@ export const HomePage = () => {
                             {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
                             {/*<img src="/mobile-newbanner.jpg" className="w-full h-full object-cover" alt="" />*/}
                             {/*<img src="/mobile-banner.png" className="w-full h-full object-cover" alt="" />*/}
-                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1757503912/1_tsrnz5.png" className="w-full h-full m-auto object-cover" alt="" />
-                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1757503912/2_vp3zzc.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="https://res.cloudinary.com/dh7d6iho8/image/upload/v1763017021/1_fmerpr.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="https://res.cloudinary.com/dh7d6iho8/image/upload/v1763017020/2_cgo2x1.png" className="w-full h-full m-auto object-cover" alt="" />
                         </Carousel>
                 </section>
                 <section className="inria-serif-regular text-[#BFA6A1] flex flex-col justify-center items-center gap-4">
@@ -676,8 +676,8 @@ export const HomePage = () => {
                         >
                             {/* <img src="/banner.png" className="absolute top-0 left-0 right-0 sm:h-[90vh] h-full w-full object-cover" alt="" /> */}
                             {/*<img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1755953570/NewBanner_1_raguzv.jpg" className="w-full h-full m-auto object-cover" alt="" />*/}
-                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1757503592/1_btquhe.png" className="w-full h-full m-auto object-cover" alt="" />
-                            <img src="https://res.cloudinary.com/dmrgscauc/image/upload/v1757503602/2_v1z8tm.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="https://res.cloudinary.com/dh7d6iho8/image/upload/v1763017010/1_dtubbi.png" className="w-full h-full m-auto object-cover" alt="" />
+                            <img src="https://res.cloudinary.com/dh7d6iho8/image/upload/v1763017005/2_tv9q2r.png" className="w-full h-full m-auto object-cover" alt="" />
                         </Carousel>
                         <div id="social-links" className="flex text-white flex-col gap-4 w-auto absolute right-[5%] bottom-[15%]">
                             <Link to={INSTAGRAM}>
