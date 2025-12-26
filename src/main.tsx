@@ -15,7 +15,7 @@ import { DashboardMain } from './components/adminPanel/DashboardMain.tsx';
 import { VideoCartPage } from './components/site/home-page/VideoCartPage.tsx';
 import { VideoCallBookingPage } from './components/site/home-page/VideoCallBookingPage.tsx';
 import { Auth } from './components/site/Auth.tsx';
-import { store } from './redux/store.ts';
+import { store } from './redux1/store.ts';
 import { ProductPage } from './components/site/product-page/ProductPage.tsx';
 import { WishListPage } from './components/site/home-page/WishlistPage.tsx';
 import { CartPage } from './components/site/home-page/CartPage.tsx';

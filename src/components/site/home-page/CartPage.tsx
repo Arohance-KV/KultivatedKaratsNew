@@ -3,7 +3,7 @@ import { UIsideBar } from "./Solitare";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { clearCart, sendEmail, updateCart } from "@/utils/utilityFunctions";
+import { clearCart, sendEmail } from "@/utils/utilityFunctions";
 import { Loader2, LucidePhone, Minus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { Dispatch } from "@reduxjs/toolkit";
@@ -16,6 +16,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ToastSuccess, ToastWarning } from "@/utils/UtilityComponents";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { removeCartItem } from "@/redux1/cartSlice";
+import { applyCouponCode, applyVoucherCode, redeemPaytmGiftCard } from "@/utils/cartHelpers";
+import { processPayment, validatePayment, createOrderInDB, encryptPaytmPin, redeemPaytmGiftCardAfterPayment } from "@/utils/paymentHelpers";
 
 const phoneSchema = z.object({
     phone: z
@@ -234,7 +237,7 @@ export const CartPage = () => {
                     </p>
                     <div className="w-[90%] max-h-full gap-4 h-full mx-[5%] pb-8 flex sm:flex-row flex-col">
                         <div className="flex-[0.6] sm:h-auto min-h-[50vh] py-4 flex gap-4 overflow-y-scroll no-scrollbar flex-col">
-                            {cartItems?.map((cartItem: ICartItem) => (<CartItem customerData={customerData} dispatch={dispatch} cartItem={cartItem} cartItems={cartItems} setCartItems={setCartItems} />))}
+                            {cartItems?.map((cartItem: ICartItem) => (<CartItem dispatch={dispatch} cartItem={cartItem} cartItems={cartItems} setCartItems={setCartItems} />))}
                         </div>
                         <div className="text inria-serif-regular text-[#A68A7E] flex flex-col border-2 bg-white border-[#BFA6A1] rounded-md h-full flex-[0.4]">
                             <p className="p-4 flex justify-start text-xl">Order summary</p>
@@ -272,59 +275,20 @@ export const CartPage = () => {
                                             setCouponError("");
                                             if ( code && code != "" ) {
                                                 try {
-                                                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}coupons/verify-coupon`, {
-                                                        method: "POST",
-                                                        headers: {
-                                                            "Content-Type": "application/json",
-                                                        },
-                                                        credentials: "include",
-                                                        body: JSON.stringify({
-                                                            code: code,
-                                                            cart: customerData?.cart,
-                                                        }),
-                                                    });
-                                                    
-                                                    const data = await response.json();
-                                                
-                                                    if (!response.ok) {
-                                                        console.log(data);
-                                                        setCouponError(data?.errors?.[0] || "");
-                                                        throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
+                                                    const result = await applyCouponCode(dispatch, code, cartTotal, voucherApplied?.amount || 0);
+                                                    if (result) {
+                                                        setCouponApplied({ 
+                                                            ...couponApplied, 
+                                                            status: true, 
+                                                            amount: result.amount,
+                                                            couponCode: code
+                                                        });
+                                                    } else {
+                                                        setCouponError("Failed to apply coupon");
                                                     }
-                                                    
-                                                    let discountAmount = 0;
-                                                    
-                                                    // Handle different coupon types
-                                                    if (data?.data?.type === "fixed") {
-                                                        // Fixed discount amount
-                                                        discountAmount = Number(data?.data?.discount) || 0;
-                                                    } else if (data?.data?.type === "making_waiver") {
-                                                        // Making charges waiver - use the exact discount amount returned
-                                                        discountAmount = Number(data?.data?.discount) || 0;
-                                                    } else if (data?.data?.type === "percentage") {
-                                                        // Percentage discount
-                                                        const percentageDiscount = (Number(data?.data?.discount) / 100) * cartTotal;
-                                                        discountAmount = percentageDiscount > data?.data?.upperLimit 
-                                                            ? data?.data?.upperLimit 
-                                                            : percentageDiscount;
-                                                    }
-                                                    
-                                                    console.log("Coupon type:", data?.data?.type, "Discount amount:", discountAmount);
-
-                                                    // Ensure discount doesn't exceed cart total minus voucher amount
-                                                    if ((cartTotal - voucherApplied?.amount) < discountAmount) {
-                                                        discountAmount = cartTotal - voucherApplied?.amount;
-                                                    }
-                                                    
-                                                    console.log(data.data);
-                                                    setCouponApplied({ 
-                                                        ...couponApplied, 
-                                                        status: true, 
-                                                        amount: discountAmount 
-                                                    });
-                                                    
-                                                } catch (error) {
+                                                } catch (error: any) {
                                                     console.log(error);
+                                                    setCouponError(error.message || "Failed to apply coupon");
                                                 } finally {
                                                     setApplyCouponButtonLoading(false);
                                                 }
@@ -364,112 +328,28 @@ export const CartPage = () => {
                                             setVoucherError("");
                                             setApplyVoucherCodeLoading(true);
                                             try {
-                                                let discountAmount = 0;
+                                                let result = null;
                                                 if ( isPaytmCode ) {
-                                                    setVoucherError("");
-                                                    const encryptedPinResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/encrypt-pin`, {
-                                                        method: "POST",
-                                                        headers: {
-                                                            "Content-Type" : "application/json"
-                                                        },
-                                                        credentials: "include",
-                                                        body: JSON.stringify({ pin: (voucherApplied?.GVorVoucherPin + "") }),
-                                                    });
-
-                                                    const encryptedPinData = await encryptedPinResponse.json();
-
-                                                    if ( !encryptedPinResponse.ok ) throw Error("Failed to encrypt PIN, please try again")
-
-                                                    const encryptedPin = encryptedPinData.data;
-
-                                                    const response =  await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/validate-giftcard`, {
-                                                        method: "POST",
-                                                        headers: {
-                                                            "Content-Type" : "application/json"
-                                                        },
-                                                        credentials: "include",
-                                                        body: JSON.stringify({
-                                                            "requestBody": {
-                                                                "request": {
-                                                                    "brandMID": "PaytmGvTestBrand",
-                                                                    "cardNumber": voucherApplied?.GVorVoucherCode,
-                                                                    "cardPIN": encryptedPin,
-                                                                    "orderId": "MERCHANT-ORDER-ID-1689584367474",
-                                                                    "sourceMerchantMid": "PaytmGvTestReseller",
-                                                                    // "amount": 100,
-                                                                    "redemptionMetaData": {
-                                                                    "redeemerName": `${customerData?.firstName} ${customerData?.lastName}`,
-                                                                    "redeemerMobileNumber": customerData?.phoneNumber || "",
-                                                                    "redeemerEmailId": customerData?.email || "",
-                                                                    // "redemptionStoreId":"pantaloonstore12345",
-                                                                    // "redemptionStoreName":"Pantaloon sec 18 Noida",
-                                                                    // "invoiceNumber":"12345678",
-                                                                    "invoiceAmount": cartTotal
-                                                                    },
-                                                                    "source": "BRAND"
-                                                                }
-                                                            }
-                                                        }),
-                                                    });
-
-                                                    const responseJSON = await response.json();
-
-                                                    if ( !response.ok ) throw Error("Failed to redeem giftcard, please try again")
-                                                        
-                                                    console.log(responseJSON.data.statusMessage);
-
-                                                    if ( responseJSON.data.status == "FAILURE" ) {
-                                                        setVoucherError(responseJSON.data.statusMessage);
-                                                        return;
+                                                    result = await redeemPaytmGiftCard(
+                                                        voucherApplied?.GVorVoucherCode,
+                                                        voucherApplied?.GVorVoucherPin?.toString() || "",
+                                                        customerData,
+                                                        cartTotal
+                                                    );
+                                                    if (result) {
+                                                        setVoucherApplied({ ...voucherApplied, status: true, amount: result.amount, GVorVoucherPin: result.pin ? Number(result.pin) : undefined });
                                                     }
-                                                    if ( Number(responseJSON?.data?.response?.availableAmount) > cartTotal )
-                                                        return setVoucherError("Giftcard amount greater than cart amount!");
-                                                    // setVoucherOrGiftCardValid(true);
-                                                    setVoucherError("");
-                                                    discountAmount = Number(responseJSON?.data?.response?.availableAmount) || 0;
-                                                    setVoucherApplied({ ...voucherApplied, status: responseJSON?.data?.status == "FAILURE" ? false : true, amount: discountAmount });
                                                 } else {
-                                                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}vouchers/apply-voucher`, {
-                                                        method: "POST",
-                                                        headers: {
-                                                            "Content-Type": "application/json",
-                                                        },
-                                                        credentials: "include",
-                                                        body: JSON.stringify({
-                                                            voucherCode: voucherApplied?.GVorVoucherCode,
-                                                            cartTotal: cartTotal,
-                                                            userId: customerData?._id
-                                                        }),
-                                                    });
-
-                                                    const data = await response.json();
-
-                                                    if (!response.ok) {
-                                                        console.log(data);
-                                                        setVoucherError(data?.errors?.[0] || data.message || "Failed to apply voucher");
-                                                        throw new Error("HTTP error! status: " + response.status + ", " + response.statusText);
+                                                    result = await applyVoucherCode(
+                                                        dispatch,
+                                                        voucherApplied?.GVorVoucherCode,
+                                                        cartTotal,
+                                                        customerData?._id,
+                                                        couponApplied?.amount || 0
+                                                    );
+                                                    if (result) {
+                                                        setVoucherApplied({ ...voucherApplied, status: true, GVorVoucherCode: result.code, amount: result.amount, GVorVoucherPin: undefined });
                                                     }
-
-                                                    if (!data.success || data.statusCode !== 200 || !data.data.isValid) {
-                                                        setVoucherError(data.message || "Invalid voucher code");
-                                                        return;
-                                                    }
-
-                                                    discountAmount = data.data.discount;
-
-                                                    // Ensure discount doesn't exceed cart total minus coupon amount
-                                                    if ((cartTotal - couponApplied?.amount) < discountAmount) {
-                                                        discountAmount = cartTotal - couponApplied?.amount;
-                                                    }
-
-                                                    console.log(data.data);
-                                                    setVoucherApplied({ 
-                                                        ...voucherApplied, 
-                                                        status: true, 
-                                                        GVorVoucherCode: data.data.voucher.code,
-                                                        amount: discountAmount,
-                                                        GVorVoucherPin: undefined
-                                                    });
                                                 }
                                             } catch (error) {
                                                 console.log(error);
@@ -489,227 +369,107 @@ export const CartPage = () => {
                                     setIsPlaceOrderButtonLoading(true);
                                     if ( customerData?.address?.city == null )
                                         return navigate("/set-shipping");
-                                    // if ( customerData?.address?.city == null )
-                                    //     return navigate("/set-shipping");
+                                    
                                     try {
-                                        
                                         const subtotal = cartItems?.reduce((total, item) => {
                                             return total + item?.totalPrice * item?.quantity;
                                         }, 0) || 0;
                                         const gst = subtotal * (3 / 100);
                                         const finalAmount = Math.round((subtotal + gst) - couponApplied?.amount - voucherApplied?.amount);
-                                        
-                                        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}payment/create-an-order/`, {
-                                            method: "POST",
-                                            headers: {
-                                                "Content-Type": "application/json",
-                                            },
-                                            body: JSON.stringify({ options: {
-                                                amount: (finalAmount * 100),
-                                                // amount: (Math.round(100) * 100),
-                                                currency: "INR",
-                                            }}),
-                                            credentials: "include"
-                                        });
-                                        // console.log(response);
-                                
-                                        if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
-                                        
-                                        const data = await response.json();
-                                        // console.log(data, window.Razorpay);
 
-                                        var options = {
-                                            "key_id": import.meta.env.VITE_RAZORPAY_KEY_ID,
-                                            "key": import.meta.env.VITE_RAZORPAY_KEY_ID,
-                                            "amount": (finalAmount * 100),
-                                            "currency": "INR",
-                                            "name": "Kultivated karats",
-                                            "description": "Test Transaction",
-                                            "image": "https://example.com/your_logo",
-                                            "order_id": data?.data?.id, 
-                                            "handler": async function (res : any){
+                                        // Initialize Razorpay payment with handler
+                                        const razorpayInstance = await processPayment(
+                                            cartItems,
+                                            cartTotal,
+                                            customerData,
+                                            couponApplied?.amount || 0,
+                                            voucherApplied?.amount || 0,
+                                            async (res: any) => {
                                                 try {
-                                                    console.log(res);
-                                                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}payment/order/validate`, {
-                                                        method: "POST",
-                                                        headers: {
-                                                            "Content-Type": "application/json",
-                                                        },
-                                                        body: JSON.stringify({ 
-                                                            razorpay_order_id: res.razorpay_order_id,
-                                                            razorpay_payment_id: res.razorpay_payment_id, 
-                                                            razorpay_signature: res.razorpay_signature,
-                                                        }),
-                                                        credentials: "include"
+                                                    // Validate payment
+                                                    const validationData = await validatePayment({
+                                                        razorpay_order_id: res.razorpay_order_id,
+                                                        razorpay_payment_id: res.razorpay_payment_id,
+                                                        razorpay_signature: res.razorpay_signature,
                                                     });
-                                                    // console.log(response);
-                                                    
-                                                    if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
-                                                    
-                                                    console.log(res);
 
-                                                    const data = await response.json();
-                                                    console.log(data, response);
-
-                                                    console.log(response);
-                                                    const orderResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}orders/create-an-order`, {
-                                                        method: "POST",
-                                                        headers: {
-                                                            "Content-Type": "application/json",
-                                                        },
-                                                        body: JSON.stringify({ 
-                                                            order: {
-                                                                orderId: Math.round(Math.random() * 100000000 + 1),
-                                                                customerId: customerData?._id,
-                                                                total: finalAmount,
-                                                                // total: 0,
-                                                                deliveryAddress: customerData?.address,
-                                                                orderStatus: "Pending",
-                                                                cart: customerData?.cart,
-                                                            }
-                                                        }),
-                                                        credentials: "include"
-                                                    });
-                                                    // console.log(response);
-                                                    
-                                                    if (!orderResponse.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
-                                                
-
-                                                    console.log(orderResponse);
-                                                    
-                                                    const orderData = await orderResponse.json();
-
-                                                    if (voucherApplied.status && voucherApplied.GVorVoucherPin !== undefined) {
-                                                        const encryptedPinResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/encrypt-pin`, {
-                                                            method: "POST",
-                                                            headers: {
-                                                                "Content-Type" : "application/json"
-                                                            },
-                                                            credentials: "include",
-                                                            body: JSON.stringify({ pin: (voucherApplied?.GVorVoucherPin + "") }),
-                                                        });
-
-                                                        const encryptedPinData = await encryptedPinResponse.json();
-
-                                                        if ( !encryptedPinResponse.ok ) throw Error("Failed to encrypt PIN, please try again")
-
-                                                        const encryptedPin = encryptedPinData.data;
-
-                                                        const GVresponse =  await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/redeem-giftcard`, {
-                                                            method: "POST",
-                                                            headers: {
-                                                                "Content-Type" : "application/json"
-                                                            },
-                                                            credentials: "include",
-                                                            body: JSON.stringify({
-                                                                "requestBody": {
-                                                                    "request": {
-                                                                        "brandMID": "PaytmGvTestBrand",
-                                                                        "cardNumber": voucherApplied?.GVorVoucherCode,
-                                                                        "cardPIN": encryptedPin,
-                                                                        "orderId": "MERCHANT-ORDER-ID-1689584367474",
-                                                                        "sourceMerchantMid": "PaytmGvTestReseller",
-                                                                        "amount": voucherApplied?.amount,
-                                                                        "redemptionMetaData": {
-                                                                        "redeemerName": `${customerData?.firstName} ${customerData?.lastName}`,
-                                                                        "redeemerMobileNumber": customerData?.phoneNumber || "",
-                                                                        "redeemerEmailId": customerData?.email || "",
-                                                                        "invoiceAmount": cartTotal
-                                                                        },
-                                                                        "source": "BRAND"
-                                                                    }
-                                                                }
-                                                            }),
-                                                        });
-
-                                                        if ( !GVresponse.ok ) throw Error("Failed to redeem giftcard");
-
-                                                        const GVresponseJSON = await GVresponse.json();
-                                                        console.log(GVresponseJSON);
+                                                    if (!validationData) {
+                                                        throw new Error("Payment validation failed");
                                                     }
 
-                                                    const emailToCusomter = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ customerData?.email, "rohraaaryan@gmail.com" ], subject : "Order placed at kultivated karats!", html:"Thank you for placing order at kultivated karats." });
-                                                    const emailToOwner = await sendEmail({ from: import.meta.env.VITE_FROM_EMAIL, to: [ "info@kultivatedkarats.com", "sampathraj@ketandiamonds.com", "manishkumar@ketandiamonds.com", "deepaksagar@ketandiamonds.com", "mehek@kultivatedkarats.com", "rohraaaryan@gmail.com", "kultivatedkaratsarohance@gmail.com" ], subject : "Order received from kultivatedkarats.com!", html: getOrderEmailHtml() });
+                                                    // Create order in database
+                                                    const orderData = await createOrderInDB({
+                                                        order: {
+                                                            orderId: Math.round(Math.random() * 100000000 + 1),
+                                                            customerId: customerData?._id || "",
+                                                            total: finalAmount,
+                                                            deliveryAddress: customerData?.address || {} as any,
+                                                            orderStatus: "Pending",
+                                                            cart: customerData?.cart,
+                                                        }
+                                                    });
 
-                                                    console.log(orderData, orderResponse, emailToCusomter, emailToOwner);
+                                                    if (!orderData) {
+                                                        throw new Error("Failed to create order");
+                                                    }
+
+                                                    // Handle Paytm gift card redemption if applicable
+                                                    if (voucherApplied?.status && voucherApplied?.GVorVoucherPin) {
+                                                        const encryptedPin = await encryptPaytmPin(String(voucherApplied.GVorVoucherPin));
+                                                        if (encryptedPin) {
+                                                            await redeemPaytmGiftCardAfterPayment({
+                                                                brandMID: "PaytmGvTestBrand",
+                                                                cardNumber: voucherApplied?.GVorVoucherCode,
+                                                                cardPIN: encryptedPin,
+                                                                orderId: "MERCHANT-ORDER-ID-1689584367474",
+                                                                sourceMerchantMid: "PaytmGvTestReseller",
+                                                                amount: voucherApplied?.amount,
+                                                                redemptionMetaData: {
+                                                                    redeemerName: `${customerData?.firstName} ${customerData?.lastName}`,
+                                                                    redeemerMobileNumber: String(customerData?.phoneNumber || ""),
+                                                                    redeemerEmailId: customerData?.email || "",
+                                                                    invoiceAmount: cartTotal
+                                                                },
+                                                                source: "BRAND"
+                                                            });
+                                                        }
+                                                    }
+
+                                                    // Send confirmation emails
+                                                    await sendEmail({ 
+                                                        from: import.meta.env.VITE_FROM_EMAIL, 
+                                                        to: [ customerData?.email, "rohraaaryan@gmail.com" ], 
+                                                        subject: "Order placed at kultivated karats!", 
+                                                        html: "Thank you for placing order at kultivated karats." 
+                                                    });
+                                                    await sendEmail({ 
+                                                        from: import.meta.env.VITE_FROM_EMAIL, 
+                                                        to: [ "info@kultivatedkarats.com", "sampathraj@ketandiamonds.com", "manishkumar@ketandiamonds.com", "deepaksagar@ketandiamonds.com", "mehek@kultivatedkarats.com", "rohraaaryan@gmail.com", "kultivatedkaratsarohance@gmail.com" ], 
+                                                        subject: "Order received from kultivatedkarats.com!", 
+                                                        html: getOrderEmailHtml() 
+                                                    });
+
+                                                    // Complete order flow
                                                     dispatch(setCustomerData(orderData?.data));
                                                     await clearCart(dispatch, customerData?._id ? true : false);
                                                     navigate("/payment-success");
                                                 } catch (error) {
-                                                    console.log(error);
+                                                    console.error("Payment handler error:", error);
+                                                    toast.error("Error processing payment. Please contact support.", {
+                                                        className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white"
+                                                    });
                                                 }
-                                            },
-                                            modal: {
-                                                ondismiss: async function () {
-                                                    console.log("Modal closed by user");
-                                                    // const response =  await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}paytm/redeem-giftcard`, {
-                                                    //     method: "POST",
-                                                    //     headers: {
-                                                    //         "Content-Type" : "application/json"
-                                                    //     },
-                                                    //     credentials: "include",
-                                                    //     body: JSON.stringify({
-                                                    //         "requestBody": {
-                                                    //             "request": {
-                                                    //                 "brandMID": "PaytmGvTestBrand",
-                                                    //                 "cardNumber": voucherOrGiftCardRef.current,
-                                                    //                 // "cardPIN": encryptedPin,
-                                                    //                 "orderId": "MERCHANT-ORDER-ID-1689584367474",
-                                                    //                 "sourceMerchantMid": "PaytmGvTestReseller",
-                                                    //                 "amount": 100,
-                                                    //                 "redemptionMetaData": {
-                                                    //                 "redeemerName": `${customerData?.firstName} ${customerData?.lastName}`,
-                                                    //                 "redeemerMobileNumber": customerData?.phoneNumber || "",
-                                                    //                 "redeemerEmailId": customerData?.email || "",
-                                                    //                 // "redemptionStoreId":"pantaloonstore12345",
-                                                    //                 // "redemptionStoreName":"Pantaloon sec 18 Noida",
-                                                    //                 // "invoiceNumber":"12345678",
-                                                    //                 "invoiceAmount": cartTotal
-                                                    //                 },
-                                                    //                 "source": "BRAND"
-                                                    //             }
-                                                    //         }
-                                                    //     }),
-                                                    // });
-
-                                                    // const responseJSON = await response.json();
-
-                                                    // if ( !response.ok ) throw Error("Failed to redeem giftcard, please try again")
-                                                        
-                                                    // console.log(responseJSON.data.statusMessage);
-
-                                                    // if ( responseJSON.data.status == "FAILURE" ) {
-                                                    //     setVoucherError(responseJSON.data.statusMessage);
-                                                    //     return;
-                                                    // }
-                                                }
-                                            },
-                                            "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
-                                                "name": `${customerData?.firstName} ${customerData?.lastName}`, //your customer's name
-                                                "email": `${customerData?.email}`, 
-                                                "contact": `${customerData?.phoneNumber || "0000000000"}`  //Provide the customer's phone number for better conversion rates 
-                                            },
-                                            // "notes": {
-                                            //     "address": "Razorpay Corporate Office"
-                                            // },
-                                            "theme": {
-                                                "color": "#BFA6A1"
                                             }
-                                        };
-                                        // var rzp1 = new Razorpay(options);
-                                        const rzp = new (window as any).Razorpay(options);
-                                        rzp.open();
-                                        rzp.on("payment.failed", function (response: any) {
-                                            console.log("payment failed")
-                                            console.log(response)
-                                        });
-                                        // rzp.on("payment.success", async function (response: any) {
+                                        );
 
-                                        // });
-
-                                        e.preventDefault();
+                                        if (!razorpayInstance) {
+                                            setIsPlaceOrderButtonLoading(false);
+                                        }
                                     } catch (error) {
-                                        console.log(error);
+                                        console.error("Payment processing error:", error);
+                                        toast.error("Error initiating payment. Please try again.", {
+                                            className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white"
+                                        });
                                     } finally {
                                         setIsPlaceOrderButtonLoading(false);
                                     }
@@ -724,7 +484,7 @@ export const CartPage = () => {
 };
 
 
-const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } : { cartItem: ICartItem, cartItems: ICartItem[], dispatch: Dispatch, customerData: IUser, setCartItems: React.Dispatch<React.SetStateAction<ICartItem[]>> }) => {
+const CartItem = ({ cartItem, cartItems, dispatch, setCartItems } : { cartItem: ICartItem, cartItems: ICartItem[], dispatch: Dispatch, setCartItems: React.Dispatch<React.SetStateAction<ICartItem[]>> }) => {
 
     const [ isRemoveItemLoadingButton, setIsRemoveItemLoadingButton ] = useState(false);
 
@@ -737,12 +497,20 @@ const CartItem = ({ cartItem, cartItems, dispatch, customerData, setCartItems } 
                 <Button disabled={isRemoveItemLoadingButton} variant={"ghost"} className="absolute z-30 rounded-full py-3 px-1 w-0 h-0 -translate-y-1/2 translate-x-1/2 right-0 top-0 bg-white text-[#A68A7E] border border-[#A68A7E] hover:text-white hover:bg-gray-800/20" onClick={async (e) => {
                     e.preventDefault();
                     setIsRemoveItemLoadingButton(true);
-                    const response = await updateCart({ containsGemstone: cartItem?.product?.containsGemstone , product: cartItem.product!, quantity: 1, color: "white", karat: 14, totalPrice: 0 }, false, false, cartItems, dispatch, customerData?._id ? true : false, customerData?.wishList, customerData?.videoCallCart);
-                    setIsRemoveItemLoadingButton(false);
-                    console.log(customerData?.cart, response)
-                    setCartItems(customerData?.cart);
-                    // setIsInVideoCallCart(false);
-                    return toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });            
+                    try {
+                        const productId = cartItem.product?._id || "";
+                        const result = await dispatch(removeCartItem(productId) as any);
+                        if (result.type === removeCartItem.fulfilled.type) {
+                            setCartItems(cartItems.filter(item => item.product?._id !== cartItem.product?._id));
+                            toast.success("Product deleted from cart successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                        } else {
+                            toast.error("Failed to remove product from cart", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white" });
+                        }
+                    } catch (error) {
+                        toast.error("Error removing product", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white" });
+                    } finally {
+                        setIsRemoveItemLoadingButton(false);
+                    }
                 }}>{isRemoveItemLoadingButton ? <Loader2 className="w-2 h-2 animate-spin" /> : <Minus className="w-2 h-2" />}</Button>
             </div>
             <div className="flex-1 sm:bg-white border-2 border-[#BFA6A1] px-8 overflow-visible flex rounded-md text-[#A68A7E] inria-serif-regular">

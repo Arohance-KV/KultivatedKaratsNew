@@ -1,11 +1,12 @@
 import { ArrowUpDown } from "lucide-react";
-// import { Input } from "../../ui/input";
 import { UIsideBar } from "./Solitare"
 import { Button } from "../../ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { ICollection, IProduct } from "../../../utils/interfaces";
 import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
+import { fetchAllCollections } from "@/redux1/collectionSlice";
+import { fetchAllProducts } from "@/redux1/productSlice";
 
 const Collection = ({ data, navigate } : { data : ICollection, navigate: NavigateFunction}) => {
     
@@ -41,8 +42,8 @@ const Collection = ({ data, navigate } : { data : ICollection, navigate: Navigat
 }
 
 export const Collections = () => {
-
-    const collectionsFromStore = useSelector((state: any) => state.website.collections);
+    const dispatch = useDispatch();
+    const { collections: collectionsFromStore } = useSelector((state: any) => state.collection);
 
     const navigate = useNavigate();
     const [ collections, setCollections ] = useState<ICollection[]>([]);
@@ -50,8 +51,14 @@ export const Collections = () => {
     const queryParams = new URLSearchParams(location.search);
     const filter = queryParams.get("filter");
 
+    // Dispatch Redux thunks on component mount
     useEffect(() => {
-        let filteredCollections = collectionsFromStore.map((collection: ICollection) => {
+        dispatch(fetchAllCollections() as any);
+        dispatch(fetchAllProducts() as any);
+    }, [dispatch]);
+
+    useEffect(() => {
+        let filteredCollections = (collectionsFromStore || []).map((collection: ICollection) => {
             let products = collection.products || [];
 
             if (filter === "100k") {
@@ -69,7 +76,7 @@ export const Collections = () => {
         });
 
         setCollections(filteredCollections);
-    }, [ collectionsFromStore ]);
+    }, [ collectionsFromStore, filter ]);
     // const [ showFilter, setShowFilter ] = useState<Boolean>(true);
     const [ showSortOptions, setShowSortOptions ] = useState<Boolean>(false); 
 

@@ -3,11 +3,12 @@ import { UIsideBar } from "../home-page/Solitare";
 import { useEffect, useRef, useState } from "react";
 import { ICartItem, IProduct, IUser, IWishListItem } from "../../../utils/interfaces";
 import { Button } from "../../ui/button";
-import { updateCart, updateVideoCallCart, updateWishList } from "../../../utils/utilityFunctions";
+import { updateCart, updateVideoCallCart } from "../../../utils/utilityFunctions";
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowLeft, ChevronLeft, ChevronRight, ListMinus, ListPlus, Loader2, Package, Percent, Repeat, RotateCcw, ShieldCheck, Tag, Trash2, Triangle, Video, VideoOff } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { toast } from "sonner";
+import { toggleWishlistItem } from "../../../utils/wishlistHelpers";
 import { ToastSuccess } from "../../../utils/UtilityComponents";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -18,9 +19,10 @@ import { ReviewCard, TESTIMONIALS } from "../home-page/HomePage";
 import Marquee from "react-fast-marquee";
 import { Skeleton } from "@/components/ui/skeleton";
 import React, { useCallback } from 'react';
-import { ChevronDown, Check } from 'lucide-react'; // Assuming you have lucide-react for icons
+import { ChevronDown, Check } from 'lucide-react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { fetchProductById } from "@/redux1/productSlice";
 
 const ringSizes = [
     { value: '6', label: '6' },
@@ -51,22 +53,26 @@ const ringSizes = [
 ];
 
 export const ProductPage = () => {
-    const { productId }= useParams();
-    // const ringSizeRef = useRef(0);
-    const [ ringSize, setRingSize ] = useState(0);
-    // const [ product, setProduct ] = useState<IProduct>();
-    const [ productData, setProductData ] = useState<IProduct>(useSelector((state: any) => state.website.productData));
+    const { productId } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
+    const [ ringSize, setRingSize ] = useState(0);
+    const { selectedProduct } = useSelector((state: any) => state.product);
+    const [ productData, setProductData ] = useState<IProduct | null>(null);
+    
     const userData: IUser = useSelector((state: any) => state.website.customerData);
-    const currentWishlist: IWishListItem[] = userData?._id ? userData?.wishList : JSON.parse(localStorage.getItem("wishList")!) ;
-    const currentCart: ICartItem[] = userData?._id ? userData?.cart : JSON.parse(localStorage.getItem("cart")!);
-    const currentVideoCallCart: ICartItem[] = userData?._id ? userData?.videoCallCart : JSON.parse(localStorage.getItem("videoCallCart")!);
+    const currentWishlist: IWishListItem[] = userData?._id ? userData?.wishList : JSON.parse(localStorage.getItem("wishList") || "[]");
+    const currentCart: ICartItem[] = userData?._id ? userData?.cart : JSON.parse(localStorage.getItem("cart") || "[]");
+    const currentVideoCallCart: ICartItem[] = userData?._id ? userData?.videoCallCart : JSON.parse(localStorage.getItem("videoCallCart") || "[]");
+    
     const [ isInWishList, setIsInWishList ] = useState<boolean>(false);
     const [ isInCart, setIsInCart ] = useState<boolean>(false);
     const [ isInVideoCallCart, setIsInVideoCallCart ] = useState(false);
     const [ isWishListAddedButtonLoading, setIsWishListAddedButtonLoading ] = useState<boolean>(false);
     const [ isCartAddedButtonLoading, setIsCartAddedButtonLoading ] = useState<boolean>(false);
     const [ isInVideoCallCartButtonLoading, setIsInVideoCallCartButtonLoading ] = useState(false);
+    
     const quantityRef = useRef(1);
     const karatRef = useRef(14);
     const colourRef = useRef("White");
@@ -74,53 +80,48 @@ export const ProductPage = () => {
     const addChainRef = useRef(false);
     const gemstoneRef = useRef("gemstone");
 
+    // Dispatch Redux thunk to fetch product
     useEffect(() => {
-        (async function () {
-            await getProductFromId();
-            console.log();
-        })();
-    }, []);    
+        if (productId) {
+            dispatch(fetchProductById(productId) as any);
+        }
+    }, [productId, dispatch]);
+
+    // Helper function to build price details params with null safety
+    const buildPriceDetailsParams = () => ({
+        isGemStoneProduct: productData?.containsGemstone ?? false,
+        isChainAdded: addChainRef?.current,
+        chainKarat: chainKaratRef?.current,
+        isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true,
+        karat: karatRef?.current,
+        pointersWeight: productData?.pointersWeight ?? 0,
+        solitareWeight: productData?.solitareWeight ?? 0,
+        gemStonePointerWeight: productData?.gemStoneWeightPointer ?? 0,
+        gemStoneSolWeight: productData?.gemStoneWeightSol ?? 0,
+        multiDiaWeight: productData?.multiDiamondWeight ?? 0,
+        netWeight: productData?.netWeight ?? 0
+    });
+
+    // Update local state when Redux product changes
+    useEffect(() => {
+        if (selectedProduct) {
+            setProductData(selectedProduct);
+        }
+    }, [selectedProduct]);
 
     const [ diamondCalculation, setDiamondCalculation ] = useState<{ subTotal: number, total: number, grossWeight: number, goldRate: number, solitareRate: number, multiDiaRate: number, pointersRate: number, diamondRate: number, makingCharges: number, pendantChainPrice: number, gemstonePointerRate: number, gemstoneSolRate: number, CERTIFICATION_CHARGES: number }>();
 
     useEffect(() => {
-        setIsInWishList(currentWishlist?.find((item: IWishListItem) => item?.product?._id === productData?._id) == undefined ? false : true);
-        setIsInCart(currentCart?.find((item: ICartItem) => item?.product?._id === productData?._id) == undefined ? false : true);
-        console.log(currentWishlist?.find((item: IWishListItem) => item?.product?._id === productData?._id), isInWishList, currentCart, currentWishlist);
-        console.log(currentWishlist, isInWishList, isInCart, currentCart, productData, productData);
-        console.log(currentWishlist, productData);
-        const price = getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight });
-        setDiamondCalculation(price); 
-        console.log(productData)
-    }, [ productData ]);
-
-    const getProductFromId = async () => {
-        try {
-            // @ts-ignore
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}products/get-product/${productId}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include"
-            });
-            // console.log(response);
-
-            if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
-            
-            const data = await response.json();
-            console.log(data.data);
-            setProductData(data?.data);
-            // setProductData(data.data)
-        } catch (error) {
-            console.log(error);
+        if (productData) {
+            setIsInWishList(currentWishlist?.find((item: IWishListItem) => item?.product?._id === productData?._id) == undefined ? false : true);
+            setIsInCart(currentCart?.find((item: ICartItem) => item?.product?._id === productData?._id) == undefined ? false : true);
+            const price = getProductPriceDetails(buildPriceDetailsParams());
+            setDiamondCalculation(price); 
         }
-    }
+    }, [ productData, currentCart, currentWishlist ]);
 
     // const [ isInCart, setIsInCart ] = useState(false);
     // const [ isInWishList, setIsInWishList ] = useState(false);
-
-    const navigate = useNavigate();
 
     // console.log(productData?.goldColor[0]?.charAt(0).toUpperCase() + productData?.goldColor[0]?.slice(1) == "White");
 
@@ -129,7 +130,7 @@ export const ProductPage = () => {
             <UIsideBar side="left"/>
             <UIsideBar side="right"/>
             <div className="sm:hidden flex flex-col inria-serif-regular text-[#E1C6B3] border-[#E1C6B3] p-4 border m-4 justify-self-center rounded-lg">
-                <JewelryCarousel imageUrl={ productData?.imageUrl } />
+                <JewelryCarousel imageUrl={ productData?.imageUrl || [] } />
                 <p className="text-xl my-2">
                     {productData?.name}
                 </p>
@@ -203,17 +204,16 @@ export const ProductPage = () => {
                             if ( (productData?.category?._id == "67fe5da50254f62d3e5fe917" && ringSize == (0)) ) return;
                             setIsWishListAddedButtonLoading(true);
                             e.preventDefault();
-                            if( isInWishList )
-                            {
-                                await updateWishList({ product: productData!, color: colourRef.current, karat: karatRef.current }, false, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
-                                setIsWishListAddedButtonLoading(false);
-                                setIsInWishList(false);
-                                return toast.success("Product deleted from wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                            const success = await toggleWishlistItem(
+                                dispatch,
+                                { product: productData!, color: colourRef.current, karat: karatRef.current },
+                                isInWishList,
+                                userData?._id
+                            );
+                            if (success) {
+                                setIsInWishList(!isInWishList);
                             }
-                            await updateWishList({ product: productData!, color: colourRef.current, karat: karatRef.current}, true, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                             setIsWishListAddedButtonLoading(false);
-                            setIsInWishList(true);
-                            return toast.success("Product added to wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                         }}>{isWishListAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInWishList ? <>Remove from wishlist <ListMinus /></> : <>Add to wishlist <ListPlus /></>}</Button>
                     </div>
                     <Button className="border-[#A68A7E] border text-[#A68A7E] bg-white hover:bg-[#A68A7E] hover:text-white" onClick={async (e) => {
@@ -247,7 +247,7 @@ export const ProductPage = () => {
                         <RadioGroup id="gem-stone-input" onValueChange={(value) => {
                                 // karatRef.current = Number(value);
                                 gemstoneRef.current = value;
-                                setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                         }} defaultValue={ gemstoneRef?.current }>
                             {/* {productData?.totalKarats?.map(karat => { */}
                                 {/* return ( */}
@@ -298,7 +298,7 @@ export const ProductPage = () => {
                                                         </p>
                                                         <RadioGroup className="w-full" id="karat-input" onValueChange={(value) => {
                                                                 karatRef.current = Number(value);
-                                                                setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                                setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                         }} defaultValue={ "14" }>
                                                             {/* {productData?.totalKarats?.map(karat => { */}
                                                                 {/* return ( */}
@@ -318,13 +318,12 @@ export const ProductPage = () => {
                                                                 Get a chain with the pendant: <Checkbox onCheckedChange={(value) => {
                                                                     console.log(typeof value);
                                                                     addChainRef.current = value ? true : false;
-                                                                    if ( productData?.containsGemstone ) setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }))
-                                                                    else setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                                    setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                                 }} />
                                                             </p>
                                                             {(addChainRef.current == true) && <RadioGroup className="w-full" id="karat-input" onValueChange={(value) => {
                                                                     chainKaratRef.current = Number(value);
-                                                                    setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                                    setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                                     // karatRef.current = Number(value);
                                                             }} defaultValue={ "14" }>
                                                                 {/* {productData?.totalKarats?.map(karat => { */}
@@ -346,13 +345,12 @@ export const ProductPage = () => {
                                                             Get a chain with the pendant: <Checkbox onCheckedChange={(value) => {
                                                                 console.log(typeof value);
                                                                 addChainRef.current = value ? true : false;
-                                                                if ( productData?.containsGemstone ) setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }))
-                                                                else setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                                setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                             }} />
                                                         </p>
                                                         {(addChainRef.current == true) && <RadioGroup className="w-full" id="karat-input" onValueChange={(value) => {
                                                                 chainKaratRef.current = Number(value);
-                                                                setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                                setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                             }} defaultValue={ "14" }>
                                                             <Label className={cn("items-center flex justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
                                                                 <Label className="captalize" htmlFor="pc-14karat">{14}k</Label>
@@ -395,7 +393,7 @@ export const ProductPage = () => {
                             navigate("/collections");
                     }}><ArrowLeft className="stroke-[#E1C6B3]" /></Button>
                     <div className="flex-1 flex justify-center items-center">
-                        <JewelryCarousel imageUrl={ productData?.imageUrl } />
+                        <JewelryCarousel imageUrl={ productData?.imageUrl || [] } />
                     </div>
                 </div>
             </div> */}
@@ -409,7 +407,7 @@ export const ProductPage = () => {
                         }}><ArrowLeft className="stroke-[#E1C6B3]" /></Button>
                         <div className="flex-1 flex justify-center items-center">
                             {/* <img src={productData?.imageUrl?.[0]?.url} alt="" className="w-[70%] aspect-square rounded-md border border-[#E1C6B3]" /> */}
-                            <JewelryCarousel imageUrl={ productData?.imageUrl } />
+                            <JewelryCarousel imageUrl={ productData?.imageUrl || [] } />
                         </div>
                         <div className="bg-[#BFA6A1] self-end justify-self-end justify-center items-center gap-4 p-4 w-[80%] inria-serif-regular flex flex-col text-white" id="certificate-of-authenticity">
                             <p className="text-bold text-lg">
@@ -434,7 +432,7 @@ export const ProductPage = () => {
                             <AccordionItem value="item-1">
                                 <AccordionTrigger className="sm:max-w-1/2 w-full border px-4 border-[#A68A7E]">Customization options</AccordionTrigger>
                                 <AccordionContent>
-                                    {productData._id ? <div className="flex">
+                                    {productData?._id ? <div className="flex">
                                         <div className="flex-1 flex w flex-col gap-4">
                                             <p className="">
                                                 Colours:
@@ -464,7 +462,7 @@ export const ProductPage = () => {
                                                 <RadioGroup id="gem-stone-input" onValueChange={(value) => {
                                                         // karatRef.current = Number(value);
                                                         gemstoneRef.current = value;
-                                                        setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                        setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                 }} defaultValue={ gemstoneRef?.current }>
                                                     {/* {productData?.totalKarats?.map(karat => { */}
                                                         {/* return ( */}
@@ -485,13 +483,12 @@ export const ProductPage = () => {
                                                     Get a chain with the pendant: <Checkbox onCheckedChange={(value) => {
                                                         console.log(typeof value);
                                                         addChainRef.current = value ? true : false;
-                                                        if ( productData?.containsGemstone ) setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }))
-                                                        else setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                        setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                     }} />
                                                 </p>
                                                 {(addChainRef.current == true) && <RadioGroup className="w-full" id="karat-input" onValueChange={(value) => {
                                                         chainKaratRef.current = Number(value);
-                                                        setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                        setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                         // karatRef.current = Number(value);
                                                 }} defaultValue={ "14" }>
                                                     {/* {productData?.totalKarats?.map(karat => { */}
@@ -543,7 +540,7 @@ export const ProductPage = () => {
                                                 </p>
                                                 <RadioGroup id="karat-input" onValueChange={(value) => {
                                                         karatRef.current = Number(value);
-                                                        setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                        setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                 }} defaultValue={ "14" }>
                                                     {/* {productData?.totalKarats?.map(karat => { */}
                                                         {/* return ( */}
@@ -564,7 +561,7 @@ export const ProductPage = () => {
                                                     </p>
                                                     <RadioGroup id="gem-stone-input" onValueChange={(value) => {
                                                             gemstoneRef.current = value;
-                                                            setDiamondCalculation(getProductPriceDetails({  isGemStoneProduct: productData?.containsGemstone, isChainAdded: addChainRef?.current, chainKarat: chainKaratRef?.current, isColouredDiamond: gemstoneRef?.current == "gemstone" ? false : true, karat: karatRef?.current, pointersWeight: productData?.pointersWeight, solitareWeight: productData?.solitareWeight, gemStonePointerWeight: productData?.gemStoneWeightPointer, gemStoneSolWeight: productData?.gemStoneWeightSol, multiDiaWeight: productData?.multiDiamondWeight, netWeight: productData?.netWeight }));
+                                                            setDiamondCalculation(getProductPriceDetails(buildPriceDetailsParams()));
                                                     }} defaultValue={ gemstoneRef?.current }>
                                                         <Label className={cn("items-center flex justify-between w-44 px-6 text-[#A68A7E] border border-[#A68A7E] py-4 rounded-md")}>
                                                             <Label className="captalize" htmlFor="r8">Lab grown coloured diamond</Label>
@@ -626,17 +623,16 @@ export const ProductPage = () => {
                                     if ( (productData?.category?._id == "67fe5da50254f62d3e5fe917" && ringSize == (0)) ) return;
                                     setIsWishListAddedButtonLoading(true);
                                     e.preventDefault();
-                                    if( isInWishList )
-                                    {
-                                        await updateWishList({ product: productData!, color: colourRef.current, karat: karatRef.current }, false, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
-                                        setIsWishListAddedButtonLoading(false);
-                                        setIsInWishList(false);
-                                        return toast.success("Product deleted from wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <Trash2 className="w-4 h-4 stroke-red-500" /> });
+                                    const success = await toggleWishlistItem(
+                                        dispatch,
+                                        { product: productData!, color: colourRef.current, karat: karatRef.current },
+                                        isInWishList,
+                                        userData?._id
+                                    );
+                                    if (success) {
+                                        setIsInWishList(!isInWishList);
                                     }
-                                    await updateWishList({ product: productData!, color: colourRef.current, karat: karatRef.current}, true, currentWishlist, dispatch, userData?._id ? true : false, currentCart, currentVideoCallCart);
                                     setIsWishListAddedButtonLoading(false);
-                                    setIsInWishList(true);
-                                    return toast.success("Product added to wishlist successfully!", { className: "!inria-serif-regular !border-[#A68A7E] !text-[#A68A7E] !bg-white", icon: <ToastSuccess /> });
                                 }}>{isWishListAddedButtonLoading ? <Loader2 className="animate-spin"/> : isInWishList ? <>Remove from wishlist <ListMinus /></> : <>Add to wishlist <ListPlus /></>}</Button> : <Skeleton className="flex-1 h-10 rounded-md bg-gray-500/10" />}
                             </div>
                             {productData?._id ? <Button className="border-[#A68A7E] border text-[#A68A7E] bg-white hover:bg-[#A68A7E] hover:text-white" onClick={async (e) => {

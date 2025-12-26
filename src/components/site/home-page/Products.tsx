@@ -1,8 +1,7 @@
 import { ArrowUpDown, Filter, Loader2, X } from "lucide-react";
-// import { Input } from "../../ui/input";
 import { UIsideBar } from "./Solitare"
 import { Button } from "../../ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { ICategory, ICollection, IProduct } from "../../../utils/interfaces";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,23 +10,18 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { smallRandomBanners } from "@/utils/constants";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-// import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-// import { Input } from "@/components/ui/input";
-// import { Select, SelectContent, SelectGroup, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import { SelectItem, Value } from "@radix-ui/react-select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-// import { ScrollArea } from "@radix-ui/react-scroll-area";
-// import { ScrollArea } from "@/components/ui/scroll-area"; 
+import { fetchAllProducts } from "@/redux1/productSlice";
+import { fetchAllCategories } from "@/redux1/categorySlice";
+import { fetchAllCollections } from "@/redux1/collectionSlice"; 
 
 export const Products = () => {
-
+    const dispatch = useDispatch();
     const isSolitarePage = window.location.href.includes(`solitare-page`);
-    // const [ isClearFilterLoading, setIsClearFilterLoading ] = useState(false);
     const [ isApplyFilterLoading, setIsApplyFilterLoading ] = useState(false);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    // const [ categoryFilter, setCategoryFilter ] = useState(queryParams.get("category-filter"));
     const categoryFilter = queryParams.get("category-filter");
 
     const [ filters, setFilters ] = useState<{
@@ -36,8 +30,6 @@ export const Products = () => {
             female: boolean
         };
         price: { max: number; min: number };
-        // gemStone: boolean;
-        // gemStoneColour: string[];
         categories: string[],
         collections: string[],
         sort: string,
@@ -55,8 +47,6 @@ export const Products = () => {
             max: 10000000000000,
             min: 0
         },
-        // gemStone: false,
-        // gemStoneColour: [],
         categories: [],
         collections: [],
         sort: "high",
@@ -67,18 +57,12 @@ export const Products = () => {
         }
     });
 
-    const categoryDataFromStore: ICategory[] = useSelector((state: any) => state.website.categories);
-    const collectionDataFromStore: ICollection[] = useSelector((state: any) => state.website.collections);
-
-    // const productDataFromStore = useSelector((state: any) => state.website.productData)
+    const categoryDataFromStore: ICategory[] = useSelector((state: any) => state.category.categories);
+    const collectionDataFromStore: ICollection[] = useSelector((state: any) => state.collection.collections);
+    const { products: reduxProducts, loading: isProductsLoading } = useSelector((state: any) => state.product);
 
     const [ products, setProducts ] = useState<IProduct[]>([]);
-
-    const [ isProductsLoading, setIsProductsLoading ] = useState(false);
-
     const navigate = useNavigate();
-
-    // const [ isLoading, setIsLoading ] = useState(true);
 
     const [ randomBanner, setRandomBanner ]= useState({
         name: "",
@@ -89,48 +73,25 @@ export const Products = () => {
 		link: ""
     });
 
-    const visibleProductsCount = 15;
-
     const [ currentPage, setCurrentPage ] = useState(1);
+
+    // Dispatch Redux thunks on component mount
+    useEffect(() => {
+        dispatch(fetchAllProducts() as any);
+        dispatch(fetchAllCategories() as any);
+        dispatch(fetchAllCollections() as any);
+    }, [dispatch]);
 
     useEffect(() => {
         window?.scrollTo({ top: 0, behavior: "smooth" });
     }, [ currentPage ]);
 
-    const getProducts = async () => {
-        setIsProductsLoading(true);
-        try {
-            // @ts-ignore
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${import.meta.env.VITE_PORT}${import.meta.env.VITE_API_URL}products/get-products?page=${currentPage}?limit=${visibleProductsCount}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: 'include',
-                body: JSON.stringify({ filters: filters })
-            });
-            // console.log(response);
-
-            if (!response.ok) throw new Error("HTTP error! status: "+response.status+", "+response.statusText);
-            
-            const data = await response.json();
-            // dispatch(setProductData(data.data));
-            console.log(data.data);
-            // setFilters({ ...filters, meta: data.data.meta });
-            // filters.meta = data.data.meta;
-            return (data.data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setIsProductsLoading(false);
+    // Use Redux products directly
+    useEffect(() => {
+        if (reduxProducts && reduxProducts.length > 0) {
+            setProducts(reduxProducts);
         }
-    };
-
-    // useEffect(() => {
-    //     (async function () {
-    //         await getProducts();
-    //     })();
-    // }, [ visibleProductsCount ]);
+    }, [reduxProducts]);
 
     const dialogRef = useRef<HTMLDivElement | null>(null);
 
@@ -165,15 +126,8 @@ export const Products = () => {
                     filters.categories.push(category?._id!)
                     setFilters({ ...filters, categories: filters.categories });
                 }
-                // if ( category?.products )
-                // setIsLoading(false);
                 console.log(filters)
             }
-            const productResponse = await getProducts(); 
-            setFilters({ ...filters, meta: productResponse?.meta})
-            setProducts(productResponse?.data);
-            // setIsLoading(false);
-            return console.log(categoryDataFromStore, categoryFilter, products, productResponse);
         })();
     }, [ currentPage, categoryDataFromStore ]);
 
@@ -424,11 +378,12 @@ export const Products = () => {
                                             }}>{isClearFilterLoading ? <Loader2 className="w-4 aspect-square"/> : "Clear filters"}</Button> */}
                                             <Button disabled={isApplyFilterLoading} variant={"ghost"} className="bg-white justify-self-end border stroke-[#A68A7E] hover:stroke-white border-[#A68A7E] hover:text-white hover:bg-[#A68A7E] self-center" onClick={ async () => {
                                                 setIsApplyFilterLoading(true);
-                                                const data = await getProducts();
-                                                setProducts(data.data);
-                                                setFilters({ ...filters, meta: data?.meta })
-                                                setDialogOpen(false);
-                                                setIsApplyFilterLoading(false);
+                                                try {
+                                                    dispatch(fetchAllProducts() as any);
+                                                } finally {
+                                                    setIsApplyFilterLoading(false);
+                                                    setDialogOpen(false);
+                                                }
                                             }}>{isApplyFilterLoading ? <Loader2 className="w-4 animate-spin aspect-square"/> : "Apply filters"}</Button>
                                         </div>
                                     </div>
